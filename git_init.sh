@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 # ① ディレクトリに移動
 cd /Users/sakamotomichiaki/work/git/ips_compensation
 
