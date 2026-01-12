@@ -99,13 +99,15 @@
 #### 実行例
 
 ```bash
-python ips_compensation4_stacks_envelope.py \
+python ips_compensation4_stacks_envelope_AstepIso.py \
   --outdir out_opt \
-  --theta 30 --phi 45 \
-  --Amin 0.60 --Amax 1.40 --Ad 0.05 \
+  --stack LC_AC_abs \
+  --Amin 0.60 --Amax 2.40 --Ad 0.05 \
   --ReCmin -280 --ReCmax 280 --ReCd 20 \
-  --stack all \
-  --track_progress --progress_stride 5 --progress_plot
+  --track_progress --progress_plot \
+  --progress_iso_stride 5 \
+  --export_envelope \
+  --export_Astep_iso
 ```
 
 #### 出力（生成ファイル）
