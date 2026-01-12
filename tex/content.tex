@@ -1,0 +1,1046 @@
+\section{概要}
+
+\subsection{背景と位置づけ}
+車載用 IPS-LCD における高コントラスト（特に斜視における暗状態漏れの抑制）は、偏光子（POL）・液晶層（LC）・補償位相板（retarder stack）の複合効果として決定される。
+Applied Optics（2006）で示された実用的な補償構成では、TAC の繰り返し層と A-plate / C-plate を対称配置し、入射角依存の位相遅れを設計自由度として用いることで、視野角全域での漏れ光を最小化する設計指針が与えられている。
+本プログラム \texttt{ips\_compensation.py} は、当該設計思想を踏まえつつ、実装上重要となる ``回転ズレ（misalignment）'' と ``分散不整合（dispersion mismatch）'' を明示的にパラメータ化し、設計探索・感度解析を再現性高く行うための計算基盤を提供する。
+
+\subsection{目的}
+本仕様書の対象である \texttt{ips\_compensation.py} の目的は、次の三点に整理できる。
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{現実的な retarder-only スタックの評価：}
+  TAC 繰り返し層に加え、必要に応じて対称 C-plate を導入し、A/LC/A を含む「retarder-only」スタックとして、暗状態漏れ透過率 $T_{\mathrm{leak}}(\theta,\phi,\lambda)$ およびコントラスト比 $\mathrm{CR}$ を計算する。
+  \item \textbf{回転自由度の導入と分解：}
+  入射側・出射側の偏光子と対応する A-plate を \emph{ペアとして同時回転}する自由度（pair rotation）に加え、同一ペア内部での A 軸と偏光子の相対回転（misalignment）を独立に与え、どのズレが暗状態漏れに支配的かを定量化する。
+  \item \textbf{同一ワークフローでの可視化・要約：}
+  (i) $\theta=\SI{60}{\degree}$ における line-cut（$A$ 強度スケールごとに 1 枚）、(ii) $\theta$--$\phi$ 平面上の等高線（ISO）$\mathrm{CR}$ 図（$(A\_\mathrm{scale}, C\_\mathrm{case}, \mathrm{rotation})$ ごとに 1 枚）を生成し、さらに $\theta\approx 0$ での $\mathrm{CR}_0$（$\phi$ に関する平均・最小・最大）を併せて出力する。
+\end{enumerate}
+
+\subsection{解析上の前提（Notes）}
+\begin{itemize}
+  \item 本スクリプトはスタンドアロンであり、\texttt{ips\_compensation2*.py} を import しない。
+  \item 偏光子は理想的な O-type とし、吸収軸 $\bm{c}_1,\bm{c}_2$ により表現する。透過状態は
+    \[
+      \bm{o}(\bm{k},\bm{c})=\frac{\bm{k}\times \bm{c}}{\|\bm{k}\times \bm{c}\|}
+    \]
+    と定義する（\S\ref{sec:pol_impl} 参照）。
+  \item 次をゼロに設定すると、回転ズレを含まないベースラインモデルに一致する。
+\begin{lstlisting}
+POL_PAIR_ROT_IN = 0, POL_PAIR_ROT_OUT = 0,
+REL_ROT_LA = 0, REL_ROT_UA = 0
+\end{lstlisting}
+  \item \texttt{REL\_ROT\_*}=0 とし、片側の \texttt{POL\_PAIR\_ROT\_*} のみを回転させると、従来の「POL+A ペア回転 vs LC」挙動を再現する。
+\end{itemize}
+
+\clearpage
+\section{入力}
+\subsection{光学スタック（引用論文の Table と同等の構造）}
+添付論文（Applied Optics, 2006）の提案構造は、概ね以下の積層を用いる：
+\begin{center}
+\texttt{protection / analyzer / TAC(-C) / +C / A / LC / A / TAC(-C) / polarizer / protection}.
+\end{center}
+論文中の一例（Table 1 など）では、TAC 厚みが \SI{40}{\micro\meter}、+C plate が \SI{1.2}{\micro\meter}、
+LC 厚みが \SI{3.4}{\micro\meter}、A-plate は upper \SI{80}{\micro\meter} / lower \SI{150}{\micro\meter} 等で示される。
+本プログラムは、同系統の ``TAC 繰り返し +（任意）対称 C-plate + A/LC/A'' を辞書（\S\ref{sec:stack_struct}）で表現し、
+視野角ごとに等価遅相量を計算して積層伝搬を行う。
+
+\subsection{回転の定義}
+本プログラムの回転は、いずれも \textbf{グローバル $z$ 軸回りの回転}（\texttt{rotz\_deg}）として実装される。
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{Pair rotation}：\texttt{POL\_PAIR\_ROT\_IN}, \texttt{POL\_PAIR\_ROT\_OUT} は、
+    \underline{対応する POL と A-plate の基準軸を同時に回転}させる。
+  \item \textbf{Pair internal misalignment}：\texttt{REL\_ROT\_LA}, \texttt{REL\_ROT\_UA} は、
+    \underline{そのペア内で A-plate のみ追加回転}させる（POL の吸収軸は回転させない）。
+  \item \textbf{LC director misalignment}：\texttt{LC\_REL\_TO\_INPOL\_DEG} は、
+    入射側 POL 基準からの LC director の相対回転を表す。
+\end{itemize}
+
+\subsection{設定パラメータ}
+以下は、ユーザー指定のパラメータブロック（抜粋）である。
+本文では主要パラメータの意味・単位・影響を説明し、付録に原文（verbatim）を掲載する（付録\ref{sec:param_block}）。
+\begin{longtable}{@{}p{0.23\linewidth}p{0.18\linewidth}p{0.52\linewidth}@{}}
+\toprule
+パラメータ & 代表値 & 意味 \\
+\midrule
+\texttt{WL\_NM, WL\_KEYS, WL\_WEIGHTS} & B/G/R & 代表波長と重み。白色評価は $T_{\mathrm{leak}}$ を波長で平均し、その平均から CR を算出する。\\
+\texttt{USE\_DN\_DISPERSION} & True & $dn$ の波長依存を使うか。True のとき $dn$ は一定とし、遅相の波長依存は $1/\lambda$ のみで入る（コメントに注意）。\\
+\texttt{DN\_SCALE\_MATCHED/MISMATCHED} & --- & LC と A の分散が一致（matched）/不一致（mismatched）の例。\\
+\texttt{NO\_BASE, dn\_LC, d\_LC} & --- & ベース屈折率と LC の $dn$ および厚み。\\
+\texttt{dn\_lowerA, dn\_upperA} & --- & 入射側/出射側 A-plate の $dn$。\\
+\texttt{dn\_C} & --- & C-plate の $dn$。\\
+\texttt{RE\_LC\_NM, RE\_A\_EACH\_BASE\_NM} & --- & 遅相量（nm）ベース。A\_scale により A の厚みをスケールする。\\
+\texttt{A\_SCALES, C\_CASES\_UM} & --- & A\_scale と C 厚み（\si{\micro\meter}）の掃引。\\
+\texttt{DN\_TAC\_CASES, TAC\_REPEATS, TAC\_UM\_CASES} & --- & TAC の $dn$、繰返し数、厚み（\si{\micro\meter}）。\\
+\texttt{POL\_PAIR\_ROT\_*\_DEGS, REL\_ROT\_*\_DEGS} & --- & 回転パラメータ群。\\
+\texttt{THETA\_MAX, DTHETA, DPHI} & --- & 角度グリッド（$\theta,\phi$）の最大角と刻み。\\
+\texttt{CR0\_TARGET, CR\_LEVELS} & --- & CR0 の目標値や等高線レベル（プロット用）。\\
+\bottomrule
+\end{longtable}
+
+\clearpage
+\section{出力}
+\subsection{出力物とファイル構成}
+本スクリプトは、相対パス \texttt{out\_dispersion\_match\_vs\_mismatch3/} 以下に結果を出力する。
+代表的な出力は以下である。
+
+\begin{itemize}[leftmargin=2em]
+  \item \textbf{CR0 統計（標準出力）}：
+    $\theta\simeq 0$ における CR の mean/min/max（$\phi$ 方向集計）を各ケースで print。
+  \item \textbf{ISO\_plot（極座標 CR 等高線/塗り分け）}：
+    \texttt{CR\_polar\_Ax\{A\}\_\{C\}\_POLin...\_TACx...png} など。
+  \item \textbf{cut（$\theta=60^\circ$ の linecut）}：
+    A\_scale ごとに $\mathrm{CR}(\phi)$ を PNG 出力（命名は \texttt{plot\_linecut\_theta60()} の実装に依存）。
+  \item \textbf{CSV}：
+    \texttt{summary\_CR0\_and\_minCR.csv}（各ケースの CR0 と minCR）、
+    および \texttt{summary.csv}（掃引結果：\texttt{frac\_CR\_gt\_thr} 等）。
+  \item \textbf{frac\{CR>thr\}}：
+    指定閾値（例：100）を満たす角度格子の割合を計算し、標準出力と CSV に保存する。
+\end{itemize}
+
+\subsection{CSV の主なカラム}
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{summary\_CR0\_and\_minCR.csv}：\texttt{A\_scale, C\_um, pol\_in, pol\_out, rel\_L, rel\_U, cr0\_mean/min/max, minCR\_theta\_ge\_10} など。
+  \item \texttt{summary.csv}：\texttt{case, wl\_keys, thr, C\_um, A\_scale, frac\_CR\_gt\_thr, plot} など。
+\end{itemize}
+
+\clearpage
+\section{Model details（逐語訳：test.zip の該当章）}
+\label{sec:model_details_jp}
+本節は、\texttt{test.zip} 内の仕様補足 TEX に含まれる ``Model details'' 章の英語記述を、できる限り逐語的に日本語化して収録した。
+原文内に省略記号（\texttt{...}）が含まれる箇所は、原文の体裁を維持した。
+
+\subsection{座標系と角度}
+\label{sec:coord_system_jp}
+
+（訳）本シミュレータは、光学スタックを表すために固定の \textbf{グローバル直交座標系} $(x,y,z)$ を用い、
+また、視野角 $(\theta,\phi)$ から \textbf{伝搬方向} を構成する。
+各層（A-plate、C-plate、LC director、TAC 等）の光学軸はこのグローバル座標で指定する。
+一方で、実際の偏光（電場ベクトル）は $\bm{k}(\theta,\phi)$ に結びついた \textbf{ローカル基底へ射影}される。
+
+\subsubsection{グローバル座標系}
+光学スタックの法線をグローバル $z$ 軸と定義する。
+グローバル $x$ 軸、$y$ 軸は基板面内で直交し、層の光学軸ベクトルはこの $(x,y,z)$ の \textbf{3D 単位ベクトル}で与える。
+
+\subsubsection{$(\theta,\phi)$ からの視線方向（訳）}
+各視線方向に対し、伝搬単位ベクトル
+\[
+\bm{k}=\bm{k}(\theta,\phi)
+\]
+を構成する。
+ここで $\theta$ は $+z$ 軸からの極角（チルト角）、$\phi$ は $xy$ 平面での方位角である（本ドキュメントのプロットに用いる定義に従う）。
+
+\subsubsection{ローカル横波面と基底射影（訳）}
+物理的な偏光は $\bm{k}$ に直交するため、すべての計算は $\bm{k}$ に垂直な面（横波面）で行う。
+
+\subparagraph{各リターダ層の $(u,v)$ 基底（訳）}
+リターダ層の光学軸 $\bm{a}$ を $\bm{k}$ に直交な面へ射影し、
+\[
+\bm{a}_{\perp}=\bm{a}-(\bm{a}\cdot\bm{k})\bm{k}
+\]
+とする。
+この射影ベクトルを正規化して
+\[
+\bm{u}=\frac{\bm{a}_{\perp}}{\|\bm{a}_{\perp}\|},\qquad
+\bm{v}=\frac{\bm{k}\times\bm{u}}{\|\bm{k}\times\bm{u}\|}
+\]
+を定義する。
+組 $(\bm{u},\bm{v})$ は横波面上の直交基底であり、3D-field のリターダ演算子
+$\bm{M}(\bm{k},\bm{a},\Gamma)$ は、これらのローカル軸に沿って $\exp(\pm i\Gamma/2)$ の位相因子を与える。
+
+\subparagraph{Polarizer の透過状態 $(\bm{o}_1,\bm{o}_2)$（訳）}
+Polarizer は吸収軸 $\bm{c}_1,\bm{c}_2$ によって表現される。
+O-type の透過状態は横波面上で
+\[
+\bm{o}(\bm{k},\bm{c})=\frac{\bm{k}\times\bm{c}}{\|\bm{k}\times\bm{c}\|}
+\]
+と定義し、入射側/出射側は
+\[
+\bm{o}_1=\bm{o}(\bm{k},\bm{c}_1),\qquad
+\bm{o}_2=\bm{o}(\bm{k},\bm{c}_2)
+\]
+である。
+これらは（i）入射電場を $\bm{o}_1$ に固定すること、（ii）出射側で $\bm{o}_2$ へ射影することに用いる（POL 実装の節参照）。
+
+\subsubsection{縦成分の除去（訳）}
+数値誤差により、$\bm{k}$ に平行な微小成分が発生し得る。
+そのため、本シミュレータは以下により横波条件を強制する：
+\[
+\bm{E}\leftarrow \bm{E}-(\bm{E}\cdot\bm{k})\bm{k}.
+\]
+これにより偏光を横波面に保ち、特に大きい $\theta$ で安定性が向上する。
+
+\subsubsection{まとめ（訳）}
+要するに、$(\theta,\phi)$ からグローバルな伝搬方向 $\bm{k}$ を定義し、
+その $\bm{k}$ に対して層ごとのローカル基底 $(\bm{u},\bm{v})$ と、
+Polarizer の透過状態 $(\bm{o}_1,\bm{o}_2)$ を構成して計算する。
+
+\subsection*{コードにおける POL 実装（重要点）}
+\label{sec:pol_impl}
+（訳）\textbf{コードは、損失を伴う polarizer 行列を \texttt{retarder\_matrix()} の中へ挿入しない。}
+代わりに、理想直交 POL を以下の等価手順で実装する。
+
+入射側 POL の吸収軸を $\bm{c}_1$ とする。
+O-type POL の透過方向（ordinary 方向）は $(\bm{k},\bm{c})$ 平面に垂直であり、
+\begin{align}
+\bm{o}(\bm{k},\bm{c}) &= \frac{\bm{k}\times\bm{c}}{\|\bm{k}\times\bm{c}\|}
+\end{align}
+とする。
+このとき：
+\begin{itemize}
+  \item \textbf{入射側 POL：} 入射電場を透過状態に固定する
+  \begin{align}
+  \bm{E}_0 = \bm{o}_1 \equiv \bm{o}(\bm{k},\bm{c}_1).
+  \end{align}
+  これは retarder stack の前に理想 POL を置き、吸収成分を捨てることに等価である。
+  \item \textbf{アナライザ：} stack 通過後の電場 $\bm{E}$ を出射側透過状態へ射影し、
+  \begin{align}
+  a = \bm{o}_2^{\mathsf{T}}\bm{E}, \quad \bm{o}_2 \equiv \bm{o}(\bm{k},\bm{c}_2),
+  \end{align}
+  漏れ強度は $|a|^{2}$ に比例する（コードの正規化により $1/2$ 等が掛かる場合がある）。
+\end{itemize}
+この 2 段階（``入射偏光を固定 $\rightarrow$ 出射で射影''）により、
+非ユニタリな吸収行列を明示的に構成せずに crossed POL を扱える。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{eq2_crop.png}
+\caption{引用論文に示された Eq.~(2)（クロス O-type POL の斜め入射リーク）参照画像（クロップ）。}
+\end{figure}
+
+\subsection{遅相モデル：Eq.~(3a)（A-plate）と Eq.~(3b)（C-plate）}
+（訳）斜め入射では、各光学板の見かけ遅相が角度依存で変化する。
+本ソフトは引用論文の式（Eq.~(3a),(3b)）に従い、A-plate と C-plate の遅相 $\Gamma$ を与える。
+
+\subsubsection{A-plate 遅相：Eq.~(3a)（訳）}
+A-plate（面内軸）の遅相は、相対方位角 $\phi_{\mathrm{rel}}$ を用いて
+\begin{align}
+\Gamma_{A}(\theta,\phi_{\mathrm{rel}}) &= \frac{2\pi}{\lambda} d
+\Biggl[
+n_e \left(1-\frac{\sin^2\theta\,\sin^2\phi_{\mathrm{rel}}}{n_e^2}-\frac{\sin^2\theta\,\cos^2\phi_{\mathrm{rel}}}{n_o^2}\right)^{1/2}
+-
+n_o \left(1-\frac{\sin^2\theta}{n_o^2}\right)^{1/2}
+\Biggr].
+\end{align}
+（注）実装では数値安定のため、平方根内部が負にならないようクリップを行う。
+
+\subsubsection{C-plate 遅相：Eq.~(3b)（訳）}
+C-plate（光学軸が法線 $z$）の遅相は
+\begin{align}
+\Gamma_{C}(\theta) &= \frac{2\pi}{\lambda}\frac{d}{\cos\theta}
+\left[
+\left(
+\frac{n_o^{2}n_e^{2}}{n_o^{2}\sin^{2}\theta + n_e^{2}\cos^{2}\theta}
+\right)^{1/2}
+-
+n_o
+\right].
+\end{align}
+理想的な一軸 C-plate（軸が $z$）では、$\Gamma_C$ は方位角に依存せず、極角のみの関数となる。
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{eq3ab_crop.png}
+\caption{引用論文に示された Eq.~(3a),(3b) 参照画像（クロップ）。}
+\end{figure}
+
+\clearpage
+\section{実装}
+\subsection{Software summary（逐語訳：stacked operator implementation）}
+\label{sec:software_summary_jp}
+本節は、\texttt{test.zip} 内の \texttt{\textbackslash subsection\{Software summary: stacked operator implementation\}} の英語記述を逐語的に日本語化したものである（省略記号 \texttt{...} は原文維持）。
+
+\subsubsection{概念モデル：ローカル基底の Jones-like 伝搬（訳）}
+本シミュレータは、視線方向ごとにローカル基底を用いる \emph{Jones-like} 伝搬として解釈できる。
+ここで、電場ベクトルは 3D で表現され、各リターダ層は、横波面の 2 成分に対して損失のない位相遅れを与える。
+まとめると、本シミュレータは、各視野方向について、
+\textbf{(i)} 入射偏光状態の選択 $\bm{o}_1$ と、
+\textbf{(ii)} 出射側での $\bm{o}_2$ への射影
+を含む計算を行う、とみなすのが正しい。
+
+\subsubsection{実装上の注意：Eq.~(2)/(3)/(5) と polarizer（訳）}
+Eq.~(2), Eq.~(3), および Eq.~(5) 等価の stack を、ソフトウェア上でどのように実装しているかのアルゴリズム概要を示す。
+\texttt{retarder\_matrix()} は \emph{損失のない位相遅れ}のみを実装し、
+\textbf{polarizer の吸収は \texttt{retarder\_matrix()} 内ではモデル化しない。}
+代わりに、polarizer は等価な理想処理として実装する（詳細は Model details 章参照）。
+
+\subsubsection{ソフトが行うこと（高レベルのワークフロー）（訳）}
+各視野方向 $(\theta,\phi)$ について：
+\begin{enumerate}
+  \item 視線（伝搬）単位ベクトル $\bm{k}=\bm{k}(\theta,\phi)$ を構成する。
+  \item \textbf{入力 polarizer (POL)} と \textbf{analyzer} を、吸収軸 $\bm{c}_1,\bm{c}_2$ で表し、
+        透過状態 $\bm{o}_1,\bm{o}_2$ を構成して、入射電場を $\bm{E}\leftarrow \bm{o}_1(\bm{k})$ に設定する。
+  \item 各リターダ層について、視野角依存の遅相 $\Gamma_n$ を計算し、
+        $\bm{M}_n=\bm{M}(\bm{k},\bm{a}_n,\Gamma_n)$ を作り、$\bm{E}\leftarrow \bm{M}_n\bm{E}$ と伝搬させる。
+  \item analyzer 透過状態への射影で漏れ振幅を計算し、
+        $T_{\mathrm{leak}}\propto |a|^2$、$\mathrm{CR}=f(T_{\mathrm{leak}})$ を得る。
+\end{enumerate}
+
+\subsubsection{論文の式への対応（Eq.~(2), Eq.~(3), Eq.~(5)）（訳）}
+\begin{itemize}
+  \item \textbf{Eq.~(2)（クロス O-type POL、斜め入射リーク）：} POL/analyzer は、
+        （i）入射偏光を POL の透過状態に固定すること、
+        （ii）出射側で analyzer 透過状態へ射影すること
+        で含める。Fresnel の $T^4$ は簡略モデルではしばしば省略される（$T^4=1$ 扱い）。
+  \item \textbf{Eq.~(3a)/(3b)（A-plate/C-plate の斜め入射遅相）：} これらの式が、3D リターダ演算子への入力 $\Gamma$ を与える。
+  \item \textbf{Eq.~(5)（積層演算子）：} 全体の計算は polarizer を含む Eq.~(5) 等価として書ける：
+  \begin{equation}
+  a(\theta,\phi)=\bm{o}_2(\bm{k})^{\mathsf{T}}\left(\prod_{n}\bm{M}_n(\bm{k},\bm{a}_n,\Gamma_n)\right)\bm{o}_1(\bm{k}),\qquad
+  T_{\mathrm{leak}}\propto |a|^2.
+  \end{equation}
+\end{itemize}
+
+\clearpage
+\subsection{データ構造：スタック表現}
+\label{sec:stack_struct}
+\texttt{build\_stack\_realistic()} は、層の配列 \texttt{stack} を返す。
+各層は Python 辞書で、代表的に以下のキーを持つ。
+
+\begin{itemize}[leftmargin=2em]
+  \item \texttt{type}: \texttt{"TAC"}, \texttt{"A"}, \texttt{"C"}, \texttt{"LC"} など
+  \item \texttt{axis}: グローバル座標での光学軸（3 要素）
+  \item \texttt{d}: 厚み（m）
+  \item \texttt{no}, \texttt{ne}: 屈折率（簡略モデルではベース + dn）
+\end{itemize}
+
+\subsection{主要関数の詳細説明}
+本節では、要求のあった 4 関数を中心に、入出力・物理式・実装上の注意点を説明する。
+
+\subsubsection{\texttt{eq3a\_Gamma\_A(theta\_deg, phi\_deg\_rel, lam, d, no, ne)}}
+\subsubsection{役割}
+A-plate（面内一軸）の斜め入射における見かけ遅相 $\Gamma_A$ を計算する。
+引用論文の Eq.~(3a) に対応し、方位角として \textbf{retarder 軸に対する相対方位角} $\phi_{\mathrm{rel}}$ を入力する。
+
+\subsubsection{入出力}
+\begin{itemize}[leftmargin=2em]
+  \item 入力：\texttt{theta\_deg}（度）、\texttt{phi\_deg\_rel}（度）、\texttt{lam}（m）、\texttt{d}（m）、\texttt{no},\texttt{ne}
+  \item 出力：$\Gamma_A$（rad）
+\end{itemize}
+
+\subsubsection{実装（抜粋）}
+\begin{lstlisting}[language=Python]
+def eq3a_Gamma_A(theta_deg, phi_deg_rel, lam, d, no, ne):
+    th = np.deg2rad(theta_deg)
+    ph = np.deg2rad(phi_deg_rel)
+    s2 = np.sin(th)**2
+    sin2 = np.sin(ph)**2
+    cos2 = np.cos(ph)**2
+    term_e = 1.0 - (s2*sin2)/(ne**2) - (s2*cos2)/(no**2)
+    term_o = 1.0 - (s2)/(no**2)
+    term_e = np.maximum(term_e, 0.0)
+    term_o = np.maximum(term_o, 0.0)
+    return (2*np.pi/lam) * d * (ne*np.sqrt(term_e) - no*np.sqrt(term_o))
+\end{lstlisting}
+
+\subsubsection{実装上の注意}
+\begin{itemize}[leftmargin=2em]
+  \item 平方根内部 \texttt{term\_e, term\_o} は、数値誤差で負になる可能性があるため \texttt{np.maximum(...,0.0)} でクリップする。
+  \item $\phi_{\mathrm{rel}}$ を用いる理由：グローバル $\phi$ をそのまま使うと、retarder 軸の回転と整合しない角度依存が混入し、
+        CR の極座標パターンが不自然になる（test.zip の検証観点参照）。
+\end{itemize}
+
+\subsubsection{\texttt{eq3b\_Gamma\_C(theta\_deg, lam, d, no, ne)}}
+\subsubsection{役割}
+C-plate（軸が面法線方向）について、斜め入射の見かけ遅相 $\Gamma_C$ を計算する（引用論文 Eq.~(3b)）。
+
+\subsubsection{入出力}
+\begin{itemize}[leftmargin=2em]
+  \item 入力：\texttt{theta\_deg}（度）、\texttt{lam}（m）、\texttt{d}（m）、\texttt{no},\texttt{ne}
+  \item 出力：$\Gamma_C$（rad）
+\end{itemize}
+
+\subsubsection{実装（抜粋）}
+\begin{lstlisting}[language=Python]
+def eq3b_Gamma_C(theta_deg, lam, d, no, ne):
+    th = np.deg2rad(theta_deg)
+    s2 = np.sin(th)**2
+    c2 = np.cos(th)**2
+    inside = (no**2 * ne**2) / (no**2 * s2 + ne**2 * c2)
+    inside = np.maximum(inside, 1e-18)
+    return (2*np.pi/lam) * (d/np.maximum(np.cos(th), 1e-12)) * (np.sqrt(inside) - no)
+\end{lstlisting}
+
+\subsubsection{実装上の注意}
+\begin{itemize}[leftmargin=2em]
+  \item 分母の $\cos\theta$ は $\theta\to 90^\circ$ で発散するため、\texttt{np.maximum(np.cos(th), 1e-12)} で下限を設ける。
+  \item ルート内部 \texttt{inside} も数値安定のため下限 \texttt{1e-18} を設ける。
+  \item 理想 C-plate では方位角に依存しないため、\texttt{phi} 引数は不要である。
+\end{itemize}
+
+\subsubsection{\texttt{build\_stack\_realistic(...)}}
+\subsubsection{役割}
+評価対象の retarder-only スタック（TAC 繰返し、対称 C-plate、A/LC/A）を構成し、層辞書のリストとして返す。
+回転パラメータ（pair rotation / pair 内ミスアライメント / LC misalignment）を反映して各層の \texttt{axis} を決定する。
+
+\subsubsection{入出力}
+\begin{itemize}[leftmargin=2em]
+  \item 入力：\texttt{dC\_um}（\si{\micro\meter}）、\texttt{A\_scale}、TAC 条件、回転条件
+  \item 出力：\texttt{stack}（層辞書のリスト）
+\end{itemize}
+
+\subsubsection{軸回転のロジック}
+基準軸は
+\[
+\text{Lower A: azimuth }0^\circ,\qquad \text{Upper A: azimuth }90^\circ
+\]
+とし、以下で回転を与える：
+\[
+\bm{a}_{\mathrm{LA}}=\mathrm{R}_z(\mathrm{POL\_IN}+\mathrm{REL\_LA})\bm{a}_{\mathrm{LA,base}},
+\quad
+\bm{a}_{\mathrm{UA}}=\mathrm{R}_z(\mathrm{POL\_OUT}+\mathrm{REL\_UA})\bm{a}_{\mathrm{UA,base}}.
+\]
+LC director は入射側参照で
+\[
+\bm{a}_{\mathrm{LC}}=\mathrm{R}_z(\mathrm{POL\_IN}+\mathrm{LC\_REL})\bm{a}_{0^\circ}.
+\]
+
+\subsubsection{実装（抜粋）}
+\begin{lstlisting}[language=Python]
+def build_stack_realistic(
+    dC_um,
+    A_scale,
+    tac_repeat=1,
+    tac_um=40.0,
+    dn_tac=-0.0020,
+    # rotations
+    pol_pair_rot_in_deg=0.0,
+    pol_pair_rot_out_deg=0.0,
+    rel_rot_LA_deg=0.0,
+    rel_rot_UA_deg=0.0,
+    lc_rel_to_inpol_deg=0.0,
+):
+    """
+    Retarder-only stack for IPS CR study (no dispersion):
+
+      TAC(-C) x N / (L-C) / L-A(rot) / LC(fixed 0deg) / U-A(rot) / (U-C) / TAC(-C) x N
+
+    Polarizers are NOT in the stack; they are applied in Tleak_stack_scalar via c1/c2.
+
+    Rotations:
+      - Input POL absorption axis c1 is rotated by pol_pair_rot_in_deg.
+      - Analyzer absorption axis c2 is rotated by pol_pair_rot_out_deg.
+      - Lower A axis is rotated by (pol_pair_rot_in_deg + rel_rot_LA_deg) from its baseline (0deg).
+      - Upper A axis is rotated by (pol_pair_rot_out_deg + rel_rot_UA_deg) from its baseline (90deg).
+
+    If rel_rot_* = 0, each side's POL and its A move together (pair rotation).
+    """
+    # --- TAC ---
+    tac_layer = {"type":"C", "axis":[0,0,1], "d":float(tac_um)*1e-6,
+                 "no":NO_BASE, "ne":ne_from_dn(NO_BASE, float(dn_tac))}
+
+    # --- A thickness from Re_each ---
+    Re_each_m = (RE_A_EACH_BASE_NM * 1e-9) * float(A_scale)
+    d_lower = Re_each_m / float(dn_lowerA)
+    d_upper = Re_each_m / float(dn_upperA)
+
+    # --- axes with rotations ---
+    base_LA = axis_from_azimuth_deg(0.0)
+    base_UA = axis_from_azimuth_deg(90.0)
+
+    axis_LA = rotz_deg(base_LA, float(pol_pair_rot_in_deg) + float(rel_rot_LA_deg))
+    axis_UA = rotz_deg(base_UA, float(pol_pair_rot_out_deg) + float(rel_rot_UA_deg))
+
+    # LC director: follow input-side reference (pair rotation) with a small relative misalignment
+    # lc_rel_to_inpol_deg = +1 deg means LC director is rotated +1 deg from the input POL axis (in the same sense as rotz)
+    axis_LC = rotz_deg(axis_from_azimuth_deg(0.0), float(pol_pair_rot_in_deg) + float(lc_rel_to_inpol_deg))
+
+    stack = []
+
+    # TAC in
+    for _ in range(int(tac_repeat)):
+        stack.append(dict(tac_layer))
+
+    # L-C (optional)
+    if dC_um is not None and float(dC_um) > 0:
+        stack.append({"type":"C", "axis":[0,0,1], "d":float(dC_um)*1e-6,
+                      "no":NO_BASE, "ne":ne_from_dn(NO_BASE, float(dn_C))})
+
+    # L-A / LC / U-A
+    stack += [
+        {"type":"A", "axis":axis_LA.tolist(), "d":float(d_lower), "no":NO_BASE, "ne":ne_from_dn(NO_BASE, float(dn_lowerA))},
+        {"type":"LC","axis":axis_LC.tolist(), "d":float(d_LC),    "no":NO_BASE, "ne":ne_from_dn(NO_BASE, float(dn_LC))},
+        {"type":"A", "axis":axis_UA.tolist(), "d":float(d_upper), "no":NO_BASE, "ne":ne_from_dn(NO_BASE, float(dn_upperA))},
+    ]
+
+    # U-C (optional)
+    if dC_um is not None and float(dC_um) > 0:
+        stack.append({"type":"C", "axis":[0,0,1], "d":float(dC_um)*1e-6,
+                      "no":NO_BASE, "ne":ne_from_dn(NO_BASE, float(dn_C))})
+
+    # TAC out
+    for _ in range(int(tac_repeat)):
+        stack.append(dict(tac_layer))
+
+    return stack
+\end{lstlisting}
+
+\subsubsection{厚み（d）の決定}
+A-plate は遅相量 Re（nm）から厚みを逆算する。例えば lower A は
+\[
+d_{\mathrm{LA}}=\frac{Re_{\mathrm{each}}}{dn_{\mathrm{lowerA}}},\qquad
+Re_{\mathrm{each}}=(Re_{\mathrm{A,base}})\times A\_scale
+\]
+とする（実装では SI に換算して計算）。
+
+\subsubsection{\texttt{Tleak\_stack\_scalar(theta\_deg, phi\_deg, stack, c1, c2)}}
+\subsubsection{役割}
+指定視野角 $(\theta,\phi)$ における漏れ透過率 $T_{\mathrm{leak}}$ を計算する。
+白色評価では、B/G/R の $T_{\mathrm{leak}}$ を重み付き平均し、その平均から CR を求める（コメント参照）。
+
+\subsubsection{入出力}
+\begin{itemize}[leftmargin=2em]
+  \item 入力：\texttt{theta\_deg}, \texttt{phi\_deg}、\texttt{stack}、\texttt{c1,c2}（吸収軸）
+  \item 出力：$T_{\mathrm{leak}}$（スカラー）
+\end{itemize}
+
+\subsubsection{処理フロー（要点）}
+\begin{enumerate}
+  \item \texttt{k\_hat(theta,phi)} で $\bm{k}$ を作る。
+  \item \texttt{o\_axis\_Otype(k,c)} で $\bm{o}_1,\bm{o}_2$ を作り、$\bm{E}_0\leftarrow \bm{o}_1$ とする。
+  \item 波長ループ：各波長で層ループを回し、層ごとに $\Gamma$ と \texttt{retarder\_matrix} を用いて $\bm{E}$ を更新する。
+  \item 最後に $a=\bm{o}_2^\mathsf{T}\bm{E}$ を計算し、$T\propto |a|^2$ を得る。
+\end{enumerate}
+
+\section{例題（プログラム実行例）}
+本節では、\texttt{ips\_compensation.py} が提供する代表的な解析手順を、三つの例題として整理する。
+いずれも視野角依存の暗状態漏れを $\mathrm{CR}$ の等高線（ISO）として可視化し、加えて設計指標（$\mathrm{CR}_0$、$\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$、distortion 指標）を数値として併記する。
+なお、ここで示す ``マッチング（matched）'' とは、LC と補償板（主に A-plate）の複屈折 $\Delta n(\lambda)$ の相対的な波長依存性が整合している状態、すなわち B/G/R 等の代表波長に対して $\Delta n$ のスケーリング係数が同一（または同等）であり、位相遅れ $\Gamma(\lambda)\propto \Delta n(\lambda)\,d/\lambda$ の波長依存が相互に補償し合う状態を指す。
+一方 ``ミスマッチ（mismatched）'' では、LC と A-plate の $\Delta n(\lambda)$ スケーリングが異なるため、設計波長（典型的には G）で最適化された補償条件が他波長で成立せず、白色評価（B/G/R の重み付き平均）における $\mathrm{CR}_0$ が低下し得る。
+
+\subsection{用語の定義：phase dispersion と mismatch}
+本仕様書では、位相遅れ（retardation）を
+\[
+\Gamma(\theta,\phi,\lambda)=\frac{2\pi}{\lambda}\,\Delta n_{\mathrm{eff}}(\theta,\phi,\lambda)\,d
+\]
+と表し、その波長依存性を \textbf{phase dispersion} と呼ぶ。
+ここで $\Delta n_{\mathrm{eff}}$ は入射角に依存する実効複屈折である。
+\textbf{dispersion mismatch} とは、異なる要素（LC と A-plate 等）で $\Delta n(\lambda)$ の相対スケールが異なることにより、$\Gamma(\lambda)$ の波長依存が相殺されず、暗状態の干渉条件（偏光状態の打ち消し）が波長間で一致しない状況を指す。
+
+
+\subsection{例題2：$A$ スケール×$C$ 膜厚グリッド掃引と $\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$}
+\subsubsection{main からの関数呼び出し経路と処理フロー（ex2）}
+
+以下は、あなたの \texttt{main}（ex2スクリプト）から \textbf{どの順に計算→指標→プロット→保存}まで流れるかを、\textbf{関数呼び出しの経路（コールツリー）}としてまとめたものです。  
+（※下は \texttt{ips\_compensation\_run\_signedC.py} の実装に基づく ``実際の呼び出し順'' です）
+
+\subsubsubsection{1) main からの全体コールツリー（ex2）}
+
+\paragraph{A. あなたの \texttt{main()}（run\_ex2 相当）}
+\begin{enumerate}
+  \item \textbf{グローバル計算条件を設定}
+    \begin{itemize}
+      \item \texttt{m.THETA\_MAX = 60.0}
+      \item \texttt{m.DTHETA = 5.0}
+      \item \texttt{m.DPHI = 5.0}
+      \item \texttt{theta\_ticks = [0,10,20,30,40,50,60]}
+    \end{itemize}
+
+  \item \textbf{分散条件を設定}
+    \begin{itemize}
+      \item \texttt{m.DN\_SCALE = dict(m.DN\_SCALE\_MATCHED)}（matched）
+      \item \texttt{m.WL\_KEYS = ("B","G","R")}
+      \item \texttt{m.USE\_DN\_DISPERSION = True}
+    \end{itemize}
+
+  \item \textbf{設計掃引を実行}
+    \begin{itemize}
+      \item \texttt{m.run\_Ascale\_C\_grid\_check(..., theta\_ticks=theta\_ticks)}
+    \end{itemize}
+\end{enumerate}
+
+\subsubsubsection{2) Grid掃引：\texttt{run\_Ascale\_C\_grid\_check(...)}}
+
+ここは \textbf{C のリスト}を回して、Cごとに ``A sweep'' を呼びます。
+
+\paragraph{入出力}
+\begin{itemize}
+  \item 入力：\texttt{A\_scales}, \texttt{C\_list}, \texttt{pol\_in/out}, \texttt{wl\_keys}, \texttt{thr}, \texttt{theta\_ticks}, \ldots
+  \item 出力：\texttt{manifest\_all.json}, \texttt{summary.csv} と、Cごとのサブディレクトリ
+\end{itemize}
+
+\paragraph{内部の流れ}
+\begin{enumerate}
+  \item \texttt{out\_dir} を作る
+  \item \texttt{for C\_um in C\_list:}
+    \begin{itemize}
+      \item \texttt{sub = out\_dir / f"C\_\{C\_um:+.2f\}um"} を作る
+    \end{itemize}
+  \item \textbf{C を固定して A を掃引する関数を呼ぶ}
+    \begin{itemize}
+      \item \texttt{run\_Ascale\_sweep\_check\_cr100(out\_dir=sub, dC\_um=C\_um, A\_scales=..., ..., theta\_ticks=theta\_ticks)}
+    \end{itemize}
+  \item 戻り値（Aごとの結果）を \texttt{manifest\_all.json} と \texttt{summary.csv} にまとめる
+\end{enumerate}
+
+\subsubsubsection{3) A sweep：\texttt{run\_Ascale\_sweep\_check\_cr100(...)}}
+
+ここは \textbf{A\_scale のリスト}を回して、Aごとに \textbf{CR($\theta,\phi$) グリッド計算 → frac(CR$>$thr) → ISOプロット保存}をやります。
+
+\paragraph{内部の流れ}
+\begin{enumerate}
+  \item \texttt{case\_name} から分散マップを選ぶ
+    \begin{itemize}
+      \item \texttt{DN\_SCALE\_MATCHED} or \texttt{DN\_SCALE\_MISMATCHED}
+      \item それを \textbf{グローバル} \texttt{DN\_SCALE} と \texttt{WL\_KEYS} に入れる  
+      （以降、波長依存はこのグローバルを参照）
+    \end{itemize}
+
+  \item 偏光の基底を作る
+    \begin{itemize}
+      \item \texttt{c1, c2 = pol\_axes(pol\_in, pol\_out)}
+    \end{itemize}
+
+  \item \texttt{for A\_scale in A\_scales:}
+    \begin{enumerate}
+      \item \textbf{スタックを作る}
+        \begin{itemize}
+          \item \texttt{stack = build\_stack\_realistic(dC\_um, A\_scale, ..., pol\_in/out, relA, lc\_rel)}
+        \end{itemize}
+
+      \item \textbf{CR($\theta,\phi$) を計算}
+        \begin{itemize}
+          \item \texttt{thetas, phis, CR = compute\_CR\_grid(stack, c1, c2, theta\_max=THETA\_MAX, dtheta=DTHETA, dphi=DPHI)}
+        \end{itemize}
+
+      \item \textbf{指標を計算}
+        \begin{itemize}
+          \item \texttt{frac = \_solid\_angle\_fraction\_over\_threshold(thetas, phis, CR, thr)}
+          \item \texttt{metric = \_phi\_distortion\_metric(...)}（歪み指標）
+        \end{itemize}
+
+      \item \textbf{ISOプロットを保存}
+        \begin{itemize}
+          \item \texttt{\_iso\_contour\_lines\_polar(..., out\_path=png, thr=thr, cr\_cap=cr\_cap, theta\_ticks=theta\_ticks)}
+          \item ここで \textbf{同心円は theta\_ticks に従って度表示}
+        \end{itemize}
+    \end{enumerate}
+\end{enumerate}
+
+\subsubsubsection{4) CRグリッド計算：\texttt{compute\_CR\_grid(...)}}
+
+ここは \textbf{($\theta,\phi$) の二重ループ}です。
+
+\begin{enumerate}
+  \item \texttt{thetas = 0..THETA\_MAX step DTHETA}
+  \item \texttt{phis   = 0..360 step DPHI}
+  \item 各点で：
+    \begin{itemize}
+      \item \texttt{T = Tleak\_stack\_scalar(theta, phi, stack, c1, c2)}
+      \item \texttt{CR = CR\_from\_Tleak(T)}（※ \texttt{CR = 1/(Tleak + 1/CR0\_TARGET)} ）
+    \end{itemize}
+\end{enumerate}
+
+\subsubssubection{5) Tleak計算（波長平均込み）：\texttt{Tleak\_stack\_scalar(...)}}
+
+ここが ``物理の中核'' です。
+
+\begin{enumerate}
+  \item 入射方向 \texttt{k = k\_hat(theta, phi)}
+  \item その方向でのO軸（偏光基底）を作る  
+    \begin{itemize}
+      \item \texttt{o1 = o\_axis\_Otype(k, c1)}（入力側）
+      \item \texttt{o2 = o\_axis\_Otype(k, c2)}（出力側）
+    \end{itemize}
+
+  \item \textbf{波長ループ（WL\_KEYS）}
+    \begin{itemize}
+      \item 各波長で：
+        \begin{itemize}
+          \item 各層の \texttt{no, ne} を \texttt{\_ne\_no\_for\_wl(el, wl\_key)} で決定  
+          （\texttt{USE\_DN\_DISPERSION=True} なら dn($\lambda$) を反映）
+          \item 位相遅れ \texttt{Gamma} を計算  
+            \begin{itemize}
+              \item A/LC：\texttt{eq3a\_Gamma\_A(theta, phi\_rel, lam, d, no, ne)}
+              \item C：\texttt{eq3b\_Gamma\_C(theta, lam, d, no, ne)}
+            \end{itemize}
+          \item \texttt{retarder\_matrix(...)} で電場を更新していく
+        \end{itemize}
+      \item 最後に \texttt{amp = dot(o2, E)} → \texttt{T(lambda)} を得て、波長重みで平均
+    \end{itemize}
+\end{enumerate}
+
+\subsubsubsection{6) プロット：\texttt{\_iso\_contour\_lines\_polar(...) → plot\_isocontrast\_polar(...)}}
+
+\begin{itemize}
+  \item \texttt{\_iso\_contour\_lines\_polar} は ``互換ラッパ'' で、実体は \texttt{plot\_isocontrast\_polar}
+  \item \texttt{plot\_isocontrast\_polar} がやること：
+    \begin{enumerate}
+      \item polar軸作成（r=theta[rad], angle=phi[rad]）
+      \item \texttt{theta\_ticks} が来たら  
+        \begin{itemize}
+          \item \texttt{ax.set\_rticks(deg→rad変換)}
+          \item \texttt{ax.set\_yticklabels(["0","10",...,"60"])}（\textbf{度表記}）
+        \end{itemize}
+      \item \texttt{contour} を描いて \texttt{clabel} でCR値ラベルを付ける
+      \item png保存
+    \end{enumerate}
+\end{itemize}
+
+\subsubsubsection{7 どこでディレクトリが作られるか（これが全て）}
+
+今回の ex2 の場合、作成されるのは \textbf{この3階層だけ}です：
+
+\begin{enumerate}
+  \item \texttt{out\_root = examples/ex2\_Ascale\_C\_grid\_check\_signedC/}（mainが作る）
+  \item \texttt{out\_root/C\_+0.50um/} のような \textbf{Cごとのサブdir}（grid関数が作る）
+  \item その中に \texttt{ISO\_contour\_...png}（sweepが作る）
+  \item \texttt{out\_root/manifest\_all.json} と \texttt{out\_root/summary.csv}（grid関数が作る）
+\end{enumerate}
+
+\subsubsection{対象関数}
+\texttt{run\_Ascale\_C\_grid\_check()} は、$A\_\mathrm{scale}$ と C-plate 膜厚（符号付き）の 2D グリッドに対して ISO 図を生成し、さらに固体角重み付きで
+\[
+\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}
+\]
+（閾値 $\mathrm{thr}$ を満たす視野の割合）を算出する。
+\subsubsection{構成}
+
+概ねあなたの理解（POL/TAC/…/POL）で合っていますが、\textbf{注意点が2つ}あります。
+
+\begin{enumerate}
+  \item \textbf{コード上の \texttt{stack} には POL は入っていません}（偏光子は層ではなく、\texttt{pol\_axes()} が返す吸収軸 \texttt{c1,c2} として Tleak 計算に入ります）。
+  \item \textbf{C-plate は ``入側C'' と ``出側C'' の2枚構成になり得ます}（ただし現コードは \emph{正のC} のときだけ入側Cが入り、signedC対応の出側Cは符号付きで常に入る、という実装になっています）。
+\end{enumerate}
+
+\paragraph{1) run\_ex2 の層構成は？}
+\texttt{ips\_compensation\_run\_signedC.py} の \texttt{build\_stack\_realistic()} が作る retarder stack は次です（POLは別扱い）。
+
+\paragraph{retarder stack（コード上の順序）}
+\begin{itemize}
+  \item \textbf{TAC(in)} $\times$ \texttt{tac\_repeat}
+  \item \textbf{C(in)}（※ \texttt{dC\_um > 0} のときのみ入る）
+  \item \textbf{A(lower)}
+  \item \textbf{LC}
+  \item \textbf{A(upper)}
+  \item \textbf{C(out)}（※ \texttt{abs(dC\_um)>0} なら入る。\texttt{dC\_um<0} だと dn の符号反転）
+  \item \textbf{TAC(out)} $\times$ \texttt{tac\_repeat}
+\end{itemize}
+
+したがって、概念的に``全部込み''で書くなら：
+\begin{center}
+\textbf{POL(in)} / TAC / C / A / LC / A / C / TAC / \textbf{POL(out)}
+\end{center}
+ただし \texttt{dC\_um=0} の場合は Cが無いので：
+\begin{center}
+\textbf{POL} / TAC / A / LC / A / TAC / \textbf{POL}
+\end{center}
+また \texttt{dC\_um<0} の場合は（現実装では）入側Cが入らず、出側Cのみが「負C」として入ります。
+
+\paragraph{2) 各層のリタデーション・膜厚・屈折率はどう決まる？}
+\texttt{ips\_compensation\_run\_signedC.py} の定数・式に完全に従います。
+
+\subparagraph{共通：基準屈折率}
+\begin{itemize}
+  \item すべての層で \textbf{\texttt{no = NO\_BASE = 1.50}}
+  \item \textbf{\texttt{ne = no + dn}}（G波長を基準とした値を \texttt{stack} に格納）
+\end{itemize}
+
+\subparagraph{LC}
+定数（ファイル内）：
+\begin{itemize}
+  \item \texttt{dn\_LC = 0.100}
+  \item \texttt{d\_LC = 3.1e-6} [m]
+\end{itemize}
+よって \textbf{LCのG基準の面内リタデーション}は
+\[
+Re_{LC,G} = dn_{LC}\, d_{LC} = 0.1\times 3.1\ \mu\mathrm{m} = 310\ \mathrm{nm}
+\]
+（この 310 nm が Rebase の起点です）
+
+\subparagraph{A-plate（上下2枚）}
+定数：
+\begin{itemize}
+  \item \texttt{RE\_LC\_NM = 310.0}
+  \item \texttt{RE\_A\_EACH\_BASE\_NM = RE\_LC\_NM/2 = 155.0} [nm]
+  \item \texttt{dn\_lowerA = 0.00145}
+  \item \texttt{dn\_upperA = 0.00142}
+\end{itemize}
+まず各A板の \textbf{G基準リタデーション}を
+\[
+Re_{A,each,G} = 155\ \mathrm{nm}\times A_{\mathrm{scale}}
+\]
+と置き、膜厚を
+\[
+d_{\mathrm{lower}} = \frac{Re_{A,each,G}}{dn_{\mathrm{lowerA}}},\quad
+d_{\mathrm{upper}} = \frac{Re_{A,each,G}}{dn_{\mathrm{upperA}}}
+\]
+で決めています（コードは m 単位に直して計算）。
+
+したがって \textbf{\texttt{A\_scale} は「A板のRe（≒膜厚）を一括倍率するノブ」}です。
+
+\subparagraph{C-plate（axis=[0,0,1] の単軸）}
+定数：
+\begin{itemize}
+  \item \texttt{dn\_C = 0.12049}
+  \item 膜厚：\texttt{d = abs(dC\_um)*1e-6} [m]
+\end{itemize}
+
+\begin{itemize}
+  \item \texttt{dC\_um > 0} のとき：入側Cが \textbf{dn=+dn\_C} で追加される（現コードの ``L-C optional''）
+  \item 出側Cは signed 対応で、常に
+    \begin{itemize}
+      \item \texttt{dnC\_eff = dn\_C * sign(dC\_um)}（符号反転あり）
+      \item \texttt{d = abs(dC\_um)}（厚みは絶対値）
+    \end{itemize}
+\end{itemize}
+従って \textbf{負Cは「厚み負」ではなく「dn符号反転」}として実装されています。
+
+\subparagraph{TAC（axis=[0,0,1] の単軸）}
+run\_ex2 では定数配列の先頭が使われ、
+\begin{itemize}
+  \item \texttt{tac\_repeat = TAC\_REPEATS[0] = 1}
+  \item \texttt{tac\_um = TAC\_UM\_CASES[0] = 40.0} [\,$\mu$m\,]
+  \item \texttt{dn\_tac = DN\_TAC\_CASES[0] = -0.0020}
+\end{itemize}
+膜厚：
+\[
+d_{\mathrm{TAC}} = 40\ \mu\mathrm{m}
+\]
+
+※実装上、TACは \texttt{tac\_layer = \{"type":"C", ...\}} として \texttt{type} が \texttt{"C"} になっています（概念上はTACですが、\textbf{現在 DN\_SCALE で C と TAC がどちらも 1.0 なので結果は同じ}です。将来TAC分散を入れたいなら \texttt{type:"TAC"} に直すのが筋です）。
+
+\paragraph{3) 分散（matched / mismatched）はどう入っている？}
+\texttt{stack} に入っている \texttt{no, ne} は \textbf{G波長の値}として扱われます。
+評価時に \texttt{\_ne\_no\_for\_wl(el, wl\_key)} が呼ばれて、
+\begin{itemize}
+  \item まず \texttt{dnG = neG - no}
+  \item \texttt{USE\_DN\_DISPERSION=False} なら \textbf{dnは波長で変えない}
+  \item \texttt{USE\_DN\_DISPERSION=True} なら、層typeごとに
+  \[
+  dn(\lambda) = dn_G \times \text{DN\_SCALE[type][wl\_key]}
+  \]
+  として \textbf{dnだけをスケール}します。
+\end{itemize}
+
+\texttt{DN\_SCALE} は例えば：
+\begin{itemize}
+  \item matched：LCとAが同じ (B:1.10, G:1.00, R:0.90)
+  \item mismatched：LCは同じだが、Aだけ (B:1.20, G:1.00, R:0.80)
+\end{itemize}
+という「dnの色分散の相対ズレ」を与えます。
+
+※なお、分散OFFでも位相遅れ $\Gamma$ には \textbf{$1/\lambda$} が入るので、波長でCRが変わる要因は残ります（dn自体は固定でも、$\Gamma\propto dn\cdot d/\lambda$ の $\lambda$ が変わる）。
+
+\paragraph{4) 相対角度（POL / A / LC）はどう決まる？}
+\subparagraph{偏光子（POL）}
+\texttt{pol\_axes(pol\_in, pol\_out)} で
+\begin{itemize}
+  \item 入側POL軸 \texttt{c1}：x軸を \texttt{pol\_in} だけ回転
+  \item 出側POL軸 \texttt{c2}：y軸を \texttt{pol\_out} だけ回転（crossed系）
+\end{itemize}
+
+\subparagraph{A板（LA/UA）}
+\begin{itemize}
+  \item LA の基準方位：0$^\circ$
+  \item UA の基準方位：90$^\circ$
+  \item LA軸：\texttt{pol\_in + rel\_rot\_LA\_deg}
+  \item UA軸：\texttt{pol\_out + rel\_rot\_UA\_deg}
+\end{itemize}
+run\_ex2 は \texttt{relA=0.5} を渡して \textbf{LA/UAとも +0.5$^\circ$} にしているので、A板が``効く''ようにわざと微小ミスアライメントを作っています。
+
+\subparagraph{LC}
+LC軸は
+\[
+\texttt{pol\_in + lc\_rel\_to\_inpol\_deg}
+\]
+（run\_ex2 だと \texttt{lc\_rel=1.0} なので pol\_in から +1$^\circ$）です。
+
+\subsubsection{Rebase（\texttt{RE\_A\_EACH\_BASE\_NM}）はどう決めているか}
+
+このコードでは、Rebaseは\textbf{定数として決め打ち}しています。
+\texttt{ips\_compensation\_run\_signedC.py} の冒頭で次のように定義されています。
+
+\begin{verbatim}
+RE_LC_NM = 310.0
+RE_A_EACH_BASE_NM = RE_LC_NM / 2.0
+\end{verbatim}
+
+つまり、
+\begin{itemize}
+  \item LCの基準リタデーション（$Re_{\mathrm{LC}}$）を $310\,\mathrm{nm}$ と仮定する。
+  \item A-plateが上下2枚ある前提で、各A板の基準リタデーションをその半分に配分する。
+\end{itemize}
+
+よって各A板の基準リタデーションは
+\[
+Re_{\mathrm{A,each,base}} = 155\,\mathrm{nm}
+\]
+となります。
+
+実際に使うA板のリタデーションは、スケール係数 \texttt{A\_scale} により
+\[
+Re_{\mathrm{A,each}} = Re_{\mathrm{A,each,base}} \times A_{\mathrm{scale}}
+\]
+としています。
+
+さらに膜厚は（その波長での）複屈折 $\Delta n$ で割って決めています：
+\[
+d = \frac{Re_{\mathrm{A,each}}}{\Delta n}
+\]
+
+要するに、Rebaseは「LCの基準Reを $310\,\mathrm{nm}$ とし、その半分を各A板の基準にする」という\textbf{設計仮定}です。
+（mismatchedでもGが同じ値になりやすいのは、スケールがG基準で正規化されているためです。）
+
+\begin{table}[t]
+\centering
+\caption{Example22: $CR(\theta=0,\phi=0)$ for matched / mismatched (RGB and White)}
+\label{tab:ex22_cr00}
+\begin{tabular}{c|rrrr}
+\hline
+\multicolumn{5}{c}{\textbf{case = matched}} \\
+\hline
+$A_{\mathrm{scale}}$ & $CR00_{\mathrm{B}}$ & $CR00_{\mathrm{G}}$ & $CR00_{\mathrm{R}}$ & $CR00_{\mathrm{W}}$ \\
+\hline
+0.50 &  4574.43 &  2025.91 &  1837.45 &  2387.69 \\
+1.00 & 16679.71 &  4008.35 &  2785.22 &  4487.86 \\
+1.50 & 30168.36 & 19594.48 &  6490.64 & 12591.81 \\
+2.00 &  5817.15 & 21748.35 & 32611.60 & 12070.01 \\
+\hline
+\multicolumn{5}{c}{\textbf{case = mismatched}} \\
+\hline
+$A_{\mathrm{scale}}$ & $CR00_{\mathrm{B}}$ & $CR00_{\mathrm{G}}$ & $CR00_{\mathrm{R}}$ & $CR00_{\mathrm{W}}$ \\
+\hline
+0.50 &  4907.44 &  2025.91 &  1788.24 &  2387.42 \\
+1.00 & 24419.69 &  4008.35 &  2465.20 &  4309.87 \\
+1.50 & 16875.28 & 19594.48 &  4588.28 &  9139.66 \\
+2.00 &  4311.89 & 21748.35 & 14266.28 &  8620.87 \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{結果：A-plate, C-plateの膜厚依存性}
+A-plate と C-plate はそれぞれ異なる角度依存の位相遅れを与えるため、膜厚は ISO-plot の等高線形状を直接変形させる。
+一般に、A-plate は主として面内の位相補償、C-plate は入射角に対する等方的（$\phi$ 依存の弱い）補償成分を担う。
+そのため、$C$ 膜厚を掃引すると、低 $\theta$ での補償最適点だけでなく、斜視での暗状態漏れが支配的となる領域（高 $\theta$）の等高線が系統的に移動する。
+$\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$ は ISO-plot を単一スカラーに要約する指標であり、設計探索のランキングに有効である。
+
+\subsubsection{結果：波長分散依存性}
+\texttt{demo\_CR0\_dispersion\_effect()} は、LC と A-plate の分散整合（matched）と不整合（mismatched）を切り替え、白色評価の $\mathrm{CR}_0$ が低下し得ることを数値的に示す。
+設定は以下に固定する：
+(i) 偏光子と A-plate はペアとして回転（pair rotation）、
+(ii) ペア内部の A 軸ズレを $\mathrm{REL\_ROT}\_*=\SI{0.5}{\degree}$ として A-plate の寄与を顕在化、
+(iii) LC director の入力側偏光子に対するズレを $\SI{1.0}{\degree}$ とする。
+\\
+G 波長で最適化した $A\_\mathrm{scale}$ は、$\Gamma(\lambda)$ の条件が \emph{G のみ}で満たされるように決まる。
+matched では LC と A の $\Delta n(\lambda)$ が同様にスケールするため、B/R でも位相遅れ条件が近似的に維持され、白色平均の $T_{\mathrm{leak}}$ が抑制される。
+一方 mismatched では、A の $\Delta n(\lambda)$ が LC より急峻（または緩やか）に変化するため、B/R で $\Gamma$ の過補償／不足補償が発生し、暗状態の偏光状態が完全に打ち消されない。
+この残差が波長平均後の $T_{\mathrm{leak}}$ を増大させ、結果として
+\[
+\mathrm{CR}_0 = \frac{T_{\mathrm{bright}}}{\langle T_{\mathrm{leak}}\rangle_{\lambda}}
+\]
+が低下する。
+\\
+\textbf{$\mathrm{CR}_0$ 出力}は $\theta=0$ における $\phi$ 平均（および最小・最大）として表示される。
+理想的には $\theta=0$ で $\phi$ 依存は弱いが、数値安全性と一般化のため平均化処理を保持している。
+\textbf{ISO-plot} は $\theta$--$\phi$ 上の $\mathrm{CR}$ 等高線であり、暗状態漏れが視野角でどのように増大するか（補償の破綻角度・方位）を定性的かつ定量的に把握できる。
+
+\subsection{例題3：片側 POL+A ペアの回転ズレによる ISO-plot の distortion}
+\subsubsection{対象関数}
+\texttt{run\_pol\_in\_distortion\_check()} は、$A\_\mathrm{scale}$ と $C$ 膜厚を固定したまま入力側ペア回転 $\mathrm{pol\_in}$ を掃引し、ISO-plot の ``歪み（distortion）'' を可視化する。
+併せて簡易な方位異方性指標（phi-anisotropy metric）を算出し、等高線が方位方向に引き延ばされる傾向を確認する。
+
+\subsubsection{物理的解釈}
+片側のみのペア回転は、LC director と入射側偏光子の相対角度を変化させると同時に、下側 A-plate の主軸配向も変化させる。
+このとき、上側（解析側）スタックが固定であるため、視野角依存の偏光状態の回転と位相遅れが方位角 $\phi$ に対して非対称となり、暗状態漏れが特定方位で顕著に増大する。
+結果として ISO-plot の等高線は等方的な縮退形状から外れ、方位方向に歪んだ形状（distortion）を示す。
+
+\subsubsection{Example 3（pol\_in distortion check）：main から計算・保存までの呼び出しフロー（詳細）}
+
+Example 3（\texttt{run\_ex3\_fixed.py}）は、入力偏光子の回転角 \texttt{pol\_in} を複数点スイープし、
+各 \texttt{pol\_in} について視野角全体のコントラスト比 $CR(\theta,\phi)$ を計算して、
+(1) 閾値以上の視野割合 \texttt{frac(CR>thr)} と、
+(2) 方位角方向（$\phi$方向）のばらつき指標 \texttt{phi\_std(log10CR)}
+を求め、ISO-contrast 図とともに保存する手順である。
+
+\paragraph{(1) \texttt{main()}：角度グリッドと描画設定}
+\texttt{main()} 冒頭で、ISO図（極座標プロット）および指標計算に用いる角度グリッドを設定する。
+\begin{itemize}
+  \item \texttt{THETA\_MAX = 60.0}：入射角 $\theta$ の最大値（度）
+  \item \texttt{DTHETA = 5.0}, \texttt{DPHI = 5.0}：それぞれ $\theta$ と $\phi$ の刻み（度）
+  \item \texttt{theta\_ticks = [0,10,20,30,40,50,60]}：極座標プロットの同心円ラベル（$\theta$ を度表記）
+\end{itemize}
+ここで \texttt{theta\_ticks} を明示することで、Matplotlib のデフォルト動作による
+$r$軸（ラジアン）の自動目盛（例：0.2, 0.4, ...）の表示を避け、同心円を $\theta$ [deg] として表示できる。
+
+\paragraph{(2) signed-C の扱い：\texttt{C\_um=0.0} の意味}
+Example 3 では \texttt{C\_um = 0.0} を設定し、C-plate を挿入しない条件を再現する。
+\begin{itemize}
+  \item signedC 版では \texttt{C\_um < 0} は「負の C-plate（Cの複屈折符号反転）」を意味する。
+  \item 旧仕様で用いられていた「負値＝C板なし」を混同しないため、\texttt{C\_um=0.0} を明示して
+        「C板なし」を表す。
+\end{itemize}
+
+\paragraph{(3) 本体：\texttt{run\_pol\_in\_distortion\_check(...)} の呼び出し}
+\texttt{main()} は次に、スイープ本体である
+\texttt{run\_pol\_in\_distortion\_check(...)} を呼び出す。
+この関数は \texttt{pol\_in\_list} の各値に対して、スタック構築→CRグリッド計算→指標算出→図保存を行い、
+最後に結果一覧を \texttt{manifest.json} としてまとめて保存する。
+
+\paragraph{(4) \texttt{for pol\_in in pol\_in\_list:}：各 pol\_in の処理}
+スイープのループでは、各 \texttt{pol\_in}（入力偏光子の回転角）について以下を行う。
+
+\subparagraph{(4-1) 偏光軸の生成：\texttt{pol\_axes(pol\_in, pol\_out)}}
+まず、入力偏光子（\texttt{pol\_in}）と出力偏光子（\texttt{pol\_out}）の設定から、
+解析に用いる偏光軸（ベクトル）を生成する。
+\begin{itemize}
+  \item \texttt{c1, c2 = pol\_axes(pol\_in, pol\_out)}
+\end{itemize}
+この \texttt{c1,c2} は、後段の透過計算（Tleak 計算）で「偏光子が通す成分」を定義する基底として使われる。
+
+\subparagraph{(4-2) スタック生成：\texttt{build\_stack\_realistic(...)}}
+次に、補償板（A-plate 等）と LC を含む光学スタックを生成する。
+Example 3 では通常、
+\begin{itemize}
+  \item \texttt{A\_scale = 2.0}（A-plate の Re を倍率スケールするノブ）
+  \item \texttt{dC\_um = C\_um}（ここでは 0.0 で C板なし）
+\end{itemize}
+を用いてスタックを構築する。
+\[
+\texttt{stack} \leftarrow \texttt{build\_stack\_realistic}(dC\_um=C\_um,\ A\_scale=2.0,\ \ldots)
+\]
+この \texttt{stack} は各層の（波長依存を含む）屈折率・複屈折・膜厚・配向角などを保持し、
+後段の Tleak / CR 計算の入力となる。
+
+\subparagraph{(4-3) CRグリッド計算：\texttt{compute\_CR\_grid(...)}}
+スタックと偏光軸が決まったら、視野角全体でのコントラスト比 $CR(\theta,\phi)$ を計算する。
+\begin{itemize}
+  \item \texttt{thetas, phis, CR = compute\_CR\_grid(stack, c1, c2, theta\_max=THETA\_MAX, dtheta=DTHETA, dphi=DPHI)}
+\end{itemize}
+\texttt{compute\_CR\_grid} は $\theta$ と $\phi$ の2次元グリッド上で、
+各点の漏れ光透過率 \texttt{Tleak} を計算し、\texttt{CR\_from\_Tleak} により CR に変換して配列として返す。
+（White評価の場合は B/G/R を内部で平均して 1つの \texttt{Tleak} として扱う。）
+
+\subparagraph{(4-4) 指標計算}
+得られた $CR(\theta,\phi)$ 配列から、設計評価用のスカラー指標を計算する。
+
+\begin{itemize}
+  \item \textbf{\texttt{frac(CR>thr)}}：
+    閾値 \texttt{thr} を満たす視野の割合を、固体角重み付きで算出する。
+    すなわち、各グリッド点の立体角要素（概ね $\sin\theta$ を含む重み）で重み付けした上で、
+    $CR(\theta,\phi)>\texttt{thr}$ の領域の比率を求める。
+  \item \textbf{\texttt{phi\_std(log10CR)}}：
+    $\log_{10}(CR)$ を取り、各 $\theta$ における $\phi$ 方向のばらつきを標準偏差として要約し、
+    さらにそれを単一指標としてまとめる（\texttt{phi}方向の歪み・ムラ感を表す簡易指標）。
+\end{itemize}
+
+\subparagraph{(4-5) ISO-contrast 図の保存：\texttt{plot\_isocontrast\_polar(...)}}
+次に、計算した $CR(\theta,\phi)$ を極座標等高線図として可視化し、PNGに保存する。
+\begin{itemize}
+  \item \texttt{plot\_isocontrast\_polar(thetas, phis, CR, ..., theta\_ticks=theta\_ticks)}
+\end{itemize}
+\texttt{theta\_ticks} を渡すことで、同心円（半径方向）は $\theta$ [deg] の指定値で表示される。
+
+\paragraph{(5) \texttt{manifest.json} の保存}
+全 \texttt{pol\_in} の処理が終わると、各 \texttt{pol\_in} に対して
+\texttt{frac(CR>thr)}、\texttt{phi\_std(log10CR)}、および保存したプロットファイル名などを
+リストとしてまとめ、\texttt{manifest.json} として出力ディレクトリに保存する。
+これにより、後からスイープ結果を機械的に集計・再プロットできる。
+
+
+\clearpage
+\section{参考文献}
+\begin{thebibliography}{9}
+\bibitem{Lee2006AO}
+J.-H. Lee, H. Choi, S. H. Lee, J.-C. Kim, and G.-D. Lee,
+``Optical configuration of a horizontal-switching liquid-crystal cell for improvement of the viewing angle,''
+\emph{Applied Optics} \textbf{45}(28), 7279--7285 (2006).
+\end{thebibliography}

@@ -1,0 +1,47 @@
+\subsection{例題2-2：波長分散のマッチング（matched/mismatched）が正面コントラスト $\mathrm{CR}_{00}$ に与える影響（\texttt{ex22.py}）}
+本例題では，補償板と LC の複屈折分散 $\Delta n(\lambda)$ の\textbf{相対的な波長依存性}が整合している場合（matched）と，整合していない場合（mismatched）とで，暗状態の正面漏れ $T_{\mathrm{leak}}(0,0)$，および $\mathrm{CR}_{00}=1/T_{\mathrm{leak}}(0,0)$ がどの程度変化するかを定量化する．
+ここでは C-plate 条件を $C_{\mu\mathrm{m}}=+1.0$ に固定し，A-plate のスケール因子 $A_{\mathrm{scale}}$ を離散値（$0.5,\,1.0,\,1.5,\,2.0$）で走査した．各条件について B/G/R および白色（B/G/R 平均）の $\mathrm{CR}_{00}$ を算出し，結果を \texttt{CR00\_table\_matched\_mismatched.csv} として出力した（\texttt{examples/ex22\_CR00\_table/}）．
+
+\subsubsection{結果の要約（数値比較）}
+表\ref{tab:ex22_cr00}に $\mathrm{CR}_{00}$（白色）を示す．matched では $A_{\mathrm{scale}}\approx 1.5$ で $\mathrm{CR}_{00,\mathrm{W}}$ が最大となり（$2.87\times 10^4$），$A_{\mathrm{scale}}=2.0$ でも同程度の高い正面コントラスト（$2.80\times 10^4$）を維持する．一方 mismatched では，$A_{\mathrm{scale}}$ が大きい領域ほど $\mathrm{CR}_{00,\mathrm{W}}$ が低下し，特に正面最適近傍での劣化が顕著となった（$A_{\mathrm{scale}}=1.5$ で $2.36\times 10^4$，$A_{\mathrm{scale}}=2.0$ で $2.27\times 10^4$）．
+matched に対する相対比でみると，$A_{\mathrm{scale}}=1.5$ で約 $-18\%$，$A_{\mathrm{scale}}=2.0$ で約 $-19\%$ の低下に相当する．
+
+\begin{table}[t]
+  \centering
+  \caption{例題2-2：matched/mismatched における白色 $\mathrm{CR}_{00}$ の比較（$C_{\mu\mathrm{m}}=+1.0$ 固定）．}
+  \label{tab:ex22_cr00}
+  \begin{tabular}{c|cc|c}
+    \hline
+    $A_{\mathrm{scale}}$ &
+    $\mathrm{CR}_{00,\mathrm{W}}$ (matched) &
+    $\mathrm{CR}_{00,\mathrm{W}}$ (mismatched) &
+    mismatched / matched \\
+    \hline
+    0.5 & $8.35\times 10^3$ & $8.35\times 10^3$ & 1.00 \\
+    1.0 & $1.41\times 10^4$ & $1.37\times 10^4$ & 0.97 \\
+    1.5 & $2.87\times 10^4$ & $2.36\times 10^4$ & 0.82 \\
+    2.0 & $2.80\times 10^4$ & $2.27\times 10^4$ & 0.81 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsubsection{波長別の寄与と「分散ミスマッチ」の意味}
+本実装の mismatched 設定では，G チャネルの $\mathrm{CR}_{00,\mathrm{G}}$ が matched と完全に一致した一方で，B/R が条件によって増減し，結果として白色 $\mathrm{CR}_{00,\mathrm{W}}$ が変化した．これは，\textbf{分散の整合を「基準波長（ここでは G）で合わせた上で，B/R における位相遅れの相対誤差を導入する」}という定義に対応する．
+すなわち，mismatched では G では設計通りに補償が成立しても，B/R では補償残差（楕円偏光成分）が残り，アナライザ透過後の正面漏れ $T_{\mathrm{leak}}(0,0)$ が増加し得る．
+実際，$A_{\mathrm{scale}}$ が大きい領域では，R チャネルの漏れが増えることで $\mathrm{CR}_{00,\mathrm{W}}$ が低下する傾向が見られた（例：$A_{\mathrm{scale}}=2.0$ では $\mathrm{CR}_{00,\mathrm{R}}$ が $4.41\times 10^4$ から $3.07\times 10^4$ に低下）．
+
+\subsubsection{設計上の含意}
+以上より，\textbf{分散マッチングは「正面コントラストのピーク値」だけでなく，「ピーク近傍での安定性（白色での劣化抑制）」に効く}ことが分かる．
+特に，A-plate の retardation を強めて高い $\mathrm{CR}_{00}$ を狙う設計（$A_{\mathrm{scale}}\gtrsim 1.5$）では，B/R での位相遅れ誤差が白色漏れを支配しやすく，mismatched 条件での $\mathrm{CR}_{00,\mathrm{W}}$ 劣化が顕在化する．
+したがって，白色暗状態の正面コントラストを高く保つには，
+(1) LC と補償板の $\Delta n(\lambda)$ の相対分散を整合させる（matched 化），
+(2) あるいは分散ミスマッチを見込んで A-plate 設計点を保守側に寄せる／追加補償自由度を導入する，
+といった方針が有効である．
+
+% % ---- 図（別途貼り付け：波長別 CR00 の棒グラフや，matched/mismatched の比較図など） ----
+% \begin{figure}[t]
+%   \centering
+%   % \includegraphics[width=0.8\linewidth]{ex22_CR00_compare.png}
+%   \caption{例題2-2：matched/mismatched における $\mathrm{CR}_{00}$ の比較（B/G/R および白色）．}
+%   \label{fig:ex22_cr00_compare}
+% \end{figure}

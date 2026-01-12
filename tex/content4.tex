@@ -1,0 +1,76 @@
+\subsection{例題2：A-plate/C-plate 膜厚の同時スイープによる暗状態視野角最適化（\texttt{ex2.py}）}
+本例題では，A-plate と C-plate の膜厚（本実装では A-plate はスケール因子 $A_{\mathrm{scale}}$，C-plate は符号付き膜厚 $C_{\mu\mathrm{m}}$）を二次元で走査し，暗状態コントラストの \textbf{正面性能}と\textbf{視野角性能}を同時に評価する．評価は白色（B/G/R 平均）かつ分散整合（matched）条件で行い，$\theta_{\max}=60^\circ$，角度刻み $\Delta\theta=\Delta\phi=5^\circ$ の格子上で $\mathrm{CR}(\theta,\phi)$ を計算した（\texttt{examples/ex2\_Ascale\_C\_grid\_check\_signedC/} 以下に出力）．本節では，(i) 正面コントラスト $\mathrm{CR}_{00}$，(ii) しきい値超過率 $\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$，(iii) ISO 等高線（ISO\_PLOT）の三点から最適条件を説明する．
+
+\subsubsection{評価指標}
+\paragraph{(1) 正面コントラスト $\mathrm{CR}_{00}$}
+正面 $(\theta,\phi)=(0,0)$ における漏れ透過率 $T_{\mathrm{leak}}$ から
+\[
+\mathrm{CR}_{00}=\frac{1}{T_{\mathrm{leak}}(0,0)}
+\]
+として定義する（\texttt{CR\_from\_Tleak}）．本スタックでは C-plate の光学軸が $z$ 方向（$[0,0,1]$）であり，正面入射では波数ベクトル $\mathbf{k}$ と平行となるため C-plate の位相遅れ寄与が消失する．したがって，\textbf{$\mathrm{CR}_{00}$ は $C_{\mu\mathrm{m}}$ に依存せず，主として $A_{\mathrm{scale}}$ により決まる}．実際，今回の走査では
+\[
+A_{\mathrm{scale}}=0.5,\,1.0,\,1.5,\,2.0 \quad \Rightarrow \quad
+\mathrm{CR}_{00}\approx 2.39\times 10^3,\ 4.49\times 10^3,\ 1.26\times 10^4,\ 1.21\times 10^4
+\]
+となり，正面最適は $A_{\mathrm{scale}}\simeq 1.5$ 付近に現れる．
+
+\paragraph{(2) しきい値超過率 $\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$}
+視野角格子上で $\mathrm{CR}(\theta,\phi)>\mathrm{thr}$ を満たす領域の割合を，立体角重み $\sin\theta$ を用いて
+\[
+\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}
+=\frac{\sum_{\theta,\phi}\sin\theta\,\Delta\theta\,\Delta\phi\ \mathbb{I}\!\left(\mathrm{CR}(\theta,\phi)>\mathrm{thr}\right)}
+{\sum_{\theta,\phi}\sin\theta\,\Delta\theta\,\Delta\phi}
+\]
+で近似評価する（実装は \texttt{\_solid\_angle\_fraction\_over\_threshold}）．本例題では $\mathrm{thr}=100$ とし，\textbf{視野角で暗状態が維持される範囲の広さ}を単一スカラーで比較する．
+
+\paragraph{(3) ISO\_PLOT（等高線形状）}
+$\mathrm{CR}(\theta,\phi)$ の等高線を極座標上に描き，$\mathrm{CR}=100$ 等の境界線の張り出し（到達 $\theta$）と形状の歪み（方位依存）を可視化する．本例題では塗りつぶしを行わず，等高線のみを描画した（\texttt{ISO\_contour\_matched\_C\_d*.png}）．
+
+\subsubsection{A-plate 膜厚（$A_{\mathrm{scale}}$）の最適化：$\mathrm{CR}_{00}$ に基づく候補選定}
+A-plate は基準 retardation（各 A-plate の基準値 $R_{0,\mathrm{A}}^{\mathrm{base}}=155\ \mathrm{nm}$）を $A_{\mathrm{scale}}$ 倍して設定する．膜厚は $\Delta n$ により
+\[
+d_{\mathrm{A,bot}}=\frac{R_{0,\mathrm{A}}^{\mathrm{base}}A_{\mathrm{scale}}}{\Delta n_{\mathrm{A,bot}}},\qquad
+d_{\mathrm{A,top}}=\frac{R_{0,\mathrm{A}}^{\mathrm{base}}A_{\mathrm{scale}}}{\Delta n_{\mathrm{A,top}}}
+\]
+で与えられる（本実装では $\Delta n_{\mathrm{A,bot}}=0.00145,\ \Delta n_{\mathrm{A,top}}=0.00142$）．例えば
+\[
+A_{\mathrm{scale}}=2.0 \Rightarrow
+(d_{\mathrm{A,bot}},d_{\mathrm{A,top}})\approx(214,\ 218)\ \mu\mathrm{m},
+\qquad
+A_{\mathrm{scale}}=1.0 \Rightarrow (107,\ 109)\ \mu\mathrm{m}
+\]
+となる．
+前述の通り $\mathrm{CR}_{00}$ は $A_{\mathrm{scale}}$ に強く依存し，$A_{\mathrm{scale}}\approx 1.5$ で最大（$\sim 1.26\times 10^4$）となった．一方で，$A_{\mathrm{scale}}=2.0$ でも $\mathrm{CR}_{00}\sim 1.2\times 10^4$ を維持しており，\textbf{正面性能の観点では $A_{\mathrm{scale}}=1.5\sim 2.0$ が実用的な候補域}といえる．
+
+\subsubsection{C-plate 膜厚（$C_{\mu\mathrm{m}}$）の最適化：$\mathrm{frac}\{\mathrm{CR}>100\}$ と ISO\_PLOT に基づく決定}
+C-plate は符号付き膜厚 $C_{\mu\mathrm{m}}$ で与えられ，\textbf{$C_{\mu\mathrm{m}}>0$ の場合は上下に同厚の C-plate（L-C と U-C）を配置し，$C_{\mu\mathrm{m}}<0$ の場合は U-C のみを配置して複屈折符号を反転（$-\Delta n_{\mathrm{C}}$）}する（\texttt{signedC} 実装）．したがって，$C_{\mu\mathrm{m}}=+0.5$ は上下それぞれ $0.5\ \mu\mathrm{m}$（合計 $1.0\ \mu\mathrm{m}$ 相当），$C_{\mu\mathrm{m}}=+1.0$ は合計 $2.0\ \mu\mathrm{m}$ 相当の C-plate を意味する．
+
+二次元走査（$A_{\mathrm{scale}}\in\{0.5,1.0,1.5,2.0\}$，$C_{\mu\mathrm{m}}\in\{-1.5,-1.0,-0.5,0,0.5,1.0,1.5\}$）の結果，$\mathrm{frac}\{\mathrm{CR}>100\}$ は $C_{\mu\mathrm{m}}$ に対して明瞭な最適点を示し，その最適 $C_{\mu\mathrm{m}}$ は $A_{\mathrm{scale}}$ によりシフトした．具体的には，
+\[
+A_{\mathrm{scale}}=1.0 \Rightarrow C_{\mu\mathrm{m}}=+1.0\ \text{で最大} \ (\mathrm{frac}\approx 0.530),
+\qquad
+A_{\mathrm{scale}}=2.0 \Rightarrow C_{\mu\mathrm{m}}=+0.5\ \text{で最大} \ (\mathrm{frac}\approx 0.483)
+\]
+となり，\textbf{A-plate を厚くすると最適 C-plate は薄い側へ移る}傾向が確認された．ISO\_PLOT でも，最適近傍では $\mathrm{CR}=100$ 等高線がより大きな $\theta$ まで張り出し，方位方向に極端な切れ込みが生じにくい（視野角全体での暗状態維持）ことが視覚的に確認できる．逆に，負の $C_{\mu\mathrm{m}}$（$-\Delta n_{\mathrm{C}}$）や過大な $|C_{\mu\mathrm{m}}|$ では，高 $\theta$ 側で等高線が内側へ退き，$\mathrm{frac}\{\mathrm{CR}>100\}$ が低下した．
+
+以上を踏まえ，本例題では \textbf{正面性能（$\mathrm{CR}_{00}$）と視野角性能（$\mathrm{frac}$，ISO\_PLOT）の両立}という観点から，
+\[
+\boxed{
+A_{\mathrm{scale}}=2.0,\quad C_{\mu\mathrm{m}}=+0.5
+}
+\]
+を推奨解として採用する．この条件は $\mathrm{CR}_{00}\approx 1.21\times 10^4$ を維持しつつ，$\mathrm{frac}\{\mathrm{CR}>100\}\approx 0.483$ と大きな視野角領域を確保する（図は別途挿入）．一方，\textbf{視野角領域の最大化のみ}を主目的とする場合は $(A_{\mathrm{scale}},C_{\mu\mathrm{m}})=(1.0,+1.0)$ が $\mathrm{frac}\approx 0.530$ と最大であり，設計意図に応じて選択すべきである．
+
+% % ---- 図（別途貼り付け） ----
+% \begin{figure}[t]
+%   \centering
+%   % \includegraphics[width=0.48\linewidth]{ISO_contour_matched_C_d1.0um_A1.00_thr100.png}
+%   % \includegraphics[width=0.48\linewidth]{ISO_contour_matched_C_d0.5um_A2.00_thr100.png}
+%   \caption{例題2：$A_{\mathrm{scale}}$ と $C_{\mu\mathrm{m}}$ の走査による ISO 等高線（$\mathrm{thr}=100$）の比較例．
+%   左：$\mathrm{frac}\{\mathrm{CR}>100\}$ 最大（$A_{\mathrm{scale}}=1.0,\,C_{\mu\mathrm{m}}=+1.0$）．
+%   右：$\mathrm{CR}_{00}$ を高く保ちつつ視野角を広げた推奨条件（$A_{\mathrm{scale}}=2.0,\,C_{\mu\mathrm{m}}=+0.5$）．}
+%   \label{fig:ex2_iso_compare}
+% \end{figure}
+
+\subsubsection{小括}
+\texttt{ex2.py} による二次元走査は，(i) 正面指標 $\mathrm{CR}_{00}$ により $A_{\mathrm{scale}}$ の候補域を定め，(ii) $\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$ と ISO\_PLOT により $C_{\mu\mathrm{m}}$ を最適化する，という実務的な設計分解を与える．特に C-plate は正面には影響せず視野角で支配的に効くため，\textbf{「正面は A-plate，視野角は C-plate」}という役割分担が本結果からも確認できる．

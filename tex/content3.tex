@@ -1,0 +1,81 @@
+\section{例題（プログラム実行例）}
+\subsection{例題の概要}
+本節では，\texttt{ips\_compensation.py} が提供する代表的な解析手順を，三つの例題として体系的に整理する．いずれの例題においても，視野角（入射角 $\theta$ と方位角 $\phi$）に依存する暗状態漏れをコントラスト比 $\mathrm{CR}$ の等高線（ISO）として可視化し，併せて設計評価のための指標（正面視コントラスト $\mathrm{CR}_0$，閾値超過率 $\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$，および distortion 指標）を数値として併記する．ここで $\mathrm{CR}_0$ は通常 $\theta=0$（正面入射）における白色評価の $\mathrm{CR}$ を指し，$\mathrm{frac}\{\mathrm{CR}>\mathrm{thr}\}$ は所定の視野角領域内で $\mathrm{CR}$ が閾値 $\mathrm{thr}$ を上回る割合として定義する．distortion 指標は，等高線形状の歪みや非対称性を定量化し，視野角特性の変形を単一のスカラー量として比較するために用いる．
+
+\subsubsection{用語の定義：phase dispersion と mismatch}
+本仕様書では，位相遅れ（retardation）を
+\begin{equation}
+\label{eq-retardation}
+\Gamma(\theta,\phi,\lambda)=\frac{2\pi}{\lambda}\,\Delta n_{\mathrm{eff}}(\theta,\phi,\lambda)\,d
+\end{equation}
+と表し，この $\Gamma$ の波長依存性を \textbf{phase dispersion} と呼ぶ．ここで $\Delta n_{\mathrm{eff}}(\theta,\phi,\lambda)$ は入射角に依存する実効複屈折，$d$ は層厚である．
+
+また，\textbf{dispersion mismatch} とは，異なる要素（例：LC と A-plate）において $\Delta n(\lambda)$ の相対スケールが一致しないことに起因して，$\Gamma(\lambda)$ の波長依存が要素間で相殺されず，暗状態の干渉条件（偏光状態の打ち消し）が波長間で整合しない状況を指す．この不整合は，単色（設計波長）では十分に抑えられている漏れが，白色評価では再び顕在化する主要因となる．
+
+\subsubsection{$R_0$, $R_{\mathrm{th}}$ の定義（A-plate / C-plate / LC との関係を含む）}
+\paragraph{一般的な定義}
+フィルムの主屈折率を $(n_x,n_y,n_z)$，膜厚を $d$ とすると，リタデーション長は一般に
+\begin{align}
+R_0 &\equiv (n_x-n_y)\,d
+\quad \text{(面内リタデーション；正面入射での面内位相遅れ長)},\\
+R_{\mathrm{th}} &\equiv \left(n_z-\frac{n_x+n_y}{2}\right)d
+\quad \text{(厚み方向リタデーション；biaxial film の代表的定義)}
+\end{align}
+と定義する．なお，規格・流儀により $R_{\mathrm{th}}=(n_z-n_y)d$ 等の別定義も存在し得るが，本資料では上式を採用する．リタデーションRetardation（位相遅れ） $\Gamma$ は一般に
+\[
+\Gamma=\frac{2\pi}{\lambda}\,R
+\]
+の形で現れ，$\lambda$ は真空波長，$R$ はリタデーション長である（本コード実装においても，$\Gamma$ は $2\pi/\lambda$ を前因子に持つ形で扱う）．
+
+\paragraph{retardation 長 $R$ と $R_0$, $R_{\mathrm{th}}$ の関係（近似と一般形）}\\
+\textbf{(A) 単軸／正面入射の簡約：} 正面入射近傍で，素子を面内 retarder（A-plate）として扱う簡約では，retardation 長 $R$ は面内リタデーション $R_0$ により近似でき，
+\[
+R \approx R_0
+\]
+とみなしてよい．この近似は，A-plate の主効果が面内主屈折率差 $(n_x-n_y)$ により支配される場合の直観的な基準式として用いる．
+
+\textbf{(B) 一般（斜入射・二軸性）：} 斜入射では面内成分に加えて厚み方向（$z$）成分が寄与し，固有偏光（有効主軸）も入射角に応じて変化する．このとき位相遅れは
+\[
+\Gamma(\theta,\phi,\lambda)=\frac{2\pi}{\lambda}\,R^{\mathrm{eff}}(\theta,\phi,\lambda)
+\]
+で表され，$R^{\mathrm{eff}}$ は概念的に
+\[
+R^{\mathrm{eff}}(\theta,\phi,\lambda)
+= f\!\left(R_0(\lambda),\,R_{\mathrm{th}}(\lambda),\,\theta,\,\phi,\,\text{軸方位},\,\text{二軸性}\right)
+\]
+のように $R_0$ と $R_{\mathrm{th}}$ の組合せ，および入射条件・配向条件から定まる関数として表される．本研究ではこの $R^{\mathrm{eff}}$ を Jones matrix計算により評価する．
+
+\paragraph{A-plate / C-plate / LC との関係（概念）}
+IPS 補償の文脈では，$R_0$ と $R_{\mathrm{th}}$ は各補償板の役割に直結する．
+\begin{itemize}
+  \item \textbf{A-plate（面内補償）:}
+  主として \textbf{$R_0$} を付与する層であり，LC が暗状態で生成する面内位相遅れに対して対抗する retardation を導入することで，偏光子（POL）・補償板・LC の相対光学軸が設計値からずれた場合（貼合・配向公差）や，斜入射により有効主軸が変化した場合にも，消光条件が破れにくい全体位相条件を構成することを目的とする．
+  \item \textbf{C-plate（厚み方向補償）:}
+  主として \textbf{$R_{\mathrm{th}}$} を付与する層であり，斜入射（$\theta$ 増大）に伴って顕在化する厚み方向起因の位相ずれを補償する．面内補償のみでは抑えきれない角度依存残差に対し，$\theta$ 方向の安定化を与える役割を担う．
+  \item \textbf{LC（液晶層）:}
+  配向角を持つ異方層として $R_0$ 相当の位相遅れを生成し，暗状態漏れ（$T_{\mathrm{leak}}$）とその視野角依存の主要因となる．A/C 補償板は，この LC 起因の位相遅れを波長・角度の両面で相殺するよう設計される．
+\end{itemize}
+
+\paragraph{波長分散}
+Retardationは式~\ref{eq-retardation}で与えられ波長$\lambda$に依存する。
+このため、各層のretardationのマッチングをとる必要がある。
+ここで、本節で用いる「マッチング（matched）」とは，液晶（LC）層と補償板（主として A-plate）の複屈折分散 $\Delta n(\lambda)$ の\emph{相対的な}波長依存性が整合している状態を指す．すなわち，B/G/R 等の代表波長に対して $\Delta n$ のスケーリング係数が同一（または同等）であり，位相遅れ（retardation)
+の波長依存が要素間で相互に補償し合う条件が成立している．一方，「ミスマッチ（mismatched）」では，LC と A-plate で $\Delta n(\lambda)$ の相対スケールが異なるため，設計波長（典型的には G）で最適化した補償条件が他波長では厳密に成立しない．この結果，B/G/R の重み付き平均として定義される白色評価において，$\mathrm{CR}_0$ が低下し得るだけでなく，視野角等高線の形状変形として現れる場合がある．
+
+\subsection{A-plate/C-plate/LC による補償板設計指針（retardation と光学軸ずれに基づく概念整理）}
+本節では，IPS 系暗状態補償における A-plate / C-plate / LC の設計指針を，retardation（位相遅れ長）$R_0$ および $R_{\mathrm{th}}$ の関係に基づき概念的に整理する．特に，暗状態漏れの増大要因として（i）POL/A-plate/LC の相対光学軸ずれ（製造・貼合公差），および（ii）斜入射に伴う実効複屈折・有効主軸の変化を明示し，これらに対して消光条件を保つための設計基準を述べる．以降の章では Jones/Berreman 計算により厳密評価と最適化を実施するが，本節では設計変数の役割分担と基準関係を明確化することを目的とする．
+
+\subsubsection{構成（スタック）}\label{sec:stack}
+本研究で扱う IPS 暗状態補償の基本スタックを以下に説明する。解析対象は retardation を支配する主要要素として，偏光子（POL），補償板（A-plate および必要に応じて C-plate），ならびに液晶（LC）層から構成される．本コードでは，これらを光学的異方層の直列積（Jones行列積）として扱い，入射条件 $(\theta,\phi)$ と波長 $\lambda$ に対する透過偏光状態の変換を評価する．
+
+\paragraph{スタックの定義}
+標準的な構成は，
+\begin{center}
+\textbf{POL} \;-\; \textbf{A-plate (top)} \;-\; \textbf{LC} \;-\; \textbf{A-plate (bottom)} \;-\; \textbf{(C-plate)} \;-\; \textbf{POL}
+\end{center}
+で表される（括弧は必要に応じて導入する層を示す）．A-plate を上下に配置する構成は，LC により生成される面内 retardation に対し，合成 retarder として対抗する retardation を付与し，設計点（正面・設計波長）における消光条件の確保と，配向角公差・斜入射に対する感度低減を目的とする．C-plate は主として斜入射で顕在化する厚み方向成分の残差位相を補償する目的で導入する．
+
+\paragraph{膜厚パラメータ}
+各層の膜厚を $d_{\mathrm{A,top}}$, $d_{\mathrm{LC}}$, $d_{\mathrm{A,bot}}$, $d_{\mathrm{C}}$ と表す．LC 層厚 $d_{\mathrm{LC}}$ はセルギャップに対応し，A-plate および C-plate の膜厚は各フィルムの仕様値として与える．本実装では，位相遅れは一般に $\Gamma\propto \Delta n\,d/\lambda$ に比例するため，膜厚は retardation を規定する主要パラメータとして明示的に保持する．
+
+
