@@ -1,0 +1,25 @@
+{
+  "tag": "LC_AC_abs",
+  "dispersion": "flat",
+  "wavelengths_nm": [
+    450.0,
+    470.0,
+    490.0,
+    510.0,
+    530.0,
+    550.0,
+    570.0,
+    590.0,
+    610.0,
+    630.0,
+    650.0
+  ],
+  "pol_in": 0.0,
+  "pol_out": 0.0,
+  "relLC": 0.25,
+  "relA": 0.25,
+  "A_scale_ref": 0.75,
+  "ReC_nm_ref": 85.0,
+  "A_base_deg": 90.0,
+  "A_kind": "upper"
+}

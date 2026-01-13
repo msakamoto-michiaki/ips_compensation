@@ -1,10 +1,10 @@
 {
-  "global_best_CR": 893.6242506547042,
+  "global_best_CR": 909.7076398305525,
   "global_best": {
     "A_scale": 0.75,
     "ReA_nm": 116.25,
-    "best_CR": 893.6242506547042,
-    "best_ReC_nm": 80.0,
+    "best_CR": 909.7076398305525,
+    "best_ReC_nm": 85.0,
     "best_A_base_deg": 90.0,
     "best_A_kind": "upper",
     "CR_rel_to_global_best": 1.0,
