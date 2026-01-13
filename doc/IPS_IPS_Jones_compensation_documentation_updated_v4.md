@@ -99,13 +99,15 @@
 #### 実行例
 
 ```bash
-python ips_compensation4_stacks_envelope.py \
+python ips_compensation4_stacks_envelope_AstepIso.py \
   --outdir out_opt \
-  --theta 30 --phi 45 \
-  --Amin 0.60 --Amax 1.40 --Ad 0.05 \
+  --stack LC_AC_abs \
+  --Amin 0.60 --Amax 2.40 --Ad 0.05 \
   --ReCmin -280 --ReCmax 280 --ReCd 20 \
-  --stack all \
-  --track_progress --progress_stride 5 --progress_plot
+  --track_progress --progress_plot \
+  --progress_iso_stride 5 \
+  --export_envelope \
+  --export_Astep_iso
 ```
 
 #### 出力（生成ファイル）
@@ -130,6 +132,70 @@ python ips_compensation4_stacks_envelope.py \
   - `summary.csv` : 各スタックでのベストCR、全方位min/5%点、基準（LCのみ）との比較
 
 ---
+
+---
+
+### 出力ファイルの意味（outdir配下）
+
+以下は `--outdir out_opt --stack LC_AC_abs` のように実行した場合を例に、`out_opt/` 配下に生成される代表ファイルが「何を意味するか」「何に使うか」をまとめたものです（`<tag>` はスタックタグ）。
+
+#### 最終最適解（best）
+- `best_stack_<tag>.json`  
+  **意味**: 探索した全パラメータの中で、ターゲット視角（例: `theta=30°, phi=45°`）のCRが最大だった「スタックの完全レシピ」。  
+  **用途**: 後から同じ条件の再計算・再描画をするための保存設計（再現性の根拠）。
+- `iso_<tag>_best.png`  
+  **意味**: `best_stack_<tag>.json` のスタックについて、角度グリッド上で計算した **等コントラスト（ISO-CR）極座標プロット**。  
+  **用途**: 最終最適解の視野角特性を一目で確認する代表図。
+
+#### Stokesトレース（偏光状態の層別追跡）
+- `stokes_white_<tag>.json/.csv`  
+  **意味**: 層ごとの Stokes（S0..S3）を **白色（波長加重平均）**でまとめたトレース。  
+  **用途**: どの層で偏光がどう回り、暗状態リークがどう抑制されているかを解析（Poincaré球的挙動の確認）。
+- `stokes_per_wavelength_<tag>.json/.csv`  
+  **意味**: 層ごとの Stokes を **波長ごと**に列挙したトレース。  
+  **用途**: 色依存で補償が崩れていないか（特定波長でリークが増えないか）を確認。
+
+#### progress（探索中の「best更新」ログ）
+- `progress_<tag>.csv/.json`（`--track_progress`）  
+  **意味**: 探索中に **best（最高CR）が更新された瞬間だけ**を記録するログ。  
+  **用途**: 探索がどこで収束したか、改善が起きたパラメータ領域はどこか、次の探索レンジの当たりを付ける。
+- `progress_<tag>_CR.png`（`--progress_plot`）  
+  **意味**: best更新回数（`update_idx`）に対する `best_CR` の推移プロット。  
+  **用途**: 収束状況の可視化。
+
+#### progress由来のISO（best更新履歴のスナップショット）
+- `iso_progress_<tag>/index.csv`（`--progress_iso_stride`）  
+  **意味**: progressのどの記録点（更新回）をISO化したかと、PNGの対応表。  
+  **用途**: ISO図がどの時点のbestを表しているか追跡する。
+- `iso_progress_<tag>/iso_<tag>_uXXX.png`  
+  **意味**: progressの記録点のうち、指定間隔（例: 5更新ごと）で保存したISO-CR図。  
+  **注意**: **best更新が止まると progress が増えず、ISOも増えません**。  
+  **用途**: bestが改善するにつれて視野角特性がどう変わったかを時系列で観察。
+
+#### A膜厚ステップごとの最適点（envelope）
+- `A_envelope_<tag>.csv`（`--export_envelope`）  
+  **意味**: A_scale（A膜厚ステップ）を固定したときに、そのAで最適となる ReC（等）を探索し、**Aステップごとの最適点**を1行にまとめた表。  
+  **用途**: A膜厚の設計余裕・許容差（AずれでCRがどれだけ落ちるか）を評価する基礎データ。
+- `A_envelope_<tag>_CR.png` / `A_envelope_<tag>_rel_to_best.png`  
+  **意味**: envelope（Aごとの到達best_CR）をプロットした図（後者は全体bestで正規化した相対図）。  
+  **用途**: ピークの鋭さ/鈍さ（製造許容差の観点）を直感的に把握する。
+- `A_envelope_<tag>_best.json`  
+  **意味**: envelope上で得られた最良点（全Aの中でもベスト）をまとめたJSON。  
+  **用途**: envelope観点の最良点を再参照する。
+
+#### Aステップ最適点ごとのISO（拡張：best更新に依存しないISO群）
+- `iso_Astep_<tag>/index.csv`（`--export_Astep_iso`）  
+  **意味**: `A_envelope_<tag>.csv` の各行（各Aステップ最適点）に対して作成したISO PNGの対応表。  
+  **用途**: Aと最適ReCに対応するISO図を機械的に追跡する。
+- `iso_Astep_<tag>/iso_<tag>_A###.png`  
+  **意味**: **各Aステップで最適なReC点**（envelopeの各行）に対して必ず保存されるISO-CR図。  
+  **用途**: A膜厚のずれに対する視野角特性の変化を、ISO図で一括比較（ばらつき評価・ターゲット選定）。
+
+#### サマリ
+- `summary.csv`  
+  **意味**: 実行したスタックの代表指標を1行にまとめた総括表。  
+  **用途**: 複数スタックを回したときの比較・選定に使用。
+
 
 ### 3.2 `ips_stokes_trace.py`（Stokes追跡の単体実行）
 
@@ -235,6 +301,123 @@ TACフィルム（±C相当）、A-plate、LC、（符号付き）C-plate を含
 
 ---
 
+
+---
+
+#### 5.1.x 詳細解説（仕様書PDFの Section 5.3 / 5.4 相当）
+
+この節では、`ips_compensation_run_signedC.py` の **主要4関数**（`eq3a_Gamma_A`, `eq3b_Gamma_C`, `build_stack_realistic`, `Tleak_stack_scalar`）と、
+それらを支える補助関数（`k_hat`, `o_axis_Otype`, `retarder_matrix`, `pol_axes`, `CR_from_Tleak` ほか）について、
+数式・座標・数値安定化の観点から整理します。
+
+##### `eq3a_Gamma_A(theta_deg, phi_deg_rel, lam, d, no, ne)`（Eq. 3a：A-plate / LC 用の斜入射見かけ遅相）
+
+- **役割**  
+  面内に光学軸をもつ一軸性レターダ（A-plate/LC）について、斜入射角 `(θ, φ)` での **見かけ位相差** `ΓA` [rad] を返します。  
+  ここで `phi_deg_rel` は **素子軸方位 `α` に対する相対方位角** `φrel = φ − α` を与えます。
+
+- **なぜ `φrel` を使うか（重要）**  
+  `φ`（ラボ座標の方位角）をそのまま使うと、素子軸の回転（`α`）と整合しない角度依存が混入し、
+  ISO-CR の極座標パターンが不自然になるため、必ず `φrel` を用います（実装では `phi_rel = phi_deg - axis_azimuth_deg(axis)`）。
+
+- **実装されている数式の形**  
+  実装は、`term_e`, `term_o`（平方根の中身）を計算し、
+  `ΓA = (2π/λ) d ( ne·sqrt(term_e) − no·sqrt(term_o) )` の形で評価します。
+
+- **数値安定化**  
+  `term_e`, `term_o` は数値誤差で負になり得るため、`max(…, 0)` でクリップしてから平方根を取っています。
+
+##### `eq3b_Gamma_C(theta_deg, lam, d, no, ne)`（Eq. 3b：C-plate 用の斜入射見かけ遅相）
+
+- **役割**  
+  光学軸が面法線（z軸）方向の C-plate について、斜入射角 `θ` における見かけ位相差 `ΓC` [rad] を返します。  
+  理想 C-plate は **方位角 `φ` に依存しない**ため、本関数は `φ` を引数に取りません。
+
+- **数値安定化（θ→90°の発散回避）**  
+  `d / cosθ` を含むため、`cosθ` が 0 に近づくと発散します。実装では `cosθ` に下限を設けています。  
+  また、有効屈折率を作る式の分母・平方根内部にも下限を設け、`inside >= 1e-18` のようにクリップしています。
+
+##### `retarder_matrix(k, axis_vec, Gamma)`（3D電場ベクトル版レターダ演算子）
+
+- **狙い**  
+  偏光は本質的に `k` に直交する2次元空間ですが、斜入射では「透過状態」「射影」を扱うために 3D ベクトルとして持つと実装が簡潔になります。  
+  本関数は、`k` に直交する面上に定義される直交基底 `(u, v)` を作り、その2次元部分空間に位相差 `±Γ/2` を与えます。
+
+- **内部の幾何**  
+  1. `axis_vec` を `k` に直交する平面へ射影し `a_perp` を得る  
+  2. `u = normalize(a_perp)`  
+  3. `v = normalize(k × u)`  
+  4. 射影演算子 `uu = u u^T`, `vv = v v^T`, `kk = k k^T` を用意し  
+     `M = e^{+iΓ/2} uu + e^{-iΓ/2} vv + kk` として返します。  
+     （`kk` は縦成分をそのまま通す項ですが、後段で横波条件を強制するので、結果として偏光は横成分に保たれます。）
+
+- **例外処理**  
+  `axis_vec` が `k` とほぼ平行な場合、射影 `a_perp` がゼロに近づき基底が作れないため、
+  `k` と十分直交する仮ベクトルを選んで回避しています。
+
+##### `build_stack_realistic(dC_um, A_scale, tac_repeat=..., ..., pol_pair_rot_in_deg=..., ...)`
+
+- **役割**  
+  評価対象の **retarder-only スタック**（TAC繰返し、対称 C-plate、A/LC/A）を、層辞書のリストとして構築します。  
+  偏光子/検光子はここには入れず、`Tleak_stack_scalar` 側で `c1/c2` として与えます。
+
+- **スタックの基本順序（概念）**  
+  `TAC(-C)×N / (L-C) / L-A(rot) / LC / U-A(rot) / (U-C) / TAC(-C)×N`  
+  ※ 実際に入る層は `dC_um` の有無や TAC 繰り返し数で変化します。
+
+- **軸回転ロジック（実務上重要）**  
+  基準軸：Lower A は azimuth 0°, Upper A は azimuth 90° とし、以下のように回転を与えます。
+
+  - 入射側：`axis_LA = Rz(POL_IN + REL_LA) axis_LA_base`
+  - 出射側：`axis_UA = Rz(POL_OUT + REL_UA) axis_UA_base`
+  - LC：`axis_LC = Rz(POL_IN + LC_REL) axis_0deg`
+
+  `REL_*` は「偏光子とA板が完全に一体回転しない」ミスアライメントを表し、
+  `POL_PAIR_ROT_*` は「偏光子と（基準の）A板が一緒に回る」ペア回転を表します。
+
+- **厚み（d）の決定（Re→d の逆算）**  
+  A-plate は基準遅相 `Re_each`（nm）を `A_scale` でスケールし、`d = Re_each / Δn` で厚みを決めます（実装は SI 単位に換算して計算）。
+
+##### `Tleak_stack_scalar(theta_deg, phi_deg, stack, c1, c2)`（リーク計算：Eq.(2) / Eq.(5) と等価な実装）
+
+- **役割**  
+  指定視野角 `(θ, φ)` における暗状態リーク透過率 `Tleak`（スカラー）を返します。  
+  白色評価では、B/G/R の `Tleak(λ)` を **重み付き平均**して 1 つの `Tleak` を作ります。
+
+- **Eq.(2) の扱い（偏光子/検光子は“行列”にしない）**  
+  実装上の要点は、偏光子/検光子を損失行列として積層に入れず、
+  1) 入射偏光を偏光子透過状態 `o1(k)` に固定し、  
+  2) 出射側で検光子透過状態 `o2(k)` へ射影する  
+  ことで Eq.(2) 相当の効果を取り込むことです（簡略モデルでは Fresnel 項は省略）。
+
+- **Eq.(5)（積層演算子）の等価表現**  
+  全体は概念的に  
+  `a(θ, φ) = o2(k)^T  ( Π_n  M_n(k, a_n, Γ_n) )  o1(k)`、`Tleak ∝ |a|^2`  
+  という形で書けます（`M_n` が `retarder_matrix` に相当）。
+
+- **処理フロー（実装の骨格）**  
+  1. `k = k_hat(θ, φ)`  
+  2. `o1 = o_axis_Otype(k, c1)`, `o2 = o_axis_Otype(k, c2)`  
+  3. `E0 ← o1` としてスタックに入射  
+  4. 波長ループ（B/G/R）  
+     - 層ループ：A/LC は `Γ=eq3a_Gamma_A(θ, φ−α, ...)`、C は `Γ=eq3b_Gamma_C(θ, ...)`  
+     - `E ← retarder_matrix(k, axis, Γ) E`  
+     - **横波条件の強制**：`E ← E − (E·k)k`（層更新ごとに縦成分を除去）  
+     - 出射で `amp = o2·E`, `T ∝ |amp|^2`  
+  5. 波長加重平均（`WL_KEYS`, `WL_WEIGHTS`）で白色 `Tleak` を返す
+
+- **出力値の意味**  
+  ここで得る `Tleak` は Fresnel 係数等を省略した簡略値で、CR の **相対比較**（最適化・等コントラスト図）に用います。
+
+##### 補助関数（Section 5.4 相当）：何をどの数式に対応させているか
+
+- `k_hat(theta, phi)`：球座標から単位波数ベクトル `k` を構成します。  
+- `o_axis_Otype(k, c)`：O-type 偏光子の ordinary 透過状態 `o = normalize(k×c)` を与えます。  
+- `pol_axes(pol_pair_rot_in_deg, pol_pair_rot_out_deg)`：偏光子/検光子の吸収軸 `c1, c2` を、基準（x, y）から面内回転で生成します。  
+- `CR_from_Tleak(Tleak)`：`CR = 1 / (Tleak + 1/CR0_TARGET)` の形で有限CR0を考慮してCRに変換します。  
+- `_ne_no_for_wl(el, wl_key)`：層の `(no, ne)` を波長キーに応じて与えます（分散を使わない場合は `Δn` 一定で `Γ ∝ 1/λ` のみを反映）。
+
+---
 ### 5.2 `ips_compensation4_stacks_envelope.py`（最適化・出力）
 
 #### `setup_model()`
@@ -319,4 +502,4 @@ Stokes計算用の直交基底 `u,v`（kに直交）を構成します。`basis`
 
 ---
 
-*Generated on 2026-01-12*
+*Generated on 2026-01-13*
