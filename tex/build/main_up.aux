@@ -1,56 +1,126 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand*\HyPL@Entry[1]{}
+\citation{Lee2006}
+\citation{Oh2015}
 \HyPL@Entry{0<</S/D>>}
-\@writefile{toc}{\contentsline {section}{\numberline {1}IPS光学補償フィルム構成の最適化}{1}{section.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}計算条件（探索格子と評価量）}{1}{subsection.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}最適化が想定している波長}{1}{subsection.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}最適化結果}{2}{subsection.1.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces  ターゲット視点での$CR(\theta {=}30^\circ ,\phi {=}45^\circ )$ ReA--ReC ２次元マップ}}{2}{figure.caption.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1}数値モデル（IPSモードにおける光学補償最適化設計）}{1}{section.1}\protected@file@percent }
+\newlabel{sec:model_details_jp}{{1}{1}{数値モデル（IPSモードにおける光学補償最適化設計）}{section.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}計算の概要}{1}{subsection.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}座標系と角度}{1}{subsection.1.2}\protected@file@percent }
+\newlabel{sec:coord_system_jp}{{1.2}{1}{座標系と角度}{subsection.1.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1}グローバル座標系}{2}{subsubsection.1.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2}ローカル横波面と基底射影}{2}{subsubsection.1.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subparagraph}{各リターダ層の $(u,v)$ 基底}{2}{section*.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}偏光板モデル}{2}{subsection.1.3}\protected@file@percent }
+\newlabel{subsec:pol_model}{{1.3}{2}{偏光板モデル}{subsection.1.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.1}クロスニコル偏光板の off-axis 有効軸}{2}{subsubsection.1.3.1}\protected@file@percent }
+\newlabel{subsec:otype_pol}{{1.3.1}{2}{クロスニコル偏光板の off-axis 有効軸}{subsubsection.1.3.1}{}}
+\newlabel{eq:otype_oaxis}{{1}{2}{クロスニコル偏光板の off-axis 有効軸}{equation.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces 引用論文に示された Eq.~(2)（クロス O-type 偏光板の斜入射リーク）参照画像（クロップ）．}}{3}{figure.caption.2}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:ReA_ReC_map}{{1}{2}{ターゲット視点での$CR(\theta {=}30^\circ ,\phi {=}45^\circ )$ ReA--ReC ２次元マップ}{figure.caption.1}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces REF（Pol/LC/Analyzer），best条件，および第2ピーク条件における正面CR00とターゲット視点CR（$\theta =30^\circ ,\phi =45^\circ $）の比較．}}{3}{table.caption.2}\protected@file@percent }
-\newlabel{tab:ref_best_second}{{1}{3}{REF（Pol/LC/Analyzer），best条件，および第2ピーク条件における正面CR00とターゲット視点CR（$\theta =30^\circ ,\phi =45^\circ $）の比較．}{table.caption.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}best条件と参照（Pol/LC/Analyzer）の ISO-CR 比較}{3}{subsection.1.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{REF（LC-only）}{3}{section*.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{best（LC/A/C）}{3}{section*.5}\protected@file@percent }
-\newlabel{fig:sub_ref}{{2a}{4}{REF構成}{figure.caption.3}{}}
-\newlabel{sub@fig:sub_ref}{{a}{4}{REF構成}{figure.caption.3}{}}
-\newlabel{fig:sub_best}{{2b}{4}{最適条件}{figure.caption.3}{}}
-\newlabel{sub@fig:sub_best}{{b}{4}{最適条件}{figure.caption.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces ISO-CR 比較．(a) 補償なしのREF構成、(b) A/Cプレートによる最適化後。}}{4}{figure.caption.3}\protected@file@percent }
-\newlabel{fig:iso_plot}{{2}{4}{ISO-CR 比較．(a) 補償なしのREF構成、(b) A/Cプレートによる最適化後。}{figure.caption.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}Stokes解析による「オフ軸クロスニコルずれ」と補償の説明}{4}{subsection.1.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{オフ軸でクロスニコル条件が崩れる理由}{4}{section*.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{A-plate + C-plate による補償の本質：出射偏光の回転}{5}{section*.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}結論}{5}{subsection.1.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2}A-plate と Analyzer 連動貼りずれに対する IPS 光学補償の感度と方位非対称性評価}{5}{section.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}要旨}{5}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}背景と目的}{6}{subsection.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}評価条件と指標}{6}{subsection.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{中心条件（best 近傍）}{6}{section*.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}連動回転（A\_polout）}{6}{subsection.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{方位非対称性指標}{7}{section*.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}結果}{7}{subsection.2.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{中心（$\Delta =0$）での ${\rm  CR}$ と初期非対称}{7}{section*.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.6}$\Delta \in [-3^\circ ,+3^\circ ]$ 全点の数値（表1）}{7}{subsection.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{方位対称化点（$\Delta \simeq +0.5^\circ $）と ${\rm  CR}00$ の挙動}{7}{section*.12}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces A-plate と Analyzer 連動回転（A\_polout）における全スキャン点（$\Delta =-3^\circ \ldots  +3^\circ $）の結果．${\rm  CR}$ は白色（W）評価．}}{8}{table.caption.11}\protected@file@percent }
-\newlabel{tab:allpoints}{{2}{8}{A-plate と Analyzer 連動回転（A\_polout）における全スキャン点（$\Delta =-3^\circ \ldots +3^\circ $）の結果．${\rm CR}$ は白色（W）評価．}{table.caption.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A+Analyzer 連動回転におけるISO-CR 比較．(a) 回転量$\Delta =0^\circ $, (b) $\Delta =3^\circ $, (c) $\Delta =-3^\circ $, }}{8}{figure.caption.14}\protected@file@percent }
-\newlabel{fig:iso_plot}{{3}{8}{A+Analyzer 連動回転におけるISO-CR 比較．(a) 回転量$\Delta =0^\circ $, (b) $\Delta =3^\circ $, (c) $\Delta =-3^\circ $,}{figure.caption.14}{}}
-\@writefile{toc}{\contentsline {paragraph}{符号依存性（$\Delta >0$ と $\Delta <0$）}{8}{section*.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.7}結論}{8}{subsection.2.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3}波長依存性評価（Dispersion: mono \& W-ISO）}{9}{section.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}評価条件}{9}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}数値結果（表）}{9}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}波長依存プロット（図）}{9}{subsection.3.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces 波長掃引における単色評価（mono）のまとめ（\texttt  {dispersion\_summary\_CRavg4.csv} 相当）．${\rm  CR}00(\lambda )$ と $\overline  {{\rm  CR}}_{30}(\lambda )$，および $\theta =30^\circ $・$\phi =\pm 45^\circ ,\pm 135^\circ $ の各 ${\rm  CR}$ を示す．}}{10}{table.caption.15}\protected@file@percent }
-\newlabel{tab:disp_summary}{{3}{10}{波長掃引における単色評価（mono）のまとめ（\texttt {dispersion\_summary\_CRavg4.csv} 相当）．${\rm CR}00(\lambda )$ と $\overline {{\rm CR}}_{30}(\lambda )$，および $\theta =30^\circ $・$\phi =\pm 45^\circ ,\pm 135^\circ $ の各 ${\rm CR}$ を示す．}{table.caption.15}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 単色評価（mono）における ${\rm  CR}00(\lambda )$ と4方位平均 $\overline  {{\rm  CR}}_{30}(\lambda )$ の波長依存性．}}{10}{figure.caption.16}\protected@file@percent }
-\newlabel{fig:lambda_dep}{{4}{10}{単色評価（mono）における ${\rm CR}00(\lambda )$ と4方位平均 $\overline {{\rm CR}}_{30}(\lambda )$ の波長依存性．}{figure.caption.16}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}RGB/W の ISO 分布（図）}{11}{subsection.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}実材料分散と分散補償スタックの必要性}{11}{subsection.3.5}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 代表波長 B/G/R の単色 ISO と，白色（W）ISO の比較．単色では波長により ISO 分布（高 ${\rm  CR}$ ローブの位置・強度）が大きく変化し得るのに対し，W は B/G/R のリーク平均によりスペクトル平均化された分布を与える．}}{12}{figure.caption.17}\protected@file@percent }
-\newlabel{fig:iso_rgbw}{{5}{12}{代表波長 B/G/R の単色 ISO と，白色（W）ISO の比較．単色では波長により ISO 分布（高 ${\rm CR}$ ローブの位置・強度）が大きく変化し得るのに対し，W は B/G/R のリーク平均によりスペクトル平均化された分布を与える．}{figure.caption.17}{}}
-\gdef \@abspage@last{12}
+\newlabel{fig:eq2_crop}{{1}{3}{引用論文に示された Eq.~(2)（クロス O-type 偏光板の斜入射リーク）参照画像（クロップ）．}{figure.caption.2}{}}
+\newlabel{eq:pol_only_leakage}{{3}{3}{クロスニコル偏光板の off-axis 有効軸}{equation.3}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.2}コードにおける偏光板実装（入射で固定，出射で射影）}{3}{subsubsection.1.3.2}\protected@file@percent }
+\newlabel{subsec:pol_impl}{{1.3.2}{3}{コードにおける偏光板実装（入射で固定，出射で射影）}{subsubsection.1.3.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.3.3}偏光板のみの極限における整合性（Eq.~\eqref  {eq:pol_only_leakage} の再現）}{4}{subsubsection.1.3.3}\protected@file@percent }
+\newlabel{eq:pol_only_amp}{{6}{4}{偏光板のみの極限における整合性（Eq.~\eqref {eq:pol_only_leakage} の再現）}{equation.6}{}}
+\newlabel{eq:pol_only_a2_general}{{7}{4}{偏光板のみの極限における整合性（Eq.~\eqref {eq:pol_only_leakage} の再現）}{equation.7}{}}
+\newlabel{eq:pol_only_a2}{{8}{4}{偏光板のみの極限における整合性（Eq.~\eqref {eq:pol_only_leakage} の再現）}{equation.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4}補償板モデル（A-plate，C-plate）}{4}{subsection.1.4}\protected@file@percent }
+\newlabel{subsec:ac_model}{{1.4}{4}{補償板モデル（A-plate，C-plate）}{subsection.1.4}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.4.1}遅相モデル：A-plate と C-plate の角度依存遅相（Eq.~(3a), Eq.~(3b)）}{5}{subsubsection.1.4.1}\protected@file@percent }
+\newlabel{subsec:retardation_model}{{1.4.1}{5}{遅相モデル：A-plate と C-plate の角度依存遅相（Eq.~(3a), Eq.~(3b)）}{subsubsection.1.4.1}{}}
+\@writefile{toc}{\contentsline {paragraph}{A-plate 遅相（Eq.~(3a)）}{5}{section*.3}\protected@file@percent }
+\newlabel{eq:GammaA}{{10}{5}{A-plate 遅相（Eq.~(3a)）}{equation.10}{}}
+\@writefile{toc}{\contentsline {paragraph}{C-plate 遅相（Eq.~(3b)）}{5}{section*.4}\protected@file@percent }
+\newlabel{eq:GammaC}{{11}{5}{C-plate 遅相（Eq.~(3b)）}{equation.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5}有効 Jones 伝達行列とスタック伝搬アルゴリズム}{5}{subsection.1.5}\protected@file@percent }
+\newlabel{subsec:effective_jones_stack}{{1.5}{5}{有効 Jones 伝達行列とスタック伝搬アルゴリズム}{subsection.1.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.1}ローカル基底における retarder 演算子}{5}{subsubsection.1.5.1}\protected@file@percent }
+\newlabel{eq:J_retarder}{{12}{5}{ローカル基底における retarder 演算子}{equation.12}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 引用論文に示された Eq.~(3a), (3b) 参照画像（クロップ）．}}{6}{figure.caption.5}\protected@file@percent }
+\newlabel{fig:eq3ab_crop}{{2}{6}{引用論文に示された Eq.~(3a), (3b) 参照画像（クロップ）．}{figure.caption.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.2}遅相 $\Gamma _n$ に基づく層作用素 $M_n$（有効 Jones 伝達行列）}{6}{subsubsection.1.5.2}\protected@file@percent }
+\newlabel{eq:Mn_def}{{14}{6}{遅相 $\Gamma _n$ に基づく層作用素 $M_n$（有効 Jones 伝達行列）}{equation.14}{}}
+\newlabel{eq:Eout_Mn}{{15}{6}{遅相 $\Gamma _n$ に基づく層作用素 $M_n$（有効 Jones 伝達行列）}{equation.15}{}}
+\newlabel{eq:stack_Mn}{{16}{6}{遅相 $\Gamma _n$ に基づく層作用素 $M_n$（有効 Jones 伝達行列）}{equation.16}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.3}全体の漏れ振幅とコントラスト指標}{7}{subsubsection.1.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.5.4}アルゴリズムまとめ}{7}{subsubsection.1.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6}Stokes 表現と Poincar\'e 球による解釈}{7}{subsection.1.6}\protected@file@percent }
+\newlabel{subsec:matrix_to_stokes}{{1.6}{7}{Stokes 表現と Poincar\'e 球による解釈}{subsection.1.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7}設計思想：クロスニコルのオフアクシス崩れを Stokes／Poincar\'e 表現で捉え，LC/A/C および C/A/LC で補償する}{8}{subsection.1.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{オフアクシス暗状態漏れの本質（クロスニコルの幾何学的崩れ）}{8}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Stokes ベクトルと「直線偏光化＋方位合わせ」という設計目標}{8}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{LC/A/C（吸収軸基準）の設計思想}{9}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{C/A/LC（透過軸基準）の設計思想}{9}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{数値最適化と Stokes トレースによる検証（設計思想の可視化）}{9}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}光学補償最適化プログラムの概要}{10}{section.2}\protected@file@percent }
+\newlabel{sec:opt_case1_case2}{{2}{10}{光学補償最適化プログラムの概要}{section.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}入力}{10}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.1}構成}{10}{subsubsection.2.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.2}膜厚}{10}{subsubsection.2.1.2}\protected@file@percent }
+\newlabel{eq:d_from_Re}{{30}{10}{膜厚}{equation.30}{}}
+\newlabel{eq:ReA_scale}{{31}{10}{}{equation.31}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.1.3}相対角（光学軸方位）の定義}{11}{subsubsection.2.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{基準配置}{11}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{光学軸の向き}{11}{section*.12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces 本節で用いる材料定数と固定パラメータ（代表値）。}}{12}{table.caption.14}\protected@file@percent }
+\newlabel{tab:model_params_case12}{{1}{12}{本節で用いる材料定数と固定パラメータ（代表値）。}{table.caption.14}{}}
+\@writefile{toc}{\contentsline {paragraph}{具体例}{12}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}最適化および出力}{12}{subsection.2.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces 本節で用いる材料定数と固定パラメータ（代表値）および角度パラメータ（定義は本文参照）。}}{13}{table.caption.15}\protected@file@percent }
+\newlabel{tab:model_params_case12}{{2}{13}{本節で用いる材料定数と固定パラメータ（代表値）および角度パラメータ（定義は本文参照）。}{table.caption.15}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {2.2.1}評価指標：CR 等高線図、$\mathrm   {CR}_{00}$、および Stokes 追跡}{13}{subsubsection.2.2.1}\protected@file@percent }
+\newlabel{eq:Tleak_pred_from_stokes}{{36}{13}{評価指標：CR 等高線図、$\mathrm {CR}_{00}$、および Stokes 追跡}{equation.36}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}IPS光学補償フィルム構成の最適化}{14}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}計算条件（探索格子と評価量）}{14}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}最適化が想定している波長}{14}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}最適化結果}{15}{subsection.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  ターゲット視点での$CR(\theta {=}30^\circ ,\phi {=}45^\circ )$ ReA--ReC ２次元マップ}}{15}{figure.caption.16}\protected@file@percent }
+\newlabel{fig:ReA_ReC_map}{{3}{15}{ターゲット視点での$CR(\theta {=}30^\circ ,\phi {=}45^\circ )$ ReA--ReC ２次元マップ}{figure.caption.16}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces REF（Pol/LC/Analyzer），best条件，および第2ピーク条件における正面CR00とターゲット視点CR（$\theta =30^\circ ,\phi =45^\circ $）の比較．}}{16}{table.caption.17}\protected@file@percent }
+\newlabel{tab:ref_best_second}{{3}{16}{REF（Pol/LC/Analyzer），best条件，および第2ピーク条件における正面CR00とターゲット視点CR（$\theta =30^\circ ,\phi =45^\circ $）の比較．}{table.caption.17}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}best条件と参照（Pol/LC/Analyzer）の ISO-CR 比較}{16}{subsection.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{REF（LC-only）}{16}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{best（LC/A/C）}{16}{section*.20}\protected@file@percent }
+\newlabel{fig:sub_ref}{{4a}{17}{REF構成}{figure.caption.18}{}}
+\newlabel{sub@fig:sub_ref}{{a}{17}{REF構成}{figure.caption.18}{}}
+\newlabel{fig:sub_best}{{4b}{17}{最適条件}{figure.caption.18}{}}
+\newlabel{sub@fig:sub_best}{{b}{17}{最適条件}{figure.caption.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces ISO-CR 比較．(a) 補償なしのREF構成、(b) A/Cプレートによる最適化後。}}{17}{figure.caption.18}\protected@file@percent }
+\newlabel{fig:iso_plot}{{4}{17}{ISO-CR 比較．(a) 補償なしのREF構成、(b) A/Cプレートによる最適化後。}{figure.caption.18}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}Stokes解析による「オフ軸クロスニコルずれ」と補償の説明}{17}{subsection.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{オフ軸でクロスニコル条件が崩れる理由}{17}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{A-plate + C-plate による補償の本質：出射偏光の回転}{18}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}結論}{18}{subsection.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}波長依存性評価（Dispersion: mono \& W-ISO）}{18}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}評価条件}{19}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}数値結果（表）}{19}{subsection.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces 波長掃引における単色評価（mono）のまとめ（\texttt  {dispersion\_summary\_CRavg4.csv} 相当）．${\rm  CR}00(\lambda )$ と $\overline  {{\rm  CR}}_{30}(\lambda )$，および $\theta =30^\circ $・$\phi =\pm 45^\circ ,\pm 135^\circ $ の各 ${\rm  CR}$ を示す．}}{19}{table.caption.23}\protected@file@percent }
+\newlabel{tab:disp_summary}{{4}{19}{波長掃引における単色評価（mono）のまとめ（\texttt {dispersion\_summary\_CRavg4.csv} 相当）．${\rm CR}00(\lambda )$ と $\overline {{\rm CR}}_{30}(\lambda )$，および $\theta =30^\circ $・$\phi =\pm 45^\circ ,\pm 135^\circ $ の各 ${\rm CR}$ を示す．}{table.caption.23}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}波長依存プロット（図）}{19}{subsection.4.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 単色評価（mono）における ${\rm  CR}00(\lambda )$ と4方位平均 $\overline  {{\rm  CR}}_{30}(\lambda )$ の波長依存性．}}{20}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:lambda_dep}{{5}{20}{単色評価（mono）における ${\rm CR}00(\lambda )$ と4方位平均 $\overline {{\rm CR}}_{30}(\lambda )$ の波長依存性．}{figure.caption.24}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}RGB/W の ISO 分布（図）}{20}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}実材料分散と分散補償スタックの必要性}{21}{subsection.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}A-plate と Analyzer 連動貼りずれに対する IPS 光学補償の感度と方位非対称性評価}{21}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}要旨}{21}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}背景と目的}{21}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}評価条件と指標}{22}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{中心条件（best 近傍）}{22}{section*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}連動回転（A\_polout）}{22}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{方位非対称性指標}{22}{section*.27}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces A-plate と Analyzer 連動回転（A\_polout）における全スキャン点（$\Delta =-3^\circ \ldots  +3^\circ $）の結果．${\rm  CR}$ は白色（W）評価．}}{23}{table.caption.29}\protected@file@percent }
+\newlabel{tab:allpoints}{{5}{23}{A-plate と Analyzer 連動回転（A\_polout）における全スキャン点（$\Delta =-3^\circ \ldots +3^\circ $）の結果．${\rm CR}$ は白色（W）評価．}{table.caption.29}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}結果}{23}{subsection.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{中心（$\Delta =0$）での ${\rm  CR}$ と初期非対称}{23}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}$\Delta \in [-3^\circ ,+3^\circ ]$ 全点の数値（表1）}{23}{subsection.5.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{方位対称化点（$\Delta \simeq +0.5^\circ $）と ${\rm  CR}00$ の挙動}{23}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{符号依存性（$\Delta >0$ と $\Delta <0$）}{24}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}結論}{24}{subsection.5.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces 代表波長 B/G/R の単色 ISO と，白色（W）ISO の比較．単色では波長により ISO 分布（高 ${\rm  CR}$ ローブの位置・強度）が大きく変化し得るのに対し，W は B/G/R のリーク平均によりスペクトル平均化された分布を与える．}}{25}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:iso_rgbw}{{6}{25}{代表波長 B/G/R の単色 ISO と，白色（W）ISO の比較．単色では波長により ISO 分布（高 ${\rm CR}$ ローブの位置・強度）が大きく変化し得るのに対し，W は B/G/R のリーク平均によりスペクトル平均化された分布を与える．}{figure.caption.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces A+Analyzer 連動回転におけるISO-CR 比較．(a) 回転量$\Delta =0^\circ $, (b) $\Delta =3^\circ $, (c) $\Delta =-3^\circ $, }}{26}{figure.caption.32}\protected@file@percent }
+\newlabel{fig:iso_plot}{{7}{26}{A+Analyzer 連動回転におけるISO-CR 比較．(a) 回転量$\Delta =0^\circ $, (b) $\Delta =3^\circ $, (c) $\Delta =-3^\circ $,}{figure.caption.32}{}}
+\gdef \@abspage@last{26}

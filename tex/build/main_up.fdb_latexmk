@@ -1,10 +1,10 @@
 # Fdb version 4
-["dvipdf"] 1768365011.86609 "build/main_up.dvi" "build/main_up.pdf" "build/main_up" 1768365017.96221 0
-  "build/main_up.dvi" 1768365011.79704 54908 6fde683b3577a1e633513b1df8bcd9ca "latex"
+["dvipdf"] 1768365471.91385 "build/main_up.dvi" "build/main_up.pdf" "build/main_up" 1768365479.15372 0
+  "build/main_up.dvi" 1768365471.84246 128308 a01fd90b0d01292c46fbede861e1e7d7 "latex"
   (generated)
   "build/main_up.pdf"
   (rewritten before read)
-["latex"] 1768365010.618 "main_up.tex" "build/main_up.dvi" "main_up" 1768365017.95985 0
+["latex"] 1768365470.40044 "main_up.tex" "build/main_up.dvi" "main_up" 1768365479.15129 0
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -45,10 +45,13 @@
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmr9.tfm" 1136768653 1292 6b21b9c2c7bebb38aa2273f7ca0fb3af ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmss10.tfm" 1136768653 1316 b636689f1933f24d1294acdf6041daaa ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmss12.tfm" 1136768653 1324 37b971caf729d7edd9cbb9f9b0ea76eb ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmss8.tfm" 1136768653 1296 d77f431d10d47c8ea2cc18cf45346274 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmss9.tfm" 1136768653 1320 49357c421c0d469f88b867dd0c3d10e8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm" 1136768653 1116 25a7bf822c58caf309a702ef79f4afbb ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmti10.tfm" 1136768653 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm" 1136768653 768 1321e9409b4137d6fb428ac9dc956269 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm" 1136768653 768 d7b9a2629a0c353102ad947dc9221d49 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-h.tfm" 1522271273 812 52bd92aa20c58a398601cda6dd62c8d1 ""
@@ -123,11 +126,16 @@
   "/usr/local/texlive/2024/texmf-var/web2c/euptex/uplatex.fmt" 1766918900 3224234 9679d657142ec31fa981fcd1f676ce30 ""
   "/usr/local/texlive/2024/texmf.cnf" 1766917354.66497 455 5b996dcaa0eb4ef14a83b026bc0a008c ""
   "ReA_ReC_map_LC_AC_abs.png" 1768359122.22174 107887 3afc78472e00beec9a4847f2b29f10e2 ""
-  "build/main_up.aux" 1768365011.79704 8703 36db6da5d07562bc285e4cf965b15ede "latex"
-  "build/main_up.out" 1768365011.79704 3330 3a86a7101b11213ad5dbb36d405c8247 "latex"
+  "build/main_up.aux" 1768365471.83846 18371 b9f60a63219e9812e577ce87cdd63acf "latex"
+  "build/main_up.out" 1768365471.84246 5440 ee4394289f2919e72a634c5c9fb4eb90 "latex"
+  "content12.tex" 1768359122.21774 24365 878a166b11cf9265a29923fbc065c79e ""
+  "content13.tex" 1768359122.21774 6789 3df4cf43b92c47b3e5db88e979ac9d7a ""
+  "content14.tex" 1768359122.21774 12437 ff38071ad87f00f043d0231422a7eb85 ""
   "content20.tex" 1768359122.21774 12268 30797b6d1d7a94842a61840f120841e9 ""
   "content21.tex" 1768359122.21774 9962 fba511967ee3917e84368ff7005b476e ""
   "content22.tex" 1768359122.21774 9987 04965ae210024a96c744f562e92df247 ""
+  "eq2_crop.png" 1768359122.21774 167922 39be8e31d2be4d90f4ae808279051992 ""
+  "eq3ab_crop.png" 1768359122.21774 208407 4d5f9c4848256846ea53816f03df28af ""
   "iso_A_polout_+0.00deg.png" 1768359122.21774 612056 a41c40587107d8236883daac10c03dbd ""
   "iso_A_polout_+3.00deg.png" 1768359122.21774 423370 2d141d9d13eb0a742fcf7e4985a163ad ""
   "iso_A_polout_-3.00deg.png" 1768359122.21774 417617 d35c38877454321957b3b254adb54136 ""
@@ -137,7 +145,7 @@
   "iso_LC_only_abs.png" 1768359122.22174 537723 78cc2012020ac19930887e4a98f4dca9 ""
   "iso_R_mono_610nm.png" 1768359122.22174 593586 5d80c16100c38241dc088f0e6375f3bd ""
   "iso_W.png" 1768359122.22174 587907 093a9ef1688db870ad53232bb49979d6 ""
-  "main_up.tex" 1768364946.6494 1064 c9975fca284faf8f78ee945cb875fab6 ""
+  "main_up.tex" 1768365462.69451 1061 717d83e3876afeb5fd7ec85a0e57778a ""
   "plot_lambda_vs_CR00_and_CRavg4_mono.png" 1768359122.22174 81855 21d6cb3be51ab7d566805949b22e52cb ""
   (generated)
   "build/main_up.aux"
