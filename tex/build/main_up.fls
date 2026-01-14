@@ -139,6 +139,8 @@ INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/caption/ltcaption.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/caption/ltcaption.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/enumitem/enumitem.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/enumitem/enumitem.sty
+INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/float/float.sty
+INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/float/float.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/caption/subcaption.sty
 INPUT /usr/local/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
@@ -257,6 +259,11 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-v.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-v.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
+INPUT ./content15.tex
+INPUT ./content15.tex
+INPUT ./content15.tex
+INPUT ./content15.tex
+INPUT content15.tex
 INPUT ./content20.tex
 INPUT ./content20.tex
 INPUT ./content20.tex
@@ -277,11 +284,19 @@ INPUT ./iso_LC_AC_abs_best.png
 INPUT ./iso_LC_AC_abs_best.png
 INPUT ./iso_LC_AC_abs_best.png
 INPUT extractbb -B cropbox -O iso_LC_AC_abs_best.png
-INPUT ./content22.tex
-INPUT ./content22.tex
-INPUT ./content22.tex
-INPUT ./content22.tex
-INPUT content22.tex
+INPUT ./content21.tex
+INPUT ./content21.tex
+INPUT ./content21.tex
+INPUT ./content21.tex
+INPUT content21.tex
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex9.tfm
@@ -292,6 +307,23 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm1
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib9.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy9.tfm
+INPUT ./iso_A_polout_+0.00deg.png
+INPUT ./iso_A_polout_+0.00deg.png
+INPUT ./iso_A_polout_+0.00deg.png
+INPUT extractbb -B cropbox -O iso_A_polout_+0.00deg.png
+INPUT ./iso_A_polout_+3.00deg.png
+INPUT ./iso_A_polout_+3.00deg.png
+INPUT ./iso_A_polout_+3.00deg.png
+INPUT extractbb -B cropbox -O iso_A_polout_+3.00deg.png
+INPUT ./iso_A_polout_-3.00deg.png
+INPUT ./iso_A_polout_-3.00deg.png
+INPUT ./iso_A_polout_-3.00deg.png
+INPUT extractbb -B cropbox -O iso_A_polout_-3.00deg.png
+INPUT ./content22.tex
+INPUT ./content22.tex
+INPUT ./content22.tex
+INPUT ./content22.tex
+INPUT content22.tex
 INPUT ./plot_lambda_vs_CR00_and_CRavg4_mono.png
 INPUT ./plot_lambda_vs_CR00_and_CRavg4_mono.png
 INPUT ./plot_lambda_vs_CR00_and_CRavg4_mono.png
@@ -312,31 +344,6 @@ INPUT ./iso_W.png
 INPUT ./iso_W.png
 INPUT ./iso_W.png
 INPUT extractbb -B cropbox -O iso_W.png
-INPUT ./content21.tex
-INPUT ./content21.tex
-INPUT ./content21.tex
-INPUT ./content21.tex
-INPUT content21.tex
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmex10.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
-INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmbsy10.tfm
-INPUT ./iso_A_polout_+0.00deg.png
-INPUT ./iso_A_polout_+0.00deg.png
-INPUT ./iso_A_polout_+0.00deg.png
-INPUT extractbb -B cropbox -O iso_A_polout_+0.00deg.png
-INPUT ./iso_A_polout_+3.00deg.png
-INPUT ./iso_A_polout_+3.00deg.png
-INPUT ./iso_A_polout_+3.00deg.png
-INPUT extractbb -B cropbox -O iso_A_polout_+3.00deg.png
-INPUT ./iso_A_polout_-3.00deg.png
-INPUT ./iso_A_polout_-3.00deg.png
-INPUT ./iso_A_polout_-3.00deg.png
-INPUT extractbb -B cropbox -O iso_A_polout_-3.00deg.png
 INPUT build/main_up.aux
 INPUT build/main_up.out
 INPUT build/main_up.out
