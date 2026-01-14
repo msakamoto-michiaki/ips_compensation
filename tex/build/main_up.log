@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.uptex) (TeX Live 2025) (preloaded format=uplatex 2025.12.28)  14 JAN 2026 14:01
+This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.uptex) (TeX Live 2025) (preloaded format=uplatex 2025.12.28)  14 JAN 2026 14:05
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -721,7 +721,30 @@ LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
 (Font)              scaled to size 8.32214pt on input line 155.
 File: iso_LC_AC_abs_best.png Graphic file (type bmp)
 <iso_LC_AC_abs_best.png>
-[20] [21]) (./content21.tex [22] [23]
+[20] [21]) (./content22.tex [22]
+LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
+(Font)              scaled to size 8.32214pt on input line 41.
+
+Overfull \hbox (3.14987pt too wide) in paragraph at lines 67--71
+[]\JY2/mc/m/n/10 図[] \OT1/cmr/m/n/10 5[] \JY2/mc/m/n/10 は $[]\OT1/cmr/m/n/1
+0 00(\OML/cmm/m/it/10 ^^U\OT1/cmr/m/n/10 )$ \JY2/mc/m/n/10 と $[][]\OT1/cmr/m/
+n/10 (\OML/cmm/m/it/10 ^^U\OT1/cmr/m/n/10 )$ \JY2/mc/m/n/10 の波長依存性
+を示す （\OT1/cmtt/m/n/10 plot[]lambda[]vs[]CR00[]and[]CRavg4[]mono.png\JY2
+/mc/m/n/10 ） ．
+ []
+
+File: plot_lambda_vs_CR00_and_CRavg4_mono.png Graphic file (type bmp)
+<plot_lambda_vs_CR00_and_CRavg4_mono.png>
+[23]
+File: iso_B_mono_450nm.png Graphic file (type bmp)
+<iso_B_mono_450nm.png>
+File: iso_G_mono_546nm.png Graphic file (type bmp)
+<iso_G_mono_546nm.png>
+File: iso_R_mono_610nm.png Graphic file (type bmp)
+<iso_R_mono_610nm.png>
+File: iso_W.png Graphic file (type bmp)
+<iso_W.png>
+ [24] [25]) (./content21.tex [26] [27]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 98.
@@ -754,35 +777,14 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 98.
 
-LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 8.32214pt on input line 112.
+[28]
 File: iso_A_polout_+0.00deg.png Graphic file (type bmp)
 <iso_A_polout_+0.00deg.png>
 File: iso_A_polout_+3.00deg.png Graphic file (type bmp)
 <iso_A_polout_+3.00deg.png>
 File: iso_A_polout_-3.00deg.png Graphic file (type bmp)
 <iso_A_polout_-3.00deg.png>
-[24] [25]) (./content22.tex
-Overfull \hbox (3.14987pt too wide) in paragraph at lines 67--71
-[]\JY2/mc/m/n/10 図[] \OT1/cmr/m/n/10 6[] \JY2/mc/m/n/10 は $[]\OT1/cmr/m/n/1
-0 00(\OML/cmm/m/it/10 ^^U\OT1/cmr/m/n/10 )$ \JY2/mc/m/n/10 と $[][]\OT1/cmr/m/
-n/10 (\OML/cmm/m/it/10 ^^U\OT1/cmr/m/n/10 )$ \JY2/mc/m/n/10 の波長依存性
-を示す （\OT1/cmtt/m/n/10 plot[]lambda[]vs[]CR00[]and[]CRavg4[]mono.png\JY2
-/mc/m/n/10 ） ．
- []
-
-File: plot_lambda_vs_CR00_and_CRavg4_mono.png Graphic file (type bmp)
-<plot_lambda_vs_CR00_and_CRavg4_mono.png>
-[26] [27]
-File: iso_B_mono_450nm.png Graphic file (type bmp)
-<iso_B_mono_450nm.png>
-File: iso_G_mono_546nm.png Graphic file (type bmp)
-<iso_G_mono_546nm.png>
-File: iso_R_mono_610nm.png Graphic file (type bmp)
-<iso_R_mono_610nm.png>
-File: iso_W.png Graphic file (type bmp)
-<iso_W.png>
- [28] [29]) [30] (build/main_up.aux)
+) [29] (build/main_up.aux)
  ***********
 pLaTeX2e <2023-02-14u04>+1, based on
 LaTeX2e <2025-11-01>
@@ -796,15 +798,15 @@ LaTeX Warning: There were undefined references.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main_up.out' has not changed.
-(rerunfilecheck)             Checksum: D22791068D7418A8BC56247765578364;5898.
+(rerunfilecheck)             Checksum: 6148084B3BC5D88607772F050DDA4189;5898.
  ) 
 Here is how much of TeX's memory you used:
  18047 strings out of 469433
  342116 string characters out of 5463469
- 744532 words of memory out of 5000000
+ 745532 words of memory out of 5000000
  46629 multiletter control sequences out of 15000+600000
  652871 words of font info for 154 fonts, out of 8000000 for 9000
  112 hyphenation exceptions out of 8191
- 72i,13n,79p,560b,1161s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,13n,79p,560b,1144s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on build/main_up.dvi (30 pages, 146688 bytes).
+Output written on build/main_up.dvi (29 pages, 146544 bytes).

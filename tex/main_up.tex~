@@ -1,0 +1,43 @@
+\documentclass[a4paper,11pt]{jsarticle} % or ujsarticle がある環境ならそれでもOK
+
+\usepackage[dvipdfmx]{graphicx}
+\usepackage[dvipdfmx]{xcolor}   % xcolor使うなら
+\usepackage[dvipdfmx]{geometry} % 任意（警告回避に）
+\usepackage[dvipdfmx]{hyperref} % hyperrefは後ろ
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{float} %
+\usepackage{subcaption}
+\captionsetup[subfigure]{
+    position=top,
+    justification=raggedright, % 左寄せ
+    singlelinecheck=off        % キャプションが短くても左寄せを維持する
+}
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  columns=fullflexible,
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  numbers=left,
+  numberstyle=\tiny,
+  xleftmargin=2.2em,
+  showstringspaces=false
+}
+
+\begin{document}
+\input{content12}
+\input{content13}
+\input{content14}
+\input{content15}
+\input{content20}
+\input{content21}
+\input{content22}
+\end{document}
