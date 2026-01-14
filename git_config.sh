@@ -11,7 +11,7 @@ git commit -m "initial commit"
 
 # ⑤ リモートリポジトリ（GitHub）を登録
 # ※ [コピーしたURL] の部分は先ほどGitHubでコピーしたものに書き換えてください
-git remote add origin https://github.com/msakamoto-michiaki/ips_compensation.git
+#git remote add origin https://github.com/msakamoto-michiaki/ips_compensation.git
 
 # ⑥ GitHubへ送信（Push）
 #git branch -M main
