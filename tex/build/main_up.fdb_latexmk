@@ -1,10 +1,10 @@
 # Fdb version 4
-["dvipdf"] 1768367147.11268 "build/main_up.dvi" "build/main_up.pdf" "build/main_up" 1768367153.72464 0
-  "build/main_up.dvi" 1768367147.03707 146544 e49b5939fe7aad6b0871563c245cf390 "latex"
+["dvipdf"] 1768371056.12691 "build/main_up.dvi" "build/main_up.pdf" "build/main_up" 1768371064.11952 0
+  "build/main_up.dvi" 1768371056.05102 147032 550f37cee5612f030915d8bba640d225 "latex"
   (generated)
   "build/main_up.pdf"
   (rewritten before read)
-["latex"] 1768367145.51781 "main_up.tex" "build/main_up.dvi" "main_up" 1768367153.72217 0
+["latex"] 1768371054.41731 "main_up.tex" "build/main_up.dvi" "main_up" 1768371064.11691 0
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1136768653 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -127,11 +127,12 @@
   "/usr/local/texlive/2024/texmf-var/web2c/euptex/uplatex.fmt" 1766918900 3224234 9679d657142ec31fa981fcd1f676ce30 ""
   "/usr/local/texlive/2024/texmf.cnf" 1766917354.66497 455 5b996dcaa0eb4ef14a83b026bc0a008c ""
   "ReA_ReC_map_LC_AC_abs.png" 1768366529.16453 107887 3afc78472e00beec9a4847f2b29f10e2 ""
-  "build/main_up.aux" 1768367147.03707 21836 34fa33318930efc67449590e7bb86b75 "latex"
-  "build/main_up.out" 1768367147.03707 5898 6148084b3bc5d88607772f050dda4189 "latex"
-  "content12.tex" 1768366529.16453 24365 878a166b11cf9265a29923fbc065c79e ""
+  "azimuth.png" 1768370789.30453 668515 4d7c0c8c05e7e77f9b908c1972f82c91 ""
+  "build/main_up.aux" 1768371056.05102 22018 b27198219cbbd0abf3cec250e2f6cf67 "latex"
+  "build/main_up.out" 1768371056.05102 5898 6148084b3bc5d88607772f050dda4189 "latex"
+  "content12.tex" 1768370937.17169 24365 878a166b11cf9265a29923fbc065c79e ""
   "content13.tex" 1768366529.16453 6789 3df4cf43b92c47b3e5db88e979ac9d7a ""
-  "content14.tex" 1768366529.16453 12437 ff38071ad87f00f043d0231422a7eb85 ""
+  "content14.tex" 1768371050.25105 12569 ca850722222177dd2fdff2d7ade5bc9f ""
   "content15.tex" 1768366529.16453 12371 913a1db2edfa276038652b8070cba3c2 ""
   "content20.tex" 1768366529.16453 12268 30797b6d1d7a94842a61840f120841e9 ""
   "content21.tex" 1768366529.16453 9962 fba511967ee3917e84368ff7005b476e ""

@@ -255,6 +255,10 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-h.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-h.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisr-v.tfm
+INPUT ./azimuth.png
+INPUT ./azimuth.png
+INPUT ./azimuth.png
+INPUT extractbb -B cropbox -O azimuth.png
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-v.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmtt8.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/uptex-fonts/jis/upjisg-v.tfm
