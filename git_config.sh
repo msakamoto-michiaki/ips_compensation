@@ -1,11 +1,5 @@
 #!/bin/bash
 #
-# ① ディレクトリに移動
-cd /Users/sakamotomichiaki/work/git/ips_compensation
-
-# ② Gitリポジトリとして初期化（すでに行っている場合はスキップ可）
-git init
-
 git config --global user.email "msakamoto.michiaki@gmail.com"
 git config --global user.name "msakamoto-michiaki"
 

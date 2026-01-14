@@ -1,0 +1,78 @@
+\subsection{例題3：偏光子・A-plate・LC の光軸角度が CR 等高線に与える影響（\texttt{ex3.py}）}
+本例題では，A-plate および C-plate の膜厚を固定した状態で，入力側スタック（偏光子・A-plate・LC）の方位角 $\alpha$ を微小に回転させた場合に，暗状態コントラスト分布 $\mathrm{CR}(\theta,\phi)$ の等高線形状（ISO\_PLOT）がどのように変化するかを検討した．
+上側スタック（解析側）は固定し，下側スタック（入力側）のみを回転させる設定である．
+出力として，等高線画像とともに，$\log_{10}\mathrm{CR}$ の方位方向標準偏差の平均値
+\[
+D = \langle \mathrm{std}_{\phi}(\log_{10}\mathrm{CR}) \rangle_{\theta}
+\]
+を「方位異方性指標」として算出した．
+
+\subsubsection{角度パラメータの関係と定義}
+下側スタック（入力側）の各光軸は，偏光子角度 \texttt{pol\_in} に追従して回転する．
+各層の光軸方位角は次式で定義される：
+
+\[
+\begin{aligned}
+\alpha_{\mathrm{pol,in}} &= \texttt{pol\_in},\\
+\alpha_{A,\mathrm{bot}} &= \texttt{pol\_in} + \texttt{relA},\\
+\alpha_{\mathrm{LC}} &= \texttt{pol\_in} + \texttt{lc\_rel},\\
+\alpha_{A,\mathrm{top}} &= 90^\circ + \texttt{pol\_out} + \texttt{relA},
+\end{aligned}
+\]
+ここで $\texttt{pol\_out}=0$ のため，上側スタック（top）は固定され，入力側（bot）が回転する．
+本例題では \texttt{relA}=0.25°, \texttt{lc\_rel}=0.5° であり，したがって
+\[
+\alpha_{A,\mathrm{bot}}=\texttt{pol\_in}+0.25^\circ,\qquad
+\alpha_{\mathrm{LC}}=\texttt{pol\_in}+0.5^\circ,\qquad
+\alpha_{A,\mathrm{top}}=90.25^\circ.
+\]
+
+\subsubsection{評価手順}
+C-plate を除いた構成（$C_{\mu\mathrm{m}}=0$）で $A_{\mathrm{scale}}=1.50$ に固定し，
+$\texttt{pol\_in} \in \{0.0, 0.2, 0.5, 1.0, 2.0\}$ [deg] を走査した．
+白色（B/G/R 平均），分散整合（matched）条件で $\theta_{\max}=60^\circ$，$\Delta\theta=\Delta\phi=5^\circ$ の格子上で $\mathrm{CR}(\theta,\phi)$ を算出し，
+しきい値超過率 $\mathrm{frac}\{\mathrm{CR}>100\}$ と異方性指標 $D$ を求めた．
+
+\subsubsection{結果：ISO\_PLOT の非対称化と異方性指標}
+$\texttt{pol\_in}=0^\circ$ の場合，ISO\_PLOT は上下左右で対称な四葉形を示し，方位対称性が保たれている．
+しかし $\texttt{pol\_in}$ を増加させると，$\phi$ 方向の明暗が偏り，等高線が一部方位で押しつぶされるような\textbf{非対称性}が現れた．
+これは入力スタックの回転により偏光状態の回転とリタデーションが非対称化し，特定方位の暗状態漏れが増加するためである．
+この結果，ISO 等高線の外形が $\phi$ に依存して歪み，暗状態維持範囲に方位的偏りが生じる。
+
+表\ref{tab:ex3_distortion_fixed}に結果を示す．ここで $D$ は「方位異方性（振幅差）」を示すものであり，**非対称性そのものではない**点に注意されたい．
+対称的な四葉形（$\texttt{pol\_in}=0$）では $\phi$ 方向の強弱が最も大きく，$\mathrm{CR}$ の $\phi$ 変化が強いため $D$ が最大となる．
+一方，$\texttt{pol\_in}$ の増加により全体の振幅差がやや緩和されるため $D$ は減少するが，ISO 図では逆に\textbf{非対称性（形状の傾き）が増加}する．
+このことから，$D$ は「異方性の強さ」を表す指標であり，「非対称の度合い」を表すものではない．
+
+\begin{table}[t]
+  \centering
+  \caption{例題3：$\texttt{pol\_in}$ に対するしきい値超過率と異方性指標（matched，$A_{\mathrm{scale}}=1.50$，$C_{\mu\mathrm{m}}=0$）．}
+  \label{tab:ex3_distortion_fixed}
+  \begin{tabular}{c|cc}
+    \hline
+    \texttt{pol\_in} [deg] & $\mathrm{frac}\{\mathrm{CR}>100\}$ & $D=\langle \mathrm{std}_\phi(\log_{10}\mathrm{CR})\rangle_\theta$ \\
+    \hline
+    0.0 & 0.340 & 0.621 \\
+    0.2 & 0.336 & 0.608 \\
+    0.5 & 0.334 & 0.581 \\
+    1.0 & 0.347 & 0.537 \\
+    2.0 & 0.342 & 0.468 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\subsubsection{設計上の含意と今後の拡張}
+ISO\_PLOT と $D$ を併用することで，
+(1) 方位依存の「異方性強度（D）」と，
+(2) 方位対称性の崩れ（非対称形状）
+を区別して議論できる．
+実際の設計では，組立て誤差や貼り合わせ角度差によって入力側の $\alpha$ が微小にずれ，暗状態の非対称化を引き起こすため，
+\textbf{ISO 図による方位依存の可視化}と，\textbf{追加指標（例えば $\phi$ と $\phi+\pi$ の差分標準偏差）}による非対称性の定量化が重要である．
+
+% \begin{figure}[t]
+%   \centering
+%   % \includegraphics[width=0.48\linewidth]{ISO_contour_pol_in_0.00deg_C+0.00um_A1.50.png}
+%   % \includegraphics[width=0.48\linewidth]{ISO_contour_pol_in_2.00deg_C+0.00um_A1.50.png}
+%   \caption{例題3：pol\_in 掃引による ISO 等高線の変化．上：pol\_in=0°, 下：2°．上側スタック固定・下側スタック回転条件．}
+%   \label{fig:ex3_iso_pol_in}
+% \end{figure}

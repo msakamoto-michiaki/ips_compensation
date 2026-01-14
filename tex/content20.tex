@@ -1,0 +1,253 @@
+\section{IPS光学補償フィルム構成の最適化}
+
+本節では，IPSパネルの光学補償フィルム構成POL/LC/A/C/ANAにおける
+CR視野角の最適化について述べる。
+ここで、POLは入射側偏光板(偏光子,polarizer)、LCは液晶、AはA-plate, CはC-plate, ANAは出射側偏光板(検光子,analyzer)である。
+尚、LCの長軸とPOLの吸収軸を平行とするEモードで偏光板同士はクロスニコル条件である．
+最適化においては、特定の視点（$\theta=30^\circ,\ \phi=45^\circ$）における，コントラスト比 CR$(\theta,\phi)$ に関するReA--ReC 平面上での，
+best条件を探索する。そして、best条件において($\theta$, $\phi$)-極座標プロット（polar plot）を用いてCRの視野角マップを作成し、REF（A/Cなし：Pol/LC/Analyzer）と比較することで、CR視野角の拡大を確認する。
+さらに Stokes 解析の結果に基づき、偏光板の「オフ軸クロスニコルずれ」を補償する光学補償の設計思想の説明を行う．
+なお、構成はPOL/LC/A/C/ANAでEモード配置としたが、POL/C/A/LC/ANAでOモード配置（OモードはLCの長軸とPOLの透過軸を平行とする）, 
+POL/C/A/LC/A/C/ANAでEモード/Oモード配置の構成の場合も補償設計の思想は同様である。
+
+\subsection{計算条件（探索格子と評価量）}
+探索パラメータは A-plate の有効リターデーション（ReA）と C-plate の有効リターデーション（ReC）である．
+今回の探索条件は以下の通りである．
+\begin{itemize}
+\item 構成：POL/LC/A/C/ANA
+\item 偏光板：　クロスニコル条件 
+$\alpha_{\rm pol\_in}=0.0^\circ$, 
+$\alpha_{\rm pol\_out}=90.0^\circ$
+\item LC： 
+リタデーション${\rm ReLC}=310$~nm,
+Eモード, 光学軸$\alpha_{\rm LC}=2.5^\circ$,
+\item A-plate: リタデーション${\rm ReA}\in[0,\,372]$\,nm,
+ 光学軸 $\alpha_{\rm A}=2.5^\circ$
+\item C-plate: リタデーション${\rm ReC}\in[-280,\,280]$\,nm
+\item 最適化すべき評価指標：CR($\theta=30^\circ,\ \phi=45^\circ$),および
+CR($\theta=0^\circ,\ \phi=0^\circ$)
+\end{itemize}
+
+\subsection{最適化が想定している波長}
+本プログラムにおける最適化（progress における best 判定，および基本の ${\rm CR}$ 評価）は，
+単色 $\lambda=550~{\rm nm}$ に固定された評価ではなく，
+代表波長
+\[
+\lambda_B=450~{\rm nm},\qquad \lambda_G=546~{\rm nm},\qquad \lambda_R=610~{\rm nm}
+\]
+を用いた白色（W）評価として定義されている．
+白色評価は，各波長の暗状態リーク透過率 $T_{\rm leak}(\theta,\phi;\lambda)$ を重み付き平均して
+\[
+T_{\rm leak}^{(W)}(\theta,\phi)
+=\frac{\sum_{k\in\{B,G,R\}} w_k\,T_{\rm leak}(\theta,\phi;\lambda_k)}{\sum_{k\in\{B,G,R\}} w_k}
+\]
+とし（デフォルトでは $w_B=w_G=w_R=1$），この $T_{\rm leak}^{(W)}$ から白色コントラスト比
+\[
+{\rm CR}^{(W)}(\theta,\phi)=\frac{T_{\rm bright}^{(W)}(\theta,\phi)}{T_{\rm leak}^{(W)}(\theta,\phi)}
+\]
+を構成する方式である．
+ここで重要なのは，白色評価が ${\rm CR}(\theta,\phi;\lambda)$ を波長平均した量ではなく，
+\textbf{$T_{\rm leak}$ を平均してから ${\rm CR}$ を定義する}点である．
+したがって，「最適化は $\lambda=550~{\rm nm}$ で行った」という理解は実装上は正確ではなく，
+より正確には「$\lambda_G=546~{\rm nm}$ を含む B/G/R（450/546/610~nm）の白色評価を目的関数として最適化した」
+と解釈されるべきである．
+
+
+\subsection{最適化結果}
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.92\linewidth]{ReA_ReC_map_LC_AC_abs.png}
+\caption{
+ターゲット視点での$CR(\theta{=}30^\circ,\phi{=}45^\circ)$
+ReA--ReC ２次元マップ
+}
+\label{fig:ReA_ReC_map}
+\end{figure}
+図~\ref{fig:ReA_ReC_map}は
+ReA--ReC ２次元マップを示し、
+各格子点 $(\mathrm{ReA},\mathrm{ReC})$ に対して 
+ターゲット視点での${\rm CR}(\theta{=}30^\circ,\phi{=}45^\circ)$
+を計算し，
+等高線として可視化したものである（デフォルトでは $\log_{10}{\rm CR}$ 表示）．
+
+2次元格子全体で最大のCRを与える条件（global best）は次である：
+\[
+\boxed{
+\mathrm{ReA}=116.25\ \mathrm{nm},\quad
+\mathrm{ReC}=85\ \mathrm{nm},\quad
+{\rm CR}(30^\circ,45^\circ)=9.097\times 10^2
+}
+\]
+
+最適条件における主要指標は次である：
+\begin{itemize}
+\item ターゲット視点（$30^\circ,45^\circ$）：
+\[
+{\rm CR}_{\rm LC-only}=1.079\times 10^2,\qquad
+{\rm CR}_{\rm best}=9.097\times 10^2,
+\]
+\[
+\boxed{\text{改善率 }={\rm CR}_{\rm best}/{\rm CR}_{\rm LC-only}\approx 8.43}
+\]
+%\item 高視角例（$70^\circ,45^\circ$）：
+%\[
+%CR_{\rm LC-only}\approx 3.22,\qquad
+%CR_{\rm best}\approx 4.56
+%\]
+\item 正面（$CR00$）：両者はほぼ同等
+\[
+{\rm CR00}_{\rm LC-only}\approx 1.975\times 10^4,\quad
+{\rm CR00}_{\rm best}\approx 1.976\times 10^4
+\]
+%\item 全視野角での下側指標（global min / global 5\%）：
+%\[
+%\min CR:\ 5.47 \rightarrow 17.0,\qquad
+%p5CR:\ 8.09 \rightarrow 25.25
+%\]
+\end{itemize}
+
+したがって，補償は正面の明暗を損なわずに，
+オフ軸の暗状態リークを低減し，視野角全体の低CR領域を押し上げる効果を持つ．
+尚、
+ReC を各 ReA で最適化した包絡線 ${\rm CR}_{\max}(\mathrm{ReA})$ には主ピーク以外に第2ピークが存在する．
+REF（Pol/LC/Analyzer），best条件，および第2ピーク条件における最適化指標である正面CR00とターゲット視点CR（$\theta=30^\circ,\phi=45^\circ$）の比較
+を表~\ref{tab:ref_best_second}に示す。
+
+\begin{table}[htb]
+\centering
+\caption{REF（Pol/LC/Analyzer），best条件，および第2ピーク条件における正面CR00とターゲット視点CR（$\theta=30^\circ,\phi=45^\circ$）の比較．}
+\label{tab:ref_best_second}
+\begin{tabular}{lccrrrr}
+\hline
+条件 & 構造 & ReA [nm] & ReC [nm] &
+${\rm CR}(\theta{=}0^\circ,\phi{=}0^\circ)$ &
+${\rm CR}(\theta{=}30^\circ,\phi{=}45^\circ)$ \\
+\hline
+ref & only LC & -- & -- & $1.9752\times 10^{4}$ & $1.0789\times 10^{2}$ \\
+best（第1ピーク） & LC/A/C & $116.25$ & $85$ & $1.9763\times 10^{4}$ & $9.0971\times 10^{2}$ \\
+第2ピーク & LC/A/C & $364.25$ & $-45$ & $4.1561\times 10^{4}$ & $1.5097\times 10^{2}$ \\
+\hline
+\end{tabular}
+\end{table}
+
+
+主ピークと第2ピークの物理解釈は以下の通りである。
+本系の補償は，オフ軸で発生する「偏光子・検光子の実効クロス条件の崩れ」を，
+A-plate と C-plate の位相回転（Poincar\'e 球上の回転）で打ち消す問題として理解できる．
+主ピーク（ReA $\sim 116$ nm, ReC $\sim 85$ nm）は，
+比較的小さな総位相遅れで「オフ軸で増加した analyzer 軸の実効回転」を補正し，
+出射偏光をほぼ線偏光のまま analyzer と直交に戻す枝である．
+第2ピーク（ReA $\sim 364$ nm, ReC $\sim -45$ nm）は，
+より大きな ReA により Poincar\'e 球上で一度大きく回転してから
+別の方位で直交条件に近づく（「回り込み」）枝に相当し，
+局所的に $CR$ を回復するが，主ピークほど強くはない．
+2次元等高線では主ピークの近傍に鋭い高CR領域が形成され，
+第2ピークは ReA 大側に広がりのある丘として現れる．
+
+\subsection{best条件と参照（Pol/LC/Analyzer）の ISO-CR 比較}
+% --- 本文 ---
+\begin{figure}[t]
+  \centering
+  % (a) の図
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{iso_LC_only_abs.png}
+    \caption{REF構成} % ここに文字を入れると (a) REF構成 と表示されます
+    \label{fig:sub_ref}
+  \end{subfigure}
+  \hfill % 左右の図の間に適切な空間を挿入
+  % (b) の図
+  \begin{subfigure}{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{iso_LC_AC_abs_best.png}
+    \caption{最適条件} % ここに文字を入れると (b) 最適条件 と表示されます
+    \label{fig:sub_best}
+  \end{subfigure}
+  \caption{ISO-CR 比較．(a) 補償なしのREF構成、(b) A/Cプレートによる最適化後。}
+  \label{fig:iso_plot}
+\end{figure}
+
+POL/LC/A/C/ANA構成のbest条件と光学補償なし(POL/LC/ANA)のISO-CR 図の定性的比較をFig~\ref{fig:iso_plot}に示す。
+
+\paragraph{REF（LC-only）}
+Fig~\ref{fig:iso_plot}~(a)では，
+特定方位角にリークの強いローブが現れ，等高線が歪む（CR が急落する）．
+これはオフ軸で偏光子・検光子の実効軸が理想クロスから外れ，
+暗状態でも analyzer 透過成分が残ることに起因する．
+
+\paragraph{best（LC/A/C）}
+Fig~\ref{fig:iso_plot}~(b)では，
+ターゲット方位（$\phi \approx 45^\circ$）近傍の CR が大きく押し上がると同時に，
+低CRローブが緩和され，等高線がより滑らかに広がる．
+これによりCR視野角が改善する。
+
+\subsection{Stokes解析による「オフ軸クロスニコルずれ」と補償の説明}
+
+POL/LC/A/C/ANA構成において，偏光状態を（規格化）Stokesパラメータにより解析する。C-plate出射後の偏光状態のStokesパラメータは
+\[
+(s_1,s_2,s_3)=(0.9655,\ 0.2460,\ 5.1\times 10^{-4}),
+\]
+であり $s_3\approx 0$ より、ほぼ直線偏光である．
+この時，
+ターゲット視点のCR（$\theta=30^\circ,\phi=45^\circ$）が
+最大化する理由を以下に説明する。
+%\[
+%\Delta = (\alpha-\psi)\bmod 180^\circ = 91.065^\circ.
+%\]
+
+\paragraph{オフ軸でクロスニコル条件が崩れる理由}
+正面入射では，理想的に Pol と Analyzer を $90^\circ$ 直交（クロスニコル）に置けば，
+暗状態で透過は抑圧される．
+しかしオフ軸では，O-type 偏光子・検光子の実効透過軸は
+波数ベクトル $\hat{\boldsymbol{k}}$ と吸収軸 $\boldsymbol{c}$ により
+\[
+\boldsymbol{o}=\frac{\hat{\boldsymbol{k}}\times \boldsymbol{c}}
+{\lVert \hat{\boldsymbol{k}}\times \boldsymbol{c}\rVert}
+\]
+で与えられる横波成分へ投影されるため，
+実効的な透過軸が視線方向に依存して回転する．
+その結果，「名目上のクロスニコル（$90^\circ$）」から外れ，
+本視点では analyzer 実効軸の方位が
+\[
+\alpha=98.213^\circ
+\]
+までずれる（＝クロス角が広がる）．
+
+\paragraph{A-plate + C-plate による補償の本質：出射偏光の回転}
+暗状態のリークは概ね
+「analyzer 実効軸」と「スタック出射偏光」の非直交成分で決まる．
+ここで出射偏光がほぼ線偏光（$s_3\approx 0$）であるとき，
+Stokes から線偏光方位 $\psi$ は
+\[
+\psi = \frac{1}{2}\tan^{-1}\!\left(\frac{s_2}{s_1}\right)
+\]
+で与えられる．今回，最適化された A/C 補償により
+\[
+\psi=7.148^\circ
+\]
+だけ出射偏光が回転し，
+\[
+\Delta=(\alpha-\psi)\bmod 180^\circ = 91.065^\circ
+\]
+となって analyzer とほぼ直交（理想 $90^\circ$）へ戻されている．
+すなわち，A-plate + C-plate は
+正面視点ではCRに影響を与えることなく，かつ，ターゲット視点では
+「オフ軸で増加したクロス角（$98.2^\circ$）」を，
+出射偏光側の回転（$\psi$の生成）によって打ち消し，
+直交条件へ近づけていると解釈できる．
+
+\subsection{結論}
+\begin{enumerate}
+\item POL/LC/A/C/ANAの光学補償におけるbest条件は
+\[
+\mathrm{ReA}=116.25\ \mathrm{nm},\ \mathrm{ReC}=85\ \mathrm{nm},\ {\rm CR}=9.10\times 10^2
+\]
+で与えられた．
+\item best条件は LC-only（Pol/LC/Analyzer）に対し，
+ターゲット視点の CR を約 8.4 倍改善し，
+ISO-CRの極座標プロットにおいても，CR>100の領域が
+広がりCR視野角特性が大きく改善した．
+\item Stokes 解析より，オフ軸で analyzer 実効軸が $\alpha=98.2^\circ$ まで回転してクロス条件が崩れるが，
+A-plate + C-plate により出射偏光方位が $\psi\simeq 7.14^\circ$ 生成され，
+$\Delta\simeq 91.06^\circ$ として直交条件へ戻すことでリークを低減していることが説明できる．
+\end{enumerate}
