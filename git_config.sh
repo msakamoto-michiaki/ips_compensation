@@ -14,5 +14,5 @@ git commit -m "initial commit"
 git remote add origin https://github.com/msakamoto-michiaki/ips_compensation.git
 
 # ⑥ GitHubへ送信（Push）
-git branch -M main
+#git branch -M main
 git push -u origin main
