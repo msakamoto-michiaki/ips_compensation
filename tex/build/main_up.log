@@ -1,4 +1,4 @@
-This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.uptex) (TeX Live 2025) (preloaded format=uplatex 2025.12.28)  14 JAN 2026 11:56
+This is e-upTeX, Version 3.141592653-p4.1.2-u2.00-250202-2.6 (utf8.uptex) (TeX Live 2025) (preloaded format=uplatex 2025.12.28)  14 JAN 2026 13:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -510,7 +510,11 @@ File: l3backend-dvips.def 2025-10-09 L3 backend support: dvips
 \g__pdfannot_backend_link_int=\count350
 \g__pdfannot_backend_link_sf_int=\count351
 )
-(build/main_up.aux)
+(build/main_up.aux
+
+LaTeX Warning: Label `fig:iso_plot' multiply defined.
+
+)
 \openout1 = `main_up.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 34.
@@ -585,7 +589,7 @@ or `english'. on input line 34.
 \c@lstlisting=\count352
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
- (./content22.tex
+ (./content20.tex
 LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
 (Font)              scaled to size 13.31541pt on input line 1.
 LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
@@ -595,48 +599,114 @@ LaTeX Font Info:    Font shape `JT2/gt/m/n' will be
 LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
 (Font)              scaled to size 13.31541pt on input line 1.
 LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
-(Font)              scaled to size 6.47278pt on input line 2.
+(Font)              scaled to size 6.47278pt on input line 7.
 LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
-(Font)              scaled to size 4.62341pt on input line 2.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 2.
+(Font)              scaled to size 4.62341pt on input line 7.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 7.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 2.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 7.
 
 (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 9.24683pt on input line 2.
+(Font)              scaled to size 9.24683pt on input line 7.
 LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 6.47278pt on input line 2.
+(Font)              scaled to size 6.47278pt on input line 7.
 LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 4.62341pt on input line 2.
+(Font)              scaled to size 4.62341pt on input line 7.
 LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 17.
+(Font)              scaled to size 11.09619pt on input line 13.
 LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 17.
+(Font)              scaled to size 11.09619pt on input line 13.
 LaTeX Font Info:    Font shape `JT2/gt/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 17.
+(Font)              scaled to size 11.09619pt on input line 13.
 LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 11.09619pt on input line 17.
-LaTeX Font Info:    Font shape `JT2/gt/m/n' will be
-(Font)              scaled to size 9.24683pt on input line 22.
+(Font)              scaled to size 11.09619pt on input line 13.
 LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
-(Font)              scaled to size 8.32214pt on input line 40.
-LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
-(Font)              scaled to size 8.32214pt on input line 40.
-LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
-(Font)              scaled to size 5.5481pt on input line 41.
-LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 8.32214pt on input line 41.
-LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 5.5481pt on input line 41.
+(Font)              scaled to size 6.47278pt on input line 19.
+LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
+(Font)              scaled to size 4.62341pt on input line 19.
+ [1
 
+]
+LaTeX Font Info:    Font shape `JT2/mc/bx/n' in size <10> not available
+(Font)              Font shape `JT2/gt/m/n' tried instead on input line 50.
+LaTeX Font Info:    Font shape `JT2/gt/m/n' will be
+(Font)              scaled to size 9.24683pt on input line 50.
+LaTeX Font Info:    Font shape `JY2/mc/bx/n' in size <10> not available
+(Font)              Font shape `JY2/gt/m/n' tried instead on input line 50.
+LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
+(Font)              scaled to size 9.24683pt on input line 50.
+File: ReA_ReC_map_LC_AC_abs.png Graphic file (type bmp)
+<ReA_ReC_map_LC_AC_abs.png>
+ [2]
+Overfull \hbox (14.39455pt too wide) in paragraph at lines 120--131
+ [][] 
+ []
+
+File: iso_LC_only_abs.png Graphic file (type bmp)
+<iso_LC_only_abs.png>
+LaTeX Font Info:    Font shape `JT2/mc/m/n' will be
+(Font)              scaled to size 8.32214pt on input line 155.
+LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
+(Font)              scaled to size 8.32214pt on input line 155.
+File: iso_LC_AC_abs_best.png Graphic file (type bmp)
+<iso_LC_AC_abs_best.png>
+[3] [4]) (./content21.tex [5] [6]
+LaTeX Font Info:    Font shape `JY2/mc/m/n' will be
+(Font)              scaled to size 5.5481pt on input line 98.
+LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
+(Font)              scaled to size 7.39746pt on input line 98.
+LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
+(Font)              scaled to size 5.5481pt on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\Delta' on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\in' on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `superscript' on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\circ' on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `superscript' on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\circ' on input line 98.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 98.
+
+LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
+(Font)              scaled to size 8.32214pt on input line 112.
+File: iso_A_polout_+0.00deg.png Graphic file (type bmp)
+<iso_A_polout_+0.00deg.png>
+File: iso_A_polout_+3.00deg.png Graphic file (type bmp)
+<iso_A_polout_+3.00deg.png>
+File: iso_A_polout_-3.00deg.png Graphic file (type bmp)
+<iso_A_polout_-3.00deg.png>
+[7] [8]) (./content22.tex
 Overfull \hbox (3.14987pt too wide) in paragraph at lines 67--71
-[]\JY2/mc/m/n/10 図[] \OT1/cmr/m/n/10 1[] \JY2/mc/m/n/10 は $[]\OT1/cmr/m/n/1
+[]\JY2/mc/m/n/10 図[] \OT1/cmr/m/n/10 4[] \JY2/mc/m/n/10 は $[]\OT1/cmr/m/n/1
 0 00(\OML/cmm/m/it/10 ^^U\OT1/cmr/m/n/10 )$ \JY2/mc/m/n/10 と $[][]\OT1/cmr/m/
 n/10 (\OML/cmm/m/it/10 ^^U\OT1/cmr/m/n/10 )$ \JY2/mc/m/n/10 の波長依存性
 を示す （\OT1/cmtt/m/n/10 plot[]lambda[]vs[]CR00[]and[]CRavg4[]mono.png\JY2
@@ -645,18 +715,7 @@ n/10 (\OML/cmm/m/it/10 ^^U\OT1/cmr/m/n/10 )$ \JY2/mc/m/n/10 の波長依存性
 
 File: plot_lambda_vs_CR00_and_CRavg4_mono.png Graphic file (type bmp)
 <plot_lambda_vs_CR00_and_CRavg4_mono.png>
-[1
-
-]
-LaTeX Font Info:    Font shape `JT2/mc/bx/n' in size <10> not available
-(Font)              Font shape `JT2/gt/m/n' tried instead on input line 82.
-LaTeX Font Info:    Font shape `JT2/gt/m/n' will be
-(Font)              scaled to size 9.24683pt on input line 82.
-LaTeX Font Info:    Font shape `JY2/mc/bx/n' in size <10> not available
-(Font)              Font shape `JY2/gt/m/n' tried instead on input line 82.
-LaTeX Font Info:    Font shape `JY2/gt/m/n' will be
-(Font)              scaled to size 9.24683pt on input line 82.
- [2]
+[9] [10]
 File: iso_B_mono_450nm.png Graphic file (type bmp)
 <iso_B_mono_450nm.png>
 File: iso_G_mono_546nm.png Graphic file (type bmp)
@@ -665,22 +724,26 @@ File: iso_R_mono_610nm.png Graphic file (type bmp)
 <iso_R_mono_610nm.png>
 File: iso_W.png Graphic file (type bmp)
 <iso_W.png>
-) [3] [4] (build/main_up.aux)
+) [11] [12] (build/main_up.aux)
  ***********
 pLaTeX2e <2023-02-14u04>+1, based on
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main_up.out' has not changed.
-(rerunfilecheck)             Checksum: AC0EFE974C6E1F6C028A783350D5FB8E;964.
+(rerunfilecheck)             Checksum: 3A86A7101B11213AD5DBB36D405C8247;3330.
  ) 
 Here is how much of TeX's memory you used:
- 17787 strings out of 469433
- 337119 string characters out of 5463469
- 741547 words of memory out of 5000000
- 46420 multiletter control sequences out of 15000+600000
- 645320 words of font info for 123 fonts, out of 8000000 for 9000
+ 17890 strings out of 469433
+ 339357 string characters out of 5463469
+ 738630 words of memory out of 5000000
+ 46495 multiletter control sequences out of 15000+600000
+ 650910 words of font info for 147 fonts, out of 8000000 for 9000
  112 hyphenation exceptions out of 8191
- 72i,11n,79p,444b,1059s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,11n,79p,446b,1161s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on build/main_up.dvi (4 pages, 16644 bytes).
+Output written on build/main_up.dvi (12 pages, 54908 bytes).
