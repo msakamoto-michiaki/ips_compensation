@@ -1,0 +1,211 @@
+\section{A-plate と Analyzer 連動貼りずれに対する IPS 光学補償の感度と方位非対称性評価}
+
+\subsection{要旨}
+IPS 液晶セルの光学補償スタック POL/LC/A/C/ANA（E-mode, abs）において，
+最適条件（best 近傍）を中心に A-plate と Analyzer を同一角度 $\Delta$ だけ連動回転させたときの，
+正面暗状態 ${\rm CR}00$ の劣化と，斜め視点 $\theta=30^\circ$ における
+$\phi=\pm45^\circ,\pm135^\circ$ の方位非対称性を定量評価する．
+連動回転は「相対角を保ったまま系全体が回る」誤差モデルであり，
+単独 misalignment と比べて方位非対称を抑制できる点が存在する一方，
+正面暗状態の劣化を伴う場合がある．
+本研究ではペア非対称指標 $A_{45},A_{135}$ を導入し，
+公差設計における ${\rm CR}00$ と方位非対称のトレードオフを整理した．
+
+\subsection{背景と目的}
+IPS ではオフ軸で偏光子・検光子の実効透過軸が視線方向に依存して回転し，
+暗状態リークが増加してコントラスト比 ${\rm CR}(\theta,\phi)$ が低下する．
+A-plate + C-plate による光学補償は，Poincar\'e 球上の回転として理解でき，
+オフ軸で崩れた直交条件を出射偏光側の回転で打ち消すことで
+ターゲット視点（例：$\theta=30^\circ,\phi=45^\circ$）の ${\rm CR}$ を改善する．
+
+しかし実装ではフィルム貼り合わせや偏光板貼りで貼りずれが生じる．
+貼りずれの影響は正面暗状態 ${\rm CR}00$ の低下として現れるだけでなく，
+方位角 $\phi$ の符号反転に対する非対称（例：${\rm CR}_{30,+45}\neq{\rm CR}_{30,-45}$）としても現れ得る．
+本稿の目的は，A-plate と Analyzer を同一角度で連動回転させる誤差モデル（A\_polout）に対し，
+\begin{itemize}
+\item ${\rm CR}00(\Delta)$ の感度
+\item $\theta=30^\circ$ における $\phi=\pm45^\circ,\pm135^\circ$ の方位非対称の感度
+\end{itemize}
+を同時に評価し，公差議論に必要な指標を整理することである．
+
+\subsection{評価条件と指標}
+\paragraph{中心条件（best 近傍）}
+中心条件は最適化結果（best 近傍）であり，
+\[
+{\rm ReA}=116.25~{\rm nm},\qquad {\rm ReC}=85~{\rm nm}
+\]
+を用いる．偏光板は \texttt{pol\_in}$=0^\circ$, \texttt{pol\_out}$=0^\circ$ とし，
+LC と A の基準方位オフセットを
+\[
+\texttt{relLC}\simeq 0.25^\circ,\qquad \texttt{relA}\simeq 0.25^\circ
+\]
+とする．
+LCのリタデーションは
+\[
+{\rm ReLC}=dn\cdot d=310~{\rm nm}
+\]
+で一定である．
+
+\subsection{連動回転（A\_polout）}
+出射側偏光板に貼りずれが生じた状態を模擬するため、A-plate と Analyzer を同一角度 $\Delta$ だけ回転させる：
+\[
+\alpha_{\rm A}\rightarrow \alpha_{\rm A}+\Delta,\qquad
+\alpha_{\rm out}\rightarrow \alpha_{\rm out}+\Delta,
+\]
+尚、C-plateは面内方向は等方のため、回転角には定義されない。
+POL 入射側，LCは固定とする．
+掃引条件は
+\[
+\Delta\in\{-3.0^\circ,-2.5^\circ,\ldots,+2.5^\circ,+3.0^\circ\}\qquad(\Delta_{\rm step}=0.5^\circ).
+\]
+
+\paragraph{方位非対称性指標}
+オフ軸の 4方位を
+\[
+{\rm CR}_{30,\phi}(\Delta)\equiv {\rm CR}(\theta=30^\circ,\phi;\Delta),\qquad
+\phi\in\{+45^\circ,-45^\circ,+135^\circ,-135^\circ\}
+\]
+と定義する．
+$\pm\phi$ のペア非対称を dB で
+\[
+A_{\phi}(\Delta)=10\log_{10}\!\left(\frac{{\rm CR}_{30,+\phi}(\Delta)}{{\rm CR}_{30,-\phi}(\Delta)}\right),
+\qquad (\phi=45^\circ,135^\circ)
+\]
+とする．
+$A_{\phi}=0$ は方位対称であり，$|A_{\phi}|$ が大きいほど非対称が強い．
+
+\subsection{結果}
+\paragraph{中心（$\Delta=0$）での ${\rm CR}$ と初期非対称}
+中心条件（$\Delta=0$）では，
+\[
+{\rm CR}00(0)=1.976\times 10^{4},
+\]
+\[
+{\rm CR}_{30,+45}(0)=9.097\times 10^{2},\quad
+{\rm CR}_{30,-45}(0)=7.166\times 10^{2},
+\]
+\[
+{\rm CR}_{30,+135}(0)=7.166\times 10^{2},\quad
+{\rm CR}_{30,-135}(0)=9.097\times 10^{2}.
+\]
+したがって
+\[
+A_{45}(0)=+1.036~{\rm dB},\qquad A_{135}(0)=-1.036~{\rm dB}.
+\]
+すなわち best 近傍条件でも，$\theta=30^\circ$ の 4方位 ${\rm CR}$ は完全対称ではなく，
+約 1 dB 程度の初期非対称が存在する．
+
+\subsection{$\Delta\in[-3^\circ,+3^\circ]$ 全点の数値（表1）}
+表\ref{tab:allpoints}に $\Delta\in[-3^\circ,+3^\circ]$ の全点での
+${\rm CR}00$ と ${\rm CR}_{30,\phi}$，および $A_{45},A_{135}$ を示す．
+負側（$\Delta<0$）では $A_{45}>0$（すなわち ${\rm CR}_{30,+45}>{\rm CR}_{30,-45}$）が増大し，
+正側（$\Delta>0$）では $A_{45}<0$ に反転する．
+同様に $A_{135}$ は符号が反転し，$\pm45^\circ$ と $\pm135^\circ$ の非対称が対になって入れ替わることが分かる．
+
+\begin{table}[t]
+\centering
+\caption{A-plate と Analyzer 連動回転（A\_polout）における全スキャン点（$\Delta=-3^\circ\ldots+3^\circ$）の結果．
+${\rm CR}$ は白色（W）評価．}
+\label{tab:allpoints}
+\setlength{\tabcolsep}{3.5pt}
+\small
+\begin{tabular}{r|r|rrrr|rr}
+\hline
+$\Delta$[deg] & ${\rm CR}00$ &
+${\rm CR}_{30,+45}$ & ${\rm CR}_{30,-45}$ & ${\rm CR}_{30,+135}$ & ${\rm CR}_{30,-135}$ &
+$A_{45}$[dB] & $A_{135}$[dB] \\
+\hline
+$-3.0$ &   626.51 & 563.27 & 253.64 & 253.64 & 563.27 &  3.465 & $-3.465$ \\
+$-2.5$ &   870.54 & 681.45 & 301.55 & 301.55 & 681.45 &  3.541 & $-3.541$ \\
+$-2.0$ &  1286.86 & 808.41 & 360.91 & 360.91 & 808.41 &  3.502 & $-3.502$ \\
+$-1.5$ &  2077.35 & 922.12 & 433.60 & 433.60 & 922.12 &  3.277 & $-3.277$ \\
+$-1.0$ &  3821.27 & 989.75 & 520.19 & 520.19 & 989.75 &  2.794 & $-2.794$ \\
+$-0.5$ &  8468.54 & 985.08 & 617.71 & 617.71 & 985.08 &  2.027 & $-2.027$ \\
+$+0.0$ & 19762.91 & 909.71 & 716.61 & 716.61 & 909.71 &  1.036 & $-1.036$ \\
+$+0.5$ & 16874.54 & 791.71 & 798.88 & 798.88 & 791.71 & $-0.039$ &  0.039 \\
+$+1.0$ &  6941.33 & 663.58 & 842.18 & 842.18 & 663.58 & $-1.035$ &  1.035 \\
+$+1.5$ &  3278.85 & 546.06 & 831.96 & 831.96 & 546.06 & $-1.829$ &  1.829 \\
+$+2.0$ &  1845.11 & 447.17 & 772.16 & 772.16 & 447.17 & $-2.372$ &  2.372 \\
+$+2.5$ &  1169.65 & 367.34 & 682.04 & 682.04 & 367.34 & $-2.687$ &  2.687 \\
+$+3.0$ &   803.96 & 304.01 & 583.15 & 583.15 & 304.01 & $-2.829$ &  2.829 \\
+\hline
+\end{tabular}
+\end{table}
+
+\paragraph{方位対称化点（$\Delta\simeq +0.5^\circ$）と ${\rm CR}00$ の挙動}
+表\ref{tab:allpoints}より，$\Delta=+0.5^\circ$ では
+\[
+A_{45}\approx 0,\qquad A_{135}\approx 0
+\]
+となり，$\theta=30^\circ$ における 4方位の ${\rm CR}$ がほぼ対称化される．
+一方で ${\rm CR}00$ は
+\[
+{\rm CR}00(0)=19762.9 \ \rightarrow\ {\rm CR}00(0.5^\circ)=16874.5
+\]
+と低下する．
+すなわち，連動回転には「方位非対称を弱める $\Delta$」が存在し得る一方，
+それが必ずしも正面暗状態の最適条件と一致しないことが示される．
+
+\paragraph{符号依存性（$\Delta>0$ と $\Delta<0$）}
+負側（$\Delta<0$）では $A_{45}$ が $+3$ dB 超まで増大し得るのに対し，
+正側（$\Delta>0$）では $A_{45}$ が負へ反転し，$-2.8$ dB 程度まで変化する．
+これは「貼りずれの符号」により，$\pm\phi$ の優劣が入れ替わることを意味する．
+連動回転は相対角を保存するため単独回転より挙動が滑らかになり得るが，
+符号依存性は残り，工程の系統オフセット（片寄り）を含めて管理する必要がある．
+
+\begin{figure}[t]
+  \centering
+  % (a) の図
+  \begin{subfigure}{0.32\linewidth}
+    \caption{}
+    \centering
+    \includegraphics[width=\linewidth]{iso_A_polout_+0.00deg.png}    
+  \end{subfigure}
+  \hfill % 左右の図の間に適切な空間を挿入
+  % (b) の図
+  \begin{subfigure}{0.32\linewidth}
+    \caption{}
+    \centering
+    \includegraphics[width=\linewidth]{iso_A_polout_+3.00deg.png}
+  \end{subfigure}
+  \hfill % 左右の図の間に適切な空間を挿入
+  % (b) の図
+  \begin{subfigure}{0.32\linewidth}
+    \caption{}
+    \centering
+    \includegraphics[width=\linewidth]{iso_A_polout_-3.00deg.png}
+  \end{subfigure}
+
+  \caption{A+Analyzer 連動回転におけるISO-CR 比較．(a) 回転量$\Delta=0^\circ$, (b) $\Delta=3^\circ$, (c) $\Delta=-3^\circ$, }
+  \label{fig:iso_plot}
+\end{figure}
+
+% 図は別途作成するためコメントアウト
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.75\linewidth]{out_mis_Apolout/plot_delta_vs_CR_t30_phis.png}
+% \caption{A+Analyzer 連動回転における ${\rm CR}_{30,\phi}(\Delta)$（$\phi=\pm45^\circ,\pm135^\circ$）．}
+% \end{figure}
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.75\linewidth]{out_mis_Apolout/plot_delta_vs_asymmetry_dB.png}
+% \caption{A+Analyzer 連動回転における非対称性指標 $A_{45},A_{135}$（dB）．}
+% \end{figure}
+% \begin{figure}[t]
+% \centering
+% \includegraphics[width=0.60\linewidth]{out_mis_Apolout/plot_delta_vs_CR00_W.png}
+% \caption{A+Analyzer 連動回転における ${\rm CR}00(\Delta)$ の変化．}
+% \end{figure}
+
+\subsection{結論}
+A-plate と Analyzer の連動貼りずれ（A\_polout）に対し，
+\begin{enumerate}
+\item best 近傍条件でも，$\theta=30^\circ$ の 4方位 ${\rm CR}$ は完全対称ではなく，
+中心で $A_{45}(0)\simeq +1.04$ dB，$A_{135}(0)\simeq -1.04$ dB の初期非対称が存在する．
+\item $\Delta=+0.5^\circ$ では $A_{45}\approx A_{135}\approx 0$ となり方位対称化される一方，
+${\rm CR}00$ は中心より低下する．
+\item $\Delta$ の符号により ${\rm CR}_{30,+\phi}$ と ${\rm CR}_{30,-\phi}$ の優劣が反転し，
+$|A_{45}|,|A_{135}|$ は最大で約 $3.5$ dB 程度まで増大し得る．
+従って公差設計では ${\rm CR}00$ と $\min {\rm CR}_{30,\phi}$ に加え，
+$A_{45},A_{135}$ を併用して方位非対称も同時に管理することが重要である．
+\end{enumerate}

@@ -1,4 +1,4 @@
-\section{波長依存性評価（Dispersion: mono \& W-ISO）}
+\section{波長依存性評価}
 本節では，最適化で得た補償条件（${\rm ReA}=116.25~{\rm nm}$，${\rm ReC}=85~{\rm nm}$）を固定したまま，
 単色波長 $\lambda$ を掃引し，(i) 正面暗状態 ${\rm CR}00(\lambda)$ と，
 (ii) 斜め視点 $\theta=30^\circ$ における 4方位平均
@@ -23,12 +23,10 @@ B/G/R のリーク透過率平均に基づく白色（W）ISO を併記し，波
 主として位相遅れが $\Gamma(\lambda)\propto 1/\lambda$ により波長依存するモデル）を用いた．
 このとき短波長側ほど位相回転量が大きくなり，補償条件が波長とともに過補償／不足補償へ移行し得る．
 
-\subsection{数値結果（表）}
+\subsection{結果}
 表\ref{tab:disp_summary}に，波長ごとの ${\rm CR}00(\lambda)$ と
 4方位平均 $\overline{{\rm CR}}_{30}(\lambda)$，
 ならびに内訳として ${\rm CR}(30,\phi;\lambda)$（$\phi=\pm45^\circ,\pm135^\circ$）を示す．
-本表は \texttt{dispersion\_summary\_CRavg4.csv} 相当であり，
-以降の議論は本表に基づく．
 
 \begin{table}[htb]
 \centering
@@ -63,11 +61,8 @@ ${\rm CR}(30,-135)$ \\
 \end{tabular}
 \end{table}
 
-\subsection{波長依存プロット（図）}
 図\ref{fig:lambda_dep}は ${\rm CR}00(\lambda)$ と
 $\overline{{\rm CR}}_{30}(\lambda)$ の波長依存性を示す
-（\texttt{plot\_lambda\_vs\_CR00\_and\_CRavg4\_mono.png}）．
-なお図は別途作成するため，本稿では挿入箇所のみを示しコメントアウトする．
 
 \begin{figure}[htb]
  \centering
@@ -79,7 +74,7 @@ $\overline{{\rm CR}}_{30}(\lambda)$ の波長依存性を示す
 
 図\ref{fig:lambda_dep}（および表\ref{tab:disp_summary}）から，
 ${\rm CR}00(\lambda)$ と $\overline{{\rm CR}}_{30}(\lambda)$ はいずれも顕著な波長依存性を持つが，
-\textbf{依存の傾向は互いに大きく異なる}ことが分かる．
+依存の傾向は互いに大きく異なることが分かる．
 具体的には，正面暗状態は
 \[
 {\rm CR}00(450~{\rm nm})\approx 1.08\times 10^4 \ \rightarrow\
@@ -96,19 +91,18 @@ ${\rm CR}00(\lambda)$ と $\overline{{\rm CR}}_{30}(\lambda)$ はいずれも顕
 \overline{{\rm CR}}_{30}(650~{\rm nm})\approx 2.3\times 10^2
 \]
 まで落ちる．
-すなわち，\textbf{正面暗状態を改善する方向（長波長側）と，
-斜め視点の平均性能を改善する方向（短波長側）とが一致しない}．
+すなわち，正面暗状態を改善する方向（長波長側）と，
+斜め視点の平均性能を改善する方向（短波長側）とが一致しない．
 
 この差は，補償スタックが与える偏光状態の回転量（位相遅れ）が $\Gamma(\lambda)\propto 1/\lambda$ として
 波長により変化することに起因し，(i) 正面（$\theta=0$）では残留位相が小さくなるほど暗状態リークが減少しやすい一方，
 (ii) 斜め視点（$\theta=30^\circ$）では波長により「直交条件が回復する方位と程度」が強く変化するためである．
-特に表\ref{tab:disp_summary}の 450--510~nm では
-${\rm CR}(30,+45)$ と ${\rm CR}(30,-45)$ の大小関係が大きく入れ替わり，
-一方の方位が高 ${\rm CR}$ に振れることで平均値が大きく変動している．
+このため，広帯域で両者を同時に改善するには，
+実材料の分散を考慮した補償設計か，A-plateなどの光学フィルムの追加が必要となる．
 
-\subsection{RGB/W の ISO 分布（図）}
-代表波長 B/G/R（450/546/610~nm）の単色 ISO と，
-白色（W）ISO を図\ref{fig:iso_rgbw}に示す（図は別途作成するためコメントアウト）．
+\subsection{RGBW毎の CR視野角分布（等高線ISO）}
+代表波長 B/G/R（450/546/610~nm）の単色と白色（W）の
+CR視野角分布（ISO） を図\ref{fig:iso_rgbw}に示す．
 ここで W は，B/G/R のリーク透過率 $T_{\rm leak}$ を平均して
 白色リークを作る定義であり，最適化で用いた W 評価と整合する．
 一方，B/G/R は単色（mono）ISO であり，
@@ -179,7 +173,7 @@ ${\rm CR}(30,+45)$ と ${\rm CR}(30,-45)$ の大小関係が大きく入れ替�
 % \label{fig:iso_rgbw}
 % \end{figure}
 
-図\ref{fig:iso_rgbw}（挿入予定）では，B（450~nm）と G（546~nm），R（610~nm）で
+図\ref{fig:iso_rgbw}では，B（450~nm）と G（546~nm），R（610~nm）で
 高 ${\rm CR}$ のローブ構造が異なり，特に短波長側で分布の変化が大きいことが分かる．
 これは表\ref{tab:disp_summary}に見られるように，
 $\theta=30^\circ$ の特定方位で ${\rm CR}$ が急激に増減し得ることと整合する．
@@ -203,4 +197,4 @@ $\theta=30^\circ$ の特定方位で ${\rm CR}$ が急激に増減し得るこ�
 \item 追加補償板（多層 A/C，あるいは分散補償用の複合膜）による波長依存性の相殺，
 \item 目的関数として白色（W）だけでなく，単色B/G/Rの最悪値や方位非対称も含めた同時最適化
 \end{itemize}
-など，\textbf{波長依存性を消す（または抑える）ような補償フィルムスタック設計}が必要である．
+など，波長依存性を消す（または抑える）ような補償フィルム構成が必要である．

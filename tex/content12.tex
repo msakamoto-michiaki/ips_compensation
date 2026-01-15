@@ -1,4 +1,4 @@
-\section{数値モデル（IPSモードにおける光学補償最適化設計）}
+\section{IPSモードの光学補償最適化のための光学モデル}
 \label{sec:model_details_jp}
 
 本節では，IPS（in-plane switching）モード液晶表示の暗状態において，斜入射観察で顕在化する視野角漏れ
@@ -10,12 +10,12 @@
 得られた $\mathrm{CR}$ 分布は等コントラスト線（isocontrast contour）として可視化でき，正面 $\mathrm{CR}_{00}$ や
 視野角領域での$\mathrm{CR}(\theta=30^\circ,\phi=45^\circ)$指標などと併せて，補償スタック構成の比較や設計パラメータ探索・最適化の進捗を定量的に追跡できる．
 先行研究では，とくに対角方向（$\phi=45^\circ$）で最大化されやすい暗状態漏れを Poincar\'e 球上の幾何学として整理し，
-A-plate／C-plate による補償条件（分散整合を含む）を設計する枠組みが提示されている \cite{Lee2006,Oh2015}．
+A-plate／C-plate による補償条件（分散整合を含む）を設計する枠組みが提示されている~\cite{lee2006, oh2015}．
 本節の定式化はこれらに基づき，後段で扱う補償条件の系統導出と最適化に必要な記号・計算法・出力指標を一貫した形で与える．
 
 
-\subsection{計算の概要}
-計算では，まず視線方向から伝搬方向ベクトル $\bm{k}(\theta,\phi)$ を構成し，この $\bm{k}$ に直交する局所横基底を定義する．
+\subsection{光学モデルの概要}
+光学モデルでは，まず視線方向から伝搬方向ベクトル $\bm{k}(\theta,\phi)$ を構成し，この $\bm{k}$ に直交する局所横基底を定義する．
 各レイヤの光学軸は固定のグローバル直交座標系 $(x,y,z)$ 上で三次元ベクトルとして与えられるが，
 複屈折による位相遅れは伝搬方向に垂直な成分により決まるため，
 各レイヤに対して，$\bm{k}$ と光学軸から定まるレイヤ固有の局所基底において Jones 行列を構成する．
@@ -23,56 +23,54 @@ A-plate／C-plate による補償条件（分散整合を含む）を設計す�
 入射 Jones ベクトルから出射 Jones ベクトルを求める．
 さらに必要に応じて Jones ベクトルから Stokes パラメータを算出し，偏光状態の解析（例：直線偏光方位，楕円率）にも用いる．
 
-暗状態評価では，出射側偏光板（アナライザ）の透過軸への射影強度から漏れ透過率を求め，これをコントラスト比（Contrast ratio: CR）へ換算する
-
 \subsection{座標系と角度}
 \label{sec:coord_system_jp}
-本数値モデルでは，光学スタックを表現するために固定の \textbf{グローバル直交座標系} $(x,y,z)$ を導入する．
+まず，光学スタックを表現するために固定の グローバル直交座標系 $(x,y,z)$ を導入する．
 観察方向は視野角 $(\theta,\phi)$ で与え，これに基づき単位伝搬方向ベクトル $\bm{k}(\theta,\phi)$ を構成する．
 各層（A-plate，C-plate，LC director，TAC 等）の光学軸は，すべてこのグローバル座標系で三次元ベクトルとして指定される．
 一方で，偏光状態（電場ベクトル）は伝搬方向 $\bm{k}(\theta,\phi)$ に対して常に横波条件 $\bm{E}\cdot\bm{k}=0$ を満たす必要があるため，
-計算は $\bm{k}$ に結びついた \textbf{ローカル横基底} $(\bm{u},\bm{v})$ への射影を通じて実行される．
+計算は $\bm{k}$ に結びついた ローカル横基底 $(\bm{u},\bm{v})$ への射影を通じて実行される．
 すなわち，入射偏光（偏光板透過軸）で与えられる初期電場を $\bm{k}$ に直交する平面に射影し，
 各層の複屈折位相遅れに対応する線形作用（Jones行列に相当）を逐次適用しながら伝搬後電場を更新する．
-最後に，アナライザ（出射側偏光板）の透過軸に対する射影強度から漏れ透過率を算出し，CR へ変換する．
-以下に座標系を説明する。
+最後に，出射側偏光板の透過軸に対する射影強度から漏れ透過率を算出し，CR へ変換する．
+以下に座標系を説明する．
 \subsubsection{グローバル座標系}
-光学スタックの法線をグローバル $z$ 軸と定義する。
-グローバル $x$ 軸、$y$ 軸は基板面内で直交し、層の光学軸ベクトルはこの $(x,y,z)$ の \textbf{3D 単位ベクトル}で与える。
-各視線方向に対し、伝搬単位ベクトル
+光学スタックの法線をグローバル $z$ 軸と定義する．
+グローバル $x$ 軸，$y$ 軸は基板面内で直交し，層の光学軸ベクトルはこの $(x,y,z)$ の 3D 単位ベクトルで与える．
+各視線方向に対し，伝搬単位ベクトル
 \[
 \bm{k}=\bm{k}(\theta,\phi)
 \]
-を構成する。
-ここで $\theta$ は $+z$ 軸からの極角（チルト角）、$\phi$ は $xy$ 平面での方位角である。
+を構成する．
+ここで $\theta$ は $+z$ 軸からの極角（チルト角），$\phi$ は $xy$ 平面での方位角である．
 
 \subsubsection{ローカル横波面と基底射影}
-物理的な偏光は $\bm{k}$ に直交するため、すべての計算は $\bm{k}$ に垂直な面（横波面）で行う。
+物理的な偏光は $\bm{k}$ に直交するため，すべての計算は $\bm{k}$ に垂直な面（横波面）で行う．
 
-\subparagraph{各リターダ層の $(u,v)$ 基底}
-リターダ層の光学軸 $\bm{a}$ を $\bm{k}$ に直交な面へ射影し、
+リターダ層の光学軸 $\bm{a}$ を $\bm{k}$ に直交な面へ射影し，
 \[
 \bm{a}_{\perp}=\bm{a}-(\bm{a}\cdot\bm{k})\bm{k}
 \]
-とする。
+とする．
 この射影ベクトルを正規化して
 \[
 \bm{u}=\frac{\bm{a}_{\perp}}{\|\bm{a}_{\perp}\|},\qquad
 \bm{v}=\frac{\bm{k}\times\bm{u}}{\|\bm{k}\times\bm{u}\|}
 \]
-を定義する。
-組 $(\bm{u},\bm{v})$ は横波面上の直交基底であり、3D-field のリターダ演算子
-$\bm{M}(\bm{k},\bm{a},\Gamma)$ は、これらのローカル軸に沿って $\exp(\pm i\Gamma/2)$ の位相因子を与える。
+を定義する．
+組 $(\bm{u},\bm{v})$ は横波面上の直交基底であり，3D-field のリターダ演算子
+$\bm{M}(\bm{k},\bm{a},\Gamma)$ は，これらのローカル軸に沿って $\exp(\pm i\Gamma/2)$ の位相因子を与える．
 
 \subsection{偏光板モデル}
 \label{subsec:pol_model}
 
-本研究では，IPS の暗状態漏れ（crossed polarizers における off-axis light leakage）を定量化し，補償スタック
-（LC/A/C あるいは C/A/LC）を最適化するために，引用論文で導入されている O-type 偏光板モデルと，
+本研究では，IPSパネルの斜め視野における暗状態漏れ（crossed polarizers における off-axis light leakage）を定量化し，
+補償スタック（LC/A/C あるいは C/A/LC）を最適化するために，引用論文~\cite{lee2006}
+で導入されている偏光板モデルと，
 斜入射における A-plate／C-plate の有効遅相モデル（Eq.~(3a), (3b)）を採用する．
 ここで off-axis 観察では，偏光子およびアナライザの\emph{有効透過軸}が視線方向に依存して回転するため，
 正面でのクロスニコル条件（有効透過軸の直交）が off-axis では一般に満たされず，これが暗状態漏れの主要因となる．
-後続の設計思想（\S\ref{subsec:ips_comp_design_philosophy}）に接続するため，本節では
+後述の設計思想に接続するため，本節では
 (i) 偏光板の off-axis 有効透過軸の定義と，直交条件が破れることに起因する漏れの発生機構，
 (ii) コード実装における扱い（入射で偏光を固定し，出射で射影する）を整理し，
 さらに (iii) 偏光板のみの極限で引用論文のリーク式（Eq.~\eqref{eq:pol_only_leakage}）を再現できることを示す．
@@ -99,10 +97,10 @@ O-type 偏光板では，透過する偏光方向（ordinary 方向）は $(\hat
 \end{equation}
 である．正面（$\theta=0$）では，$\bm c_1\perp \bm c_2$ のクロスニコル設定により理想的に漏れはゼロとなる．
 一方，斜入射では $\bm o_1,\bm o_2$ の方位が $\hat{\bm k}$ に依存して回転し，正面での $90^\circ$ 関係からずれる．
-引用論文の Fig.~2 に示されるように，この有効吸収軸／透過軸の偏位角 $\delta$ が off-axis 漏れの幾何学的起源であり，
+引用論文~\cite{lee2006}の Fig.~2 に示されるように，この有効吸収軸／透過軸の偏位角 $\delta$ が off-axis 漏れの幾何学的起源であり，
 特に対角方向（$\phi=45^\circ$）で漏れが最大化される傾向を持つ．
 
-引用論文では，理想 O-type 偏光板のみ（光学板なし）で crossed の場合に，斜入射リークが
+引用論文~\cite{lee2006}では，理想偏光板のみ（光学板なし）で crossed の場合に，斜入射リークが
 \begin{equation}
 T_{\mathrm{leakage}}
 =\frac{1}{8}\,T^{4}\,
@@ -112,37 +110,38 @@ T_{\mathrm{leakage}}
 \label{eq:pol_only_leakage}
 \end{equation}
 と表されることを示している（$T^{4}$ は 2 枚の偏光板の 4 つの界面における Fresnel 透過を表す）．
-本研究で扱う IPS の補償問題では，この「偏光板だけでも off-axis でクロスが崩れる」という事実を出発点とし，
-LC および補償板が加える偏光回転／楕円化を利用して，off-axis においても $\bm o_2$ に対する消光条件を再構成する
-（詳細は \S\ref{subsec:ips_comp_design_philosophy}）．
+本研究で扱う IPS の補償問題では，この「偏光板だけでも 斜め視野（off-axis） でクロスが崩れる」という事実を出発点とし，
+LC および補償板が加える偏光回転／楕円化を利用して，斜め視野（off-axis） においても
+ $\bm o_2$ に対する消光条件を再構成する．
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\linewidth]{eq2_crop.png}
-\caption{引用論文に示された Eq.~(2)（クロス O-type 偏光板の斜入射リーク）参照画像（クロップ）．}
+\caption{引用論文~\cite{lee2006}に示された クロスニコル偏光板の斜入射リークEq.~(2)の説明図．}
 \label{fig:eq2_crop}
 \end{figure}
 
-\subsubsection{コードにおける偏光板実装（入射で固定，出射で射影）}
+\subsubsection{偏光板モデル}
 \label{subsec:pol_impl}
 
-本研究のコードでは，偏光板を「損失（吸収）を伴う非ユニタリ行列」として retarder 行列列（\texttt{retarder\_matrix()}）に挿入しない．
-代わりに，理想直交偏光板（crossed polarizers）を次の等価手順で実装する：
+本研究のモデルでは，理想直交偏光板（crossed polarizers）を次の等価手順で実装する：
 \begin{itemize}
 \item \textbf{入射側偏光板：} 入射電場を透過状態に固定する．すなわち，
 \begin{equation}
 \bm E_0=\bm o_1\equiv \bm o(\hat{\bm k},\bm c_1)
 \end{equation}
 とおくことで，偏光板の吸収成分を明示的に構成することなく，retarder stack の入力を理想透過偏光に設定する．
+尚，$\bm o(\hat{\bm k},\bm c_1)$ は式\eqref{eq:otype_oaxis}で与えられる偏光板の有効透過軸である．
 \item \textbf{出射側（アナライザ）：} stack 通過後の電場 $\bm E$ をアナライザの透過状態 $\bm o_2$ に射影し，
 \begin{equation}
 a=\bm o_2^{\mathsf T}\bm E,\qquad \bm o_2\equiv \bm o(\hat{\bm k},\bm c_2)
 \end{equation}
-を得る．漏れ強度は $|a|^2$ に比例し（コードの正規化により $1/2$ 等が付与される），これを $T_{\mathrm{leak}}$ としてコントラストへ換算する．
+を得る．
+尚，$\bm o(\hat{\bm k},\bm c_1)$ は式\eqref{eq:otype_oaxis}で与えられる偏光板の有効透過軸である．
+漏れ強度は $|a|^2$ に比例し（コードの正規化により $1/2$ 等が付与される），これを $T_{\mathrm{leak}}$ としてコントラストへ換算する．
 \end{itemize}
-この二段階（入射偏光を固定 $\rightarrow$ 出射で射影）により，非ユニタリな吸収行列を明示的に構成せずに crossed POL を扱える．
-特に off-axis では $\bm o_2$ が $\hat{\bm k}$ により回転するため，暗状態設計では「$\bm E$ を $\bm o_2$ に直交させる」ことが本質となり，
-後続の補償設計（LC/A/C, C/A/LC）の目標条件はこの枠組みの上で定義される．
+このように，入射偏光を固定し，出射偏光板で射影することにより，クロスニコル偏光板の視野角依存性を扱うことができる．
+特に 斜め視野（off-axis） では $\bm o_2$ が $\hat{\bm k}$ により回転するため，光学補償なしでは斜め視野のCRが大幅に低下する．
 
 \subsubsection{偏光板のみの極限における整合性（Eq.~\eqref{eq:pol_only_leakage} の再現）}
 本研究の偏光板実装（入射で $\bm E_0=\bm o_1$ に固定し，出射で $\bm o_2$ へ射影）に対し，
@@ -153,7 +152,7 @@ a(\theta,\phi)=\bm o_2(\hat{\bm k})^{\mathsf T}\bm o_1(\hat{\bm k}),
 T_{\mathrm{leak}}\propto |a|^2
 \label{eq:pol_only_amp}
 \end{equation}
-となる．ここで $\bm o(\hat{\bm k},\bm c)$ は式\eqref{eq:otype_oaxis}で与えられる O-type 偏光板の有効透過軸である．
+となる．ここで $\bm o(\hat{\bm k},\bm c)$ は式\eqref{eq:otype_oaxis}で与えられる 偏光板の有効透過軸である．
 クロスニコル（$\bm c_1\perp\bm c_2$）を仮定すると，ベクトル恒等式
 $(\bm A\times\bm B)\cdot(\bm A\times\bm D)=(\bm A\cdot\bm A)(\bm B\cdot\bm D)-(\bm A\cdot\bm B)(\bm A\cdot\bm D)$
 より，
@@ -180,27 +179,18 @@ $\hat{\bm k}=(\sin\theta\cos\phi,\ \sin\theta\sin\phi,\ \cos\theta)^{\mathsf T}$
 T_{\mathrm{leakage}}=\frac{T^4}{2}\,|a|^2
 \end{equation}
 と置けば式\eqref{eq:pol_only_leakage}を再現する．
-したがって，本研究の境界条件実装は，O-type 偏光板の off-axis 有効軸回転を正しく含んでいることが確認できる．
+したがって，本研究の偏光板モデルの実装は，偏光板の off-axis 有効軸回転を正しく含んでいることが確認できる．
 
 \subsection{補償板モデル（A-plate，C-plate）}
 \label{subsec:ac_model}
-前節で述べたように，off-axis 観察では偏光子／アナライザの\emph{有効透過軸}が視線方向に依存して回転し，
-正面での crossed 条件（有効透過軸の直交）が一般に崩れる．本節では，この off-axis 漏れを抑制するために用いる
-補償板（A-plate，C-plate）を，斜入射における有効遅相（retardation）モデルに基づいて定式化する．
-具体的には，引用論文の Eq.~(3a), (3b) に従い，A-plate（面内一軸）および C-plate（光学軸が法線方向）の
-角度依存遅相 $\Gamma(\theta,\phi)$ を定義し，これを層作用素として Jones 伝搬に組み込む手順を整理する．
-後続の設計思想（\S\ref{subsec:ips_comp_design_philosophy}）に接続するため，
-A-plate／C-plate の角度依存遅相の定義，
+前節で述べたように，斜め視野のoff-axisからの視点 ではPolarizer／Analyzerの有効透過軸が視線方向に依存して回転し，
+正面での クロスニコル条件（有効透過軸の直交）が斜め視野では一般に崩れる．本節では，この off-axis 漏れを抑制するために用いる
+補償板（A-plate，C-plate）を，斜入射における有効位相差モデルに基づいて定式化する．
+具体的には，引用論文~\cite{lee2006}の Eq.~(3a), (3b) に従い，A-plate（面内一軸）および C-plate（光学軸が法線方向）の
+角度依存の位相差 $\Gamma(\theta,\phi)$ を定義し，これを層作用素として Jones 伝搬に組み込む手順を整理する．
 
-\subsubsection{遅相モデル：A-plate と C-plate の角度依存遅相（Eq.~(3a), Eq.~(3b)）}
-\label{subsec:retardation_model}
-
-斜入射では，光学板の見かけ遅相が角度依存で変化する．本研究は引用論文の有効遅相モデルに従い，
-A-plate（面内一軸）および C-plate（光学軸が法線 $z$）の遅相 $\Gamma$ を与える．
-ここで $\Gamma$ は位相遅れ（radian）であり，波長 $\lambda$，膜厚 $d$，屈折率 $n_o,n_e$ を用いて記述される．
-
-\paragraph{A-plate 遅相（Eq.~(3a)）}
-A-plate は光学軸が面内にある一軸板であり，斜入射における有効遅相は，相対方位角 $\phi_{\mathrm{rel}}$（入射方位と面内光学軸の差）を用いて
+\subsubsection{A-plateモデル（Eq.~(3a)）}
+A-plate は光学軸が面内にある一軸板であり，斜入射における有効位相差は，斜め視野の極角 $\theta$ と方位角 $\phi_{\mathrm{rel}}$（光学軸からの相対角度）に依存する：
 \begin{align}
 \Gamma_{A}(\theta,\phi_{\mathrm{rel}})
 &= \frac{2\pi}{\lambda} d
@@ -211,9 +201,10 @@ n_o \left(1-\frac{\sin^2\theta}{n_o^2}\right)^{1/2}
 \Biggr].
 \label{eq:GammaA}
 \end{align}
-実装では数値安定のため，平方根内部が負にならないよう下限クリップを施す．
+ここで $\Gamma$ は位相遅れ（radian）であり，波長 $\lambda$，膜厚 $d$，屈折率 $n_o,n_e$ を用いて記述される．
+また $\frac{2\pi}{\lambda}$を除いた部分は，Retardation（単位：length）と呼ばれる．
 
-\paragraph{C-plate 遅相（Eq.~(3b)）}
+\subsubsection{C-plateモデル（Eq.~(3b)）}
 C-plate は光学軸が法線 $z$ に一致する一軸板であり，理想的には方位角に依存せず極角のみの関数となる：
 \begin{align}
 \Gamma_{C}(\theta)
@@ -227,7 +218,7 @@ n_o
 \right].
 \label{eq:GammaC}
 \end{align}
-さらに，本研究の最適化では C-plate の ``符号付き遅相''（正負）も探索対象とし，
+さらに，本研究の最適化では C-plate の 符号付きリタデーション（正負）も探索対象とし，
 符号は実装上 $n_e-n_o$ の符号（すなわち $\Delta n$ の符号）として取り込むことで，
 Poincar\'e 球上の回転向きを反転させる自由度として扱う．
 
@@ -260,11 +251,13 @@ e^{+i\Gamma_n/2} & 0 \\
 \end{pmatrix}
 \label{eq:J_retarder}
 \end{equation}
-で与えられる．スタック全体の伝搬は，各層のローカル基底への変換と $\bm{J}_n$ の作用を組み合わせて記述できる．
+で与えられる．
+このJones行列により$(\bm{u}_n$, $\bm{v}_n)$成分の位相差が $\Gamma_n$ だけ変化する．
+スタック全体の伝搬は，各層のローカル基底への変換と $\bm{J}_n$ の作用を組み合わせて記述できる．
 実装上は，グローバル 3D 電場を横波面へ射影したうえで，各層の基底へ回転し，$\bm{J}_n$ を作用させて戻す，
-という等価な手続きで表現できる（ローカル基底に結び付いた \emph{Jones-like} 伝搬）．
+という等価な手続きで表現できる．
 
-\subsubsection{遅相 $\Gamma_n$ に基づく層作用素 $M_n$（有効 Jones 伝達行列）}
+\subsubsection{位相差 $\Gamma_n$ に基づく有効 Jones 伝達行列 $M_n$}
 視線方向を $\hat{\bm{k}}(\theta,\phi)$ とし，層 $n$ の光学軸（3D 単位ベクトル）を $\bm{a}_n$ とする．
 横波条件 $\bm{E}\cdot\hat{\bm{k}}=0$ を満たす横波面上で，$\bm{a}_n$ の射影から直交基底
 $(\bm{u}_n,\bm{v}_n)$ を構成する（\S\ref{sec:coord_system_jp}）．
@@ -332,7 +325,7 @@ $\mathrm{CR}\approx 1/T_{\mathrm{leak}}$ として扱える．
 各視野方向 $(\theta,\phi)$ について：
 \begin{enumerate}
   \item 視線（伝搬）単位ベクトル $\bm{k}=\bm{k}(\theta,\phi)$ を構成する．
-  \item 入射側偏光板（POL）と出射側偏光板（analyzer）を吸収軸 $\bm{c}_1,\bm{c}_2$ で表し，
+  \item 入射側偏光板（Polarizer）と出射側偏光板（analyzer）を吸収軸 $\bm{c}_1,\bm{c}_2$ で表し，
         有効透過状態 $\bm{o}_1(\bm{k}),\bm{o}_2(\bm{k})$ を構成して，入射電場を $\bm{E}\leftarrow \bm{o}_1(\bm{k})$ に設定する．
   \item 各リターダ層について視野角依存の遅相 $\Gamma_n$ を計算し，
         式\eqref{eq:Mn_def} により $\bm{M}_n(\bm{k};\bm{a}_n,\Gamma_n)$ を構成して，
@@ -349,7 +342,7 @@ LC，A-plate，C-plate を位相遅相板（retarder）として Jones 行列で
 任意の視線方向 $(\theta,\phi)$ に対する出射電場 $\bm E$ を得る．
 また，\S\ref{subsec:otype_pol} で定義したアナライザ透過状態 $\bm o_2$ への射影から
 $T_{\mathrm{leak}}$ を評価する．
-これらの評価を直観的に解釈するために、
+これらの評価を直観的に解釈するために，
 計算した横波面基底 $(\bm u,\bm v)$ 上の Jones ベクトル $\bm E=(E_u,E_v)^{\mathsf T}$ に対して，
 Stokes パラメータ $(S_0,S_1,S_2,S_3)$ を
 \begin{align}

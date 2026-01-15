@@ -1,0 +1,81 @@
+SHELL := /bin/bash
+
+MAIN ?= main.tex
+BUILD_DIR ?= build
+FONT_DIR ?= fonts
+FONTSET   ?= noto   # noto / harano
+
+LATEXMK ?= latexmk
+LATEXMK_FLAGS ?= -lualatex -interaction=nonstopmode -halt-on-error -file-line-error
+
+PDF := $(BUILD_DIR)/$(basename $(notdir $(MAIN))).pdf
+
+.PHONY: all pdf fonts fonts-noto fonts-harano show-fonts clean distclean
+
+all: pdf
+
+$(BUILD_DIR):
+	mkdir -p "$(BUILD_DIR)"
+
+$(FONT_DIR):
+	mkdir -p "$(FONT_DIR)"
+
+fonts: fonts-$(FONTSET)
+
+# --- Noto: copy from OS into ./fonts (ttc/otf/ttf anything) ---
+fonts-noto: | $(FONT_DIR)
+	@bash -euo pipefail -c '\
+	echo "[fonts-noto] copy Noto fonts from OS -> $(FONT_DIR)"; \
+	command -v find >/dev/null; \
+	# 1) refresh font cache if available (not fatal) \
+	command -v fc-cache >/dev/null 2>&1 && fc-cache -fv >/dev/null 2>&1 || true; \
+	# 2) copy any Noto fonts we can find \
+	srcs="$$(find /usr/share/fonts /usr/local/share/fonts -type f \( \
+		-iname "Noto*.ttf" -o -iname "Noto*.otf" -o -iname "Noto*.ttc" -o -iname "Noto*.otc" \
+	\) 2>/dev/null || true)"; \
+	if [[ -z "$$srcs" ]]; then \
+	  echo "ERROR: No Noto fonts found under /usr/share/fonts or /usr/local/share/fonts"; \
+	  echo "HINT: ensure Noto fonts are installed in the OS layer"; \
+	  exit 1; \
+	fi; \
+	n=0; \
+	while IFS= read -r f; do \
+	  bn="$$(basename "$$f")"; \
+	  cp -f "$$f" "$(FONT_DIR)/$$bn"; \
+	  n=$$((n+1)); \
+	done <<< "$$srcs"; \
+	echo "OK: copied $$n files into $(FONT_DIR)"; \
+	'
+
+# --- HaranoAji: copy from TeX Live into ./fonts ---
+fonts-harano: | $(FONT_DIR)
+	@bash -euo pipefail -c '\
+	echo "[fonts-harano] copy HaranoAji from TeX Live -> $(FONT_DIR)"; \
+	command -v kpsewhich >/dev/null || { echo "ERROR: kpsewhich not found"; exit 1; }; \
+	for f in HaranoAjiMincho-Regular.otf HaranoAjiMincho-Bold.otf HaranoAjiGothic-Regular.otf HaranoAjiGothic-Bold.otf; do \
+	  p="$$(kpsewhich "$$f" 2>/dev/null || true)"; \
+	  [[ -n "$$p" ]] || { echo "ERROR: $$f not found via kpsewhich (install TeX Live haranoaji/langjapanese)"; exit 1; }; \
+	  cp -f "$$p" "$(FONT_DIR)/$$f"; \
+	  echo "COPIED: $$f <- $$p"; \
+	done; \
+	'
+
+
+pdf: | $(BUILD_DIR)
+	@$(MAKE) fonts
+	@$(LATEXMK) $(LATEXMK_FLAGS) -outdir="$(BUILD_DIR)" "$(MAIN)"
+	@echo "OK: $(PDF)"
+
+show-fonts:
+	@echo "== $(FONT_DIR) =="; ls -lh "$(FONT_DIR)" 2>/dev/null || echo "(no fonts dir)"
+	@echo
+	@echo "== sample noto cjk files =="; ls -1 "$(FONT_DIR)"/Noto* 2>/dev/null | head -n 20 || true
+
+clean:
+	@$(LATEXMK) -C -outdir="$(BUILD_DIR)" "$(MAIN)" >/dev/null 2>&1 || true
+	@rm -rf "$(BUILD_DIR)"/*.synctex.gz 2>/dev/null || true
+	@echo "cleaned"
+
+distclean: clean
+	@rm -rf "$(BUILD_DIR)" "$(FONT_DIR)"
+	@echo "removed $(BUILD_DIR)/ and $(FONT_DIR)/"

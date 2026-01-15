@@ -61,9 +61,9 @@ $\mathrm{Re}_C$（nm）を最適化変数として走査し、式 \eqref{eq:d_fr
 
 \begin{figure}[htb]
 \centering
-\includegraphics[width=0.92\linewidth]{azmith.png}
+\includegraphics[width=0.92\linewidth]{azimuth.png}
 \caption{xxx}
-\label{fig:azmith}
+\label{fig:azimuth}
 \end{figure}
 
 \paragraph{基準配置}

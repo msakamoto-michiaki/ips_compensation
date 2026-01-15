@@ -1,0 +1,20 @@
+% fontsetup-harano.tex
+% Use HaranoAji (bundled with TeX Live Japanese collections)
+\usepackage{luatexja}
+\usepackage{luatexja-fontspec}
+\usepackage{fontspec}
+
+% Select by FILE NAME to avoid HaranoAji*.fontspec auto-weight requests.
+\setmainjfont{HaranoAjiMincho-Regular.otf}[
+  Path=fonts/,
+  BoldFont=HaranoAjiMincho-Bold.otf
+]
+\setsansjfont{HaranoAjiGothic-Regular.otf}[
+  Path=fonts/,
+  BoldFont=HaranoAjiGothic-Bold.otf
+]
+
+% Latin / mono
+\setmainfont{Latin Modern Roman}
+\setsansfont{Latin Modern Sans}
+\setmonofont{Latin Modern Mono}[Scale=MatchLowercase]

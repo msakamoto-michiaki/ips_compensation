@@ -29,7 +29,7 @@ A-plate + C-plate による光学補償は，Poincar\'e 球上の回転として
 を同時に評価し，公差議論に必要な指標を整理することである．
 
 \subsection{評価条件と指標}
-\paragraph{中心条件（best 近傍）}
+\subsubsection{中心条件（best 近傍）}
 中心条件は最適化結果（best 近傍）であり，
 \[
 {\rm ReA}=116.25~{\rm nm},\qquad {\rm ReC}=85~{\rm nm}
@@ -47,19 +47,19 @@ LCのリタデーションは
 で一定である．
 
 \subsection{連動回転（A\_polout）}
-出射側偏光板に貼りずれが生じた状態を模擬するため、A-plate と Analyzer を同一角度 $\Delta$ だけ回転させる：
+出射側偏光板に貼りずれが生じた状態を模擬するため，A-plate と Analyzer を同一角度 $\Delta$ だけ回転させる：
 \[
 \alpha_{\rm A}\rightarrow \alpha_{\rm A}+\Delta,\qquad
 \alpha_{\rm out}\rightarrow \alpha_{\rm out}+\Delta,
 \]
-尚、C-plateは面内方向は等方のため、回転角には定義されない。
+尚，C-plateは面内方向は等方のため，回転角には定義されない．
 POL 入射側，LCは固定とする．
 掃引条件は
 \[
 \Delta\in\{-3.0^\circ,-2.5^\circ,\ldots,+2.5^\circ,+3.0^\circ\}\qquad(\Delta_{\rm step}=0.5^\circ).
 \]
 
-\paragraph{方位非対称性指標}
+\subsubsection{方位非対称性指標}
 オフ軸の 4方位を
 \[
 {\rm CR}_{30,\phi}(\Delta)\equiv {\rm CR}(\theta=30^\circ,\phi;\Delta),\qquad
@@ -75,7 +75,7 @@ A_{\phi}(\Delta)=10\log_{10}\!\left(\frac{{\rm CR}_{30,+\phi}(\Delta)}{{\rm CR}_
 $A_{\phi}=0$ は方位対称であり，$|A_{\phi}|$ が大きいほど非対称が強い．
 
 \subsection{結果}
-\paragraph{中心（$\Delta=0$）での ${\rm CR}$ と初期非対称}
+\subsubsection{中心（$\Delta=0$）での ${\rm CR}$ と初期非対称}
 中心条件（$\Delta=0$）では，
 \[
 {\rm CR}00(0)=1.976\times 10^{4},
@@ -95,7 +95,7 @@ A_{45}(0)=+1.036~{\rm dB},\qquad A_{135}(0)=-1.036~{\rm dB}.
 すなわち best 近傍条件でも，$\theta=30^\circ$ の 4方位 ${\rm CR}$ は完全対称ではなく，
 約 1 dB 程度の初期非対称が存在する．
 
-\subsection{$\Delta\in[-3^\circ,+3^\circ]$ 全点の数値（表1）}
+\subsection{偏光板貼りずれ$\Delta\in[-3^\circ,+3^\circ]$ の場合の, ISO-CR 図と非対称指標}
 表\ref{tab:allpoints}に $\Delta\in[-3^\circ,+3^\circ]$ の全点での
 ${\rm CR}00$ と ${\rm CR}_{30,\phi}$，および $A_{45},A_{135}$ を示す．
 負側（$\Delta<0$）では $A_{45}>0$（すなわち ${\rm CR}_{30,+45}>{\rm CR}_{30,-45}$）が増大し，
@@ -132,28 +132,25 @@ $+3.0$ &   803.96 & 304.01 & 583.15 & 583.15 & 304.01 & $-2.829$ &  2.829 \\
 \end{tabular}
 \end{table}
 
-\paragraph{方位対称化点（$\Delta\simeq +0.5^\circ$）と ${\rm CR}00$ の挙動}
-表\ref{tab:allpoints}より，$\Delta=+0.5^\circ$ では
-\[
-A_{45}\approx 0,\qquad A_{135}\approx 0
-\]
+図~\ref{fig:iso_plot2}に $\Delta=0^\circ,\ +3^\circ,\ -3^\circ$ における ISO-CR 図を示す．
+$\Delta=0^\circ$ では Fig~\ref{fig:iso_plot1}~(b) と同じであり，方位対称性が保たれているのに対し，
+$\Delta=\pm 3^\circ$ では明確な方位非対称が現れている．
+また，$\Delta$ の符号により ${\rm CR}_{30,+\phi}$ と ${\rm CR}_{30,-\phi}$ の優劣が反転していることが分かる．
+また，表\ref{tab:allpoints}は非対称化指標 $A_{45},A_{135}$ 及び正面CR00の偏光板回転ずれ$\Delta$ に対する依存性を示す．
+表より $|A_{45}|,|A_{135}|$ は最大で約 $3.5$ dB 程度まで増大し得ることが分かる．
+対して，貼りずれのない$\Delta=0^\circ$ の場合は，非対称化指標は
+$A_{45}\approx 0$,$\qquad$ $A_{135}\approx 0$
 となり，$\theta=30^\circ$ における 4方位の ${\rm CR}$ がほぼ対称化される．
-一方で ${\rm CR}00$ は
-\[
-{\rm CR}00(0)=19762.9 \ \rightarrow\ {\rm CR}00(0.5^\circ)=16874.5
-\]
-と低下する．
+一方，正面 ${\rm CR}00$ は$\Delta=+0.0^\circ$ では
+${\rm CR}00=19762.9$
+であるのに対し，$\Delta=2 \sim 2.5^\circ$ では
+${\rm CR}00=870 \sim 1845$
+まで大幅に低下する．
 すなわち，連動回転には「方位非対称を弱める $\Delta$」が存在し得る一方，
 それが必ずしも正面暗状態の最適条件と一致しないことが示される．
 
-\paragraph{符号依存性（$\Delta>0$ と $\Delta<0$）}
-負側（$\Delta<0$）では $A_{45}$ が $+3$ dB 超まで増大し得るのに対し，
-正側（$\Delta>0$）では $A_{45}$ が負へ反転し，$-2.8$ dB 程度まで変化する．
-これは「貼りずれの符号」により，$\pm\phi$ の優劣が入れ替わることを意味する．
-連動回転は相対角を保存するため単独回転より挙動が滑らかになり得るが，
-符号依存性は残り，工程の系統オフセット（片寄り）を含めて管理する必要がある．
 
-\begin{figure}[t]
+\begin{figure}[htb]
   \centering
   % (a) の図
   \begin{subfigure}{0.32\linewidth}
@@ -177,7 +174,7 @@ A_{45}\approx 0,\qquad A_{135}\approx 0
   \end{subfigure}
 
   \caption{A+Analyzer 連動回転におけるISO-CR 比較．(a) 回転量$\Delta=0^\circ$, (b) $\Delta=3^\circ$, (c) $\Delta=-3^\circ$, }
-  \label{fig:iso_plot}
+  \label{fig:iso_plot2}
 \end{figure}
 
 % 図は別途作成するためコメントアウト

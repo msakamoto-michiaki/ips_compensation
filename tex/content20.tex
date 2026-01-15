@@ -1,17 +1,38 @@
 \section{IPS光学補償フィルム構成の最適化}
 
 本節では，IPSパネルの光学補償フィルム構成POL/LC/A/C/ANAにおける
-CR視野角の最適化について述べる。
-ここで、POLは入射側偏光板(偏光子,polarizer)、LCは液晶、AはA-plate, CはC-plate, ANAは出射側偏光板(検光子,analyzer)である。
-尚、LCの長軸とPOLの吸収軸を平行とするEモードで偏光板同士はクロスニコル条件である．
-最適化においては、特定の視点（$\theta=30^\circ,\ \phi=45^\circ$）における，コントラスト比 CR$(\theta,\phi)$ に関するReA--ReC 平面上での，
-best条件を探索する。そして、best条件において($\theta$, $\phi$)-極座標プロット（polar plot）を用いてCRの視野角マップを作成し、REF（A/Cなし：Pol/LC/Analyzer）と比較することで、CR視野角の拡大を確認する。
-さらに Stokes 解析の結果に基づき、偏光板の「オフ軸クロスニコルずれ」を補償する光学補償の設計思想の説明を行う．
-なお、構成はPOL/LC/A/C/ANAでEモード配置としたが、POL/C/A/LC/ANAでOモード配置（OモードはLCの長軸とPOLの透過軸を平行とする）, 
-POL/C/A/LC/A/C/ANAでEモード/Oモード配置の構成の場合も補償設計の思想は同様である。
+CR視野角の最適化について述べる．
+ここで，POLは入射側偏光板(偏光子,polarizer)，LCは液晶，AはA-plate, CはC-plate, ANAは出射側偏光板(検光子,analyzer)である．
+尚，LCの長軸とPOLの吸収軸を平行とするEモードで偏光板同士はクロスニコル条件である．
+最適化においては，特定の視点（$\theta=30^\circ,\ \phi=45^\circ$）における，コントラスト比 CR$(\theta,\phi)$ に関するReA--ReC 平面上での，
+best条件を探索する．そして，best条件において($\theta$, $\phi$)-極座標プロット（polar plot）を用いてCRの視野角マップを作成し，REF（A/Cなし：Pol/LC/Analyzer）と比較することで，CR視野角の拡大を確認する．
+さらに Stokes 解析の結果に基づき，偏光板の「オフ軸クロスニコルずれ」を補償する光学補償の設計思想の説明を行う．
+なお，構成はPOL/LC/A/C/ANAでEモード配置としたが，POL/C/A/LC/ANAでOモード配置（OモードはLCの長軸とPOLの透過軸を平行とする）, 
+POL/C/A/LC/A/C/ANAでEモード/Oモード配置の構成の場合も補償設計の思想は同様である．
 
 \subsection{計算条件（探索格子と評価量）}
 探索パラメータは A-plate の有効リターデーション（ReA）と C-plate の有効リターデーション（ReC）である．
+尚，本節で用いる材料定数と固定パラメータは表~\ref{tab:model_params_case12}に示す通りである．
+\begin{table}[t]
+  \centering
+  \caption{本節で用いる材料定数と固定パラメータ（代表値）．}
+  \label{tab:model_params_case12}
+  \begin{tabular}{lcc}
+    \toprule
+    Parameter & Symbol & Value \\
+    \midrule
+    LC birefringence & $\Delta n_{\mathrm{LC}}$ & $0.10$ \\
+    LC thickness & $d_{\mathrm{LC}}$ & $3.1~\mu\mathrm{m}$ \\
+    A-plate birefringence (upper) & $\Delta n_{A,\mathrm{up}}$ & $0.00142$ \\
+    A-plate birefringence (lower) & $\Delta n_{A,\mathrm{low}}$ & $0.00145$ \\
+    C-plate birefringence & $\Delta n_{C}$ & $0.12049$ \\
+    LC retardation (design) & $\mathrm{Re}_{\mathrm{LC}}$ & $310~\mathrm{nm}$ \\
+    A-plate base retardation (each) & $\mathrm{Re}_{A,\mathrm{base}}$ & $155~\mathrm{nm}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
 今回の探索条件は以下の通りである．
 \begin{itemize}
 \item 構成：POL/LC/A/C/ANA
@@ -28,7 +49,145 @@ Eモード, 光学軸$\alpha_{\rm LC}=2.5^\circ$,
 CR($\theta=0^\circ,\ \phi=0^\circ$)
 \end{itemize}
 
-\subsection{最適化が想定している波長}
+\subsection{入力}
+\subsubsection{構成}
+対象とする光学フィルムの層構成は簡便のため，POL/LC/A/C/ANAとし，
+入射側偏光板 (Polarizer; POL)の吸収軸(${\bm c_1}$)とLCの屈折率の長軸が平行のLC吸収軸基準（Eモード）
+に配置する．
+出射側偏光板 (Analyzer; ANA)の吸収軸(${\bm c_2}$)とPOLの吸収軸${\bm c_1}$は直交するクロスニコル配置とする．
+尚，通常のPOLの透過率とLCの屈折率の長軸が平行なLC透過軸基準（Oモード）の場合はC/A/LCのスタックでEモードと同様の
+結果が得られる．
+実際には光学フィルムをC-plate($R_{th}$)/A-plate($R_{0}$)の組み合わせで記述され，一般には
+C/A/LC/A/Cスタックでモデル化される．
+しかし，光学補償の設計指針はLC/A/Cスタックと同様であり，CR視野角の定性的な傾向も同様のため，
+本層構成で実施する．
+
+\subsubsection{膜厚}
+本実装では，等方屈折率を $n_o$ とし，各層の複屈折を $\Delta n$ として
+異常屈折率 $n_e=n_o+\Delta n$ を与える．
+位相差（リタデーション）$\mathrm{Re}$ と膜厚 $d$ の関係は
+\begin{equation}
+  \mathrm{Re} = \Delta n \, d,
+\end{equation}
+であり，与えられた $\mathrm{Re}$（nm）と $\Delta n$ から膜厚は
+\begin{equation}
+  d\,[\mu\mathrm{m}] = \frac{\mathrm{Re}\,[\mathrm{nm}]}{1000\,\Delta n}
+  \label{eq:d_from_Re}
+\end{equation}
+と換算できる．
+LC は $d_{\mathrm{LC}}$ と $\Delta n_{\mathrm{LC}}$ を固定し，設計値として
+$\mathrm{Re}_{\mathrm{LC}}=\Delta n_{\mathrm{LC}} d_{\mathrm{LC}}$ が定まる．
+
+一方，A-plate は 主に面内リタデーション（$R_0$）を補償する役割
+C-plate は主に 厚み方向リタデーション（$R_{th}$）を担い斜入射起因の残差を抑える役割を担う．
+A-plate の膜厚は，選択した材料（upper/lower）の $\Delta n_A$ により $d_A=\mathrm{Re}_A/(1000\,\Delta n_A)$ として決まる．
+
+\footnote{
+プログラムの作成経緯から，実際にはスケール係数 $A_{\mathrm{scale}}$ により
+\begin{equation}
+ \mathrm{Re}_{A} = A_{\mathrm{scale}} \, \mathrm{Re}_{A,\mathrm{base}}
+ \label{eq:ReA_scale}
+\end{equation}
+で与える．ここで $\mathrm{Re}_{A,\mathrm{base}}$ は「$\mathrm{Re}_{LC}/2$」に固定する必然性はなく，
+（A/LC/A 構成の ``each'' 割当として $\mathrm{Re}_{LC}/2$ を用いる流儀は存在するが），
+本節の単一 A では目的関数に応じて $\mathrm{Re}_{A,\mathrm{base}}$ を別途与える（あるいは最適化変数として扱う）．
+}
+
+同様に，C-plate の設計は膜厚 $d_C$ を直接固定するのではなく，C-plate のリタデーション
+$\mathrm{Re}_C$（nm）を最適化変数として走査し，式 \eqref{eq:d_from_Re} により
+\begin{equation}
+  d_C\,[\mu\mathrm{m}] = \frac{\mathrm{Re}_C\,[\mathrm{nm}]}{1000\,\Delta n_C}
+\end{equation}
+へ換算して膜厚表記を与える．
+
+なお $\mathrm{Re}_C$ の符号は，実装上は ``signed ReC'' として取り扱い，負の場合はTACなどのnegative C-plateを表す．
+
+
+\subsubsection{相対角（光学軸方位）の定義}
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.92\linewidth]{azimuth.png}
+\caption{xxx}
+\label{fig:azimuth}
+\end{figure}
+
+\subsubsection{基準配置}
+本節では，基準配置として以下を採用する．
+
+\begin{itemize}
+  \item 入射側偏光板（POL）の吸収軸を $x$ 軸に一致させる：$\mathbf{c}_1=\hat{\mathbf{x}}.$
+  \item 液晶（LC）の面内光学軸も $x$ 軸に一致させる： $\mathbf{a}_{\mathrm{LC}}=\hat{\mathbf{x}}.$
+  \item 出射側偏光板（アナライザー）の吸収軸を $y$ 軸に一致させる：$\mathbf{c}_2=\hat{\mathbf{y}}.$
+\end{itemize}
+
+したがって基準配置では，
+$
+  \mathbf{c}_1\parallel\hat{\mathbf{x}},\quad
+  \mathbf{a}_{\mathrm{LC}}\parallel\hat{\mathbf{x}},\quad
+  \mathbf{c}_2\parallel\hat{\mathbf{y}}
+$
+となり，入射側偏光板と出射側偏光板はクロスニコル条件（透過軸が互いに直交）を満たす．
+
+\subsubsection{光学軸の向き}
+本プログラムでは汎用性を確保するため，各層の光学軸方位は，基準軸として入力側偏光子（POL）の透過軸を取り，その方位角を $0^\circ$ と定義する．
+これに対し，上側 A-plate，下側 A-plate，LC の配向（LC のラビング方向あるいは暗状態の等価主軸），および C-plate の光学軸方位をそれぞれ
+\[
+\alpha_{\mathrm{A,top}},\ \alpha_{\mathrm{A,bot}},\ \alpha_{\mathrm{LC}},\ \alpha_{\mathrm{C}}
+\]
+で表し，相対角として
+\[
+\texttt{relA}=\Delta\alpha_{\mathrm{A,top}}=\alpha_{\mathrm{A,top}}-\alpha_{\mathrm{POL}},\quad
+\texttt{lc\_rel}=\Delta\alpha_{\mathrm{LC}}=\alpha_{\mathrm{LC}}-\alpha_{\mathrm{POL}},\quad \text{etc.}
+\]
+を用いて記述する（$\alpha_{\mathrm{POL}}=0^\circ$）．
+例えば，
+\[
+\mathrm{POL}\ /\ \mathrm{LC}\ /\ \mathrm{A}\ /\ \mathrm{C}\ /\ \mathrm{ANA}
+\]
+とし，図~\ref{fig:azimuth}のように，面内角度はすべて「偏光板の吸収軸」を基準とする角度として与える．
+基準配置として，入射側偏光板（POL）の吸収軸を $x$ 軸（$\mathbf{c}_1=\hat{\mathbf{x}}$），
+出射側偏光板（Analyzer）の吸収軸を $y$ 軸（$\mathbf{c}_2=\hat{\mathbf{y}}$）に一致させる．
+このとき，\texttt{pol\_in}, \texttt{pol\_out}（deg）はそれぞれ吸収軸の $z$ 軸回り回転角であり，
+偏光板がクロスニコルの基準位置から回転ずれを起こす場合に使用する．
+
+上述のように，\texttt{pol\_in}=0, \texttt{pol\_out}=0はクロスニコル状態である．
+LC の面内光学軸は \texttt{pol\_in} に対して相対角 \texttt{relLC} を持ち，
+\begin{equation}
+  \alpha_{\mathrm{LC}}=\texttt{pol\_in}+\texttt{rel\_LC}
+\end{equation}
+で与えられる．一方，A-plate は本実装では Analyzer 側（\texttt{pol\_out}）を基準として配置され，
+A の方位角は
+\begin{equation}
+  \alpha_{A}=A_{\mathrm{base}}+\texttt{pol\_out}+\texttt{relA}
+\end{equation}
+で与えられる（Case-1 では $A_{\mathrm{base}}=90^\circ$ に固定）．
+したがって Analyzer 側を基準に固定し（\texttt{pol\_out}=0），入力側のみ \texttt{pol\_in} を回転させる場合，
+LC のみが \texttt{pol\_in} に追随し，A は固定角のままとなり，独立に設定することが可能となる．
+
+実際の計算では
+（\texttt{pol\_in}=$0^\circ$, \texttt{pol\_out}=$0^\circ$），
+\texttt{relA}=$0.25^\circ$, \texttt{rel\_LC}=$0.25^\circ$ とした場合，
+\begin{equation}
+\alpha_{\mathrm{pol,in}}^{(\mathrm{abs})}=0^\circ,\qquad
+\alpha_{\mathrm{LC}}=0.25^\circ,\qquad
+\alpha_{\mathrm{A}}=90.25^\circ,\qquad
+\alpha_{\mathrm{pol,out}}^{(\mathrm{abs})}=90^\circ.
+\end{equation}
+とした．
+\\
+\subsection{最適化手法及び結果}
+\subsubsection{最適化手法}
+本最適化手法では正面CR00($\theta=0$)を維持しつつ，
+ターゲット視点CR($\theta=30^\circ,\ \phi=45^\circ$)を最大化することを目的とする．
+したがって，最適化変数は A-plate のリタデーション ReA と C-plate のリタデーション ReC の2変数である．
+探索範囲は
+\[\mathrm{ReA}\in[0,372]~\mathrm{nm},\quad
+\mathrm{ReC}\in[-280,280]~\mathrm{nm}\]
+とし，格子点間隔は $2.0$ nm とした．
+各格子点において，ターゲット視点CRを計算し，
+最も大きなCRを与える(ReA, ReC)の組み合わせをbest条件として採用する．
+尚，
 本プログラムにおける最適化（progress における best 判定，および基本の ${\rm CR}$ 評価）は，
 単色 $\lambda=550~{\rm nm}$ に固定された評価ではなく，
 代表波長
@@ -47,13 +206,13 @@ T_{\rm leak}^{(W)}(\theta,\phi)
 \]
 を構成する方式である．
 ここで重要なのは，白色評価が ${\rm CR}(\theta,\phi;\lambda)$ を波長平均した量ではなく，
-\textbf{$T_{\rm leak}$ を平均してから ${\rm CR}$ を定義する}点である．
+$T_{\rm leak}$ を平均してから ${\rm CR}$ を定義する点である．
 したがって，「最適化は $\lambda=550~{\rm nm}$ で行った」という理解は実装上は正確ではなく，
 より正確には「$\lambda_G=546~{\rm nm}$ を含む B/G/R（450/546/610~nm）の白色評価を目的関数として最適化した」
 と解釈されるべきである．
 
-
-\subsection{最適化結果}
+\subsubsection{最適化結果}
+%
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.92\linewidth]{ReA_ReC_map_LC_AC_abs.png}
@@ -64,7 +223,7 @@ ReA--ReC ２次元マップ
 \label{fig:ReA_ReC_map}
 \end{figure}
 図~\ref{fig:ReA_ReC_map}は
-ReA--ReC ２次元マップを示し、
+ReA--ReC ２次元マップを示し，
 各格子点 $(\mathrm{ReA},\mathrm{ReC})$ に対して 
 ターゲット視点での${\rm CR}(\theta{=}30^\circ,\phi{=}45^\circ)$
 を計算し，
@@ -94,7 +253,7 @@ ReA--ReC ２次元マップを示し、
 %CR_{\rm LC-only}\approx 3.22,\qquad
 %CR_{\rm best}\approx 4.56
 %\]
-\item 正面（$CR00$）：両者はほぼ同等
+\item 正面（${\rm CR}00$）：両者はほぼ同等
 \[
 {\rm CR00}_{\rm LC-only}\approx 1.975\times 10^4,\quad
 {\rm CR00}_{\rm best}\approx 1.976\times 10^4
@@ -108,10 +267,10 @@ ReA--ReC ２次元マップを示し、
 
 したがって，補償は正面の明暗を損なわずに，
 オフ軸の暗状態リークを低減し，視野角全体の低CR領域を押し上げる効果を持つ．
-尚、
+尚，
 ReC を各 ReA で最適化した包絡線 ${\rm CR}_{\max}(\mathrm{ReA})$ には主ピーク以外に第2ピークが存在する．
 REF（Pol/LC/Analyzer），best条件，および第2ピーク条件における最適化指標である正面CR00とターゲット視点CR（$\theta=30^\circ,\phi=45^\circ$）の比較
-を表~\ref{tab:ref_best_second}に示す。
+を表~\ref{tab:ref_best_second}に示す．
 
 \begin{table}[htb]
 \centering
@@ -131,7 +290,7 @@ best（第1ピーク） & LC/A/C & $116.25$ & $85$ & $1.9763\times 10^{4}$ & $9.
 \end{table}
 
 
-主ピークと第2ピークの物理解釈は以下の通りである。
+主ピークと第2ピークの物理解釈は以下の通りである．
 本系の補償は，オフ軸で発生する「偏光子・検光子の実効クロス条件の崩れ」を，
 A-plate と C-plate の位相回転（Poincar\'e 球上の回転）で打ち消す問題として理解できる．
 主ピーク（ReA $\sim 116$ nm, ReC $\sim 85$ nm）は，
@@ -146,56 +305,51 @@ A-plate と C-plate の位相回転（Poincar\'e 球上の回転）で打ち消�
 
 \subsection{best条件と参照（Pol/LC/Analyzer）の ISO-CR 比較}
 % --- 本文 ---
-\begin{figure}[t]
+\begin{figure}[htb]
   \centering
   % (a) の図
   \begin{subfigure}{0.48\linewidth}
+    \caption{} % ここに文字を入れると (b) 最適条件 と表示されます
     \centering
     \includegraphics[width=\linewidth]{iso_LC_only_abs.png}
-    \caption{REF構成} % ここに文字を入れると (a) REF構成 と表示されます
-    \label{fig:sub_ref}
   \end{subfigure}
   \hfill % 左右の図の間に適切な空間を挿入
   % (b) の図
   \begin{subfigure}{0.48\linewidth}
+    \caption{} % ここに文字を入れると (b) 最適条件 と表示されます
     \centering
     \includegraphics[width=\linewidth]{iso_LC_AC_abs_best.png}
-    \caption{最適条件} % ここに文字を入れると (b) 最適条件 と表示されます
-    \label{fig:sub_best}
   \end{subfigure}
-  \caption{ISO-CR 比較．(a) 補償なしのREF構成、(b) A/Cプレートによる最適化後。}
-  \label{fig:iso_plot}
+  \caption{ISO-CR 比較．(a) 補償なしのREF構成，(b) A/Cプレートによる最適化後．}
+  \label{fig:iso_plot1}
 \end{figure}
 
-POL/LC/A/C/ANA構成のbest条件と光学補償なし(POL/LC/ANA)のISO-CR 図の定性的比較をFig~\ref{fig:iso_plot}に示す。
+POL/LC/A/C/ANA構成のbest条件と光学補償なし(POL/LC/ANA)のISO-CR 図の定性的比較をFig~\ref{fig:iso_plot1}に示す．
 
-\paragraph{REF（LC-only）}
-Fig~\ref{fig:iso_plot}~(a)では，
+Fig~\ref{fig:iso_plot1}~(a)では，
 特定方位角にリークの強いローブが現れ，等高線が歪む（CR が急落する）．
 これはオフ軸で偏光子・検光子の実効軸が理想クロスから外れ，
 暗状態でも analyzer 透過成分が残ることに起因する．
 
-\paragraph{best（LC/A/C）}
-Fig~\ref{fig:iso_plot}~(b)では，
+Fig~\ref{fig:iso_plot1}~(b)では，
 ターゲット方位（$\phi \approx 45^\circ$）近傍の CR が大きく押し上がると同時に，
 低CRローブが緩和され，等高線がより滑らかに広がる．
-これによりCR視野角が改善する。
+これによりCR視野角が改善する．
 
-\subsection{Stokes解析による「オフ軸クロスニコルずれ」と補償の説明}
-
-POL/LC/A/C/ANA構成において，偏光状態を（規格化）Stokesパラメータにより解析する。C-plate出射後の偏光状態のStokesパラメータは
+\subsection{Stokes解析による斜め視野における「クロスニコル条件の破綻」と補償の説明}
+POL/LC/A/C/ANA構成において，偏光状態を（規格化）Stokesパラメータにより解析する．C-plate出射後の偏光状態のStokesパラメータは
 \[
 (s_1,s_2,s_3)=(0.9655,\ 0.2460,\ 5.1\times 10^{-4}),
 \]
-であり $s_3\approx 0$ より、ほぼ直線偏光である．
+であり $s_3\approx 0$ より，ほぼ直線偏光である．
 この時，
 ターゲット視点のCR（$\theta=30^\circ,\phi=45^\circ$）が
-最大化する理由を以下に説明する。
+最大化する理由を以下に説明する．
 %\[
 %\Delta = (\alpha-\psi)\bmod 180^\circ = 91.065^\circ.
 %\]
 
-\paragraph{オフ軸でクロスニコル条件が崩れる理由}
+\subsubsection{オフ軸でクロスニコル条件が崩れる理由}
 正面入射では，理想的に Pol と Analyzer を $90^\circ$ 直交（クロスニコル）に置けば，
 暗状態で透過は抑圧される．
 しかしオフ軸では，O-type 偏光子・検光子の実効透過軸は
@@ -213,7 +367,7 @@ POL/LC/A/C/ANA構成において，偏光状態を（規格化）Stokesパラメ
 \]
 までずれる（＝クロス角が広がる）．
 
-\paragraph{A-plate + C-plate による補償の本質：出射偏光の回転}
+\subsubsection{A-plate + C-plate による補償の本質：出射偏光の回転}
 暗状態のリークは概ね
 「analyzer 実効軸」と「スタック出射偏光」の非直交成分で決まる．
 ここで出射偏光がほぼ線偏光（$s_3\approx 0$）であるとき，

@@ -1,0 +1,18 @@
+% fontsetup-noto.tex (simple + robust)
+\usepackage{luatexja}
+\usepackage{luatexja-fontspec}
+\usepackage{fontspec}
+
+% Japanese + Latin: use CJK fonts (they include Latin glyphs)
+\setmainfont{Noto Serif CJK JP}
+\setsansfont{Noto Sans CJK JP}
+
+\setmainjfont{Noto Serif CJK JP}
+\setsansjfont{Noto Sans CJK JP}
+
+% Mono: try Noto Sans Mono, fallback to Latin Modern Mono
+\IfFontExistsTF{Noto Sans Mono}{
+  \setmonofont{Noto Sans Mono}[Scale=MatchLowercase]
+}{
+  \setmonofont{Latin Modern Mono}[Scale=MatchLowercase]
+}

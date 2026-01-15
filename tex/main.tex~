@@ -1,0 +1,114 @@
+% !TEX program = lualatex
+\documentclass[a4paper,11pt]{bxjsarticle}
+%
+\input{fontsetup-noto}
+%\input{fontsetup-harano}
+%\input{harano}
+
+% ===== Heading control =====
+\usepackage{titlesec}
+% 見出しだけゴシック太字（和文=gtfamily, 欧文=sffamily）
+\titleformat{\section}
+  {\sffamily\gtfamily\Large\bfseries}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\sffamily\gtfamily\large\bfseries}
+  {\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\sffamily\gtfamily\normalsize\bfseries}
+  {\thesubsubsection}{1em}{}  
+% 段落字下げ（1zw相当）
+\setlength{\parindent}{1em}
+% 字間（luatexja）
+%\ltjsetparameter{
+%  kanjiskip = {0pt plus 0.4pt minus 0.5pt},
+%  xkanjiskip = {0.20em plus 0.15em minus 0.06em}
+%}
+\ltjsetparameter{
+  kanjiskip  = {0pt plus 0.4pt minus 0.5pt},
+  xkanjiskip = {0.20em plus 0.10em minus 0.05em}
+}
+% ---- 行間：詰まり/広がりを最後に微調整 ----
+ \linespread{1.00}  % まず 1.00 / 1.03 / 1.06 を比較
+
+  
+\usepackage{geometry}
+\geometry{a4paper,margin=18mm}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{float} %
+\usepackage{subcaption}
+\captionsetup[subfigure]{
+    position=top,
+    justification=raggedright, % 左寄せ
+    singlelinecheck=off        % キャプションが短くても左寄せを維持する
+}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  columns=fullflexible,
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  numbers=left,
+  numberstyle=\tiny,
+  xleftmargin=2.2em,
+  showstringspaces=false
+}
+
+\title{IPSモード液晶の暗状態オフアクシス漏れ抑制に向けた光学補償スタックの数値モデルと最適化}
+\author{坂本　道昭}
+\date{\today}
+
+\begin{document}
+%
+\maketitle
+%
+\begin{abstract}
+IPS（In-Plane Switching）モード液晶表示において，暗状態での斜入射観察時に生じる光漏れは，
+とくに対角方向の視野角で顕著となり，コントラスト比（CR）の劣化を引き起こす主要因である。
+この現象は，O-type 偏光板において斜入射により有効透過軸が回転し，正面では成立していた
+クロスニコル条件がオフアクシスで破綻することに起因する。
+
+本研究では，液晶層および A-plate，C-plate などの光学補償板を含む IPS 暗状態を対象とし，
+斜入射における有効偏光軸回転と角度依存リタデーションを厳密に取り込んだ数値モデルを構築した。
+伝搬方向に直交する横波面上で定義した有効 Jones 伝達演算子を用いて偏光伝搬を記述し，
+各視野角における暗状態漏れ透過率およびコントラスト比を直接評価することで，
+等コントラスト線（ISO-CR）による視野角特性の可視化と定量比較を可能とした。
+
+本モデルを用いて POL/LC/A/C/Analyzer 構成の最適化を行い，
+代表的な斜め視点 $(\theta, \phi) = (30^\circ, 45^\circ)$ において
+A-plate および C-plate のリタデーション条件を探索した結果，
+正面コントラストを維持したまま，
+オフアクシスにおけるコントラスト比を無補償構造に対して約 8 倍以上改善できることを示した。
+
+さらに，Stokes パラメータおよび Poincar\'e 球を用いた解析により，
+補償機構の物理的本質を明確化した。
+すなわち，A-plate と C-plate は斜入射によって増大した
+検光子有効軸の回転を，
+出射偏光状態の方位回転と楕円率抑制によって相殺し，
+オフアクシスにおいてもほぼ直交条件を再構成する役割を担う。
+本研究で示した数値手法および幾何学的解釈は，
+IPS 光学補償設計に対する直観的かつ汎用的な指針を与えるものであり，
+スタック順序の変更や白色波長最適化への拡張も容易である。
+\end{abstract}
+%
+\newpage
+\tableofcontents
+\newpage
+%
+\input{content12}
+\input{content13}
+\input{content20}
+\input{content22}
+\input{content21}
+\end{document}

@@ -1,16 +1,18 @@
-\subsection{設計思想：クロスニコルのオフアクシス崩れを Stokes／Poincar\'e 表現で捉え，LC/A/C および C/A/LC で補償する}
+\subsection{光学補償の設計思想：
+$\sim$ 偏光板のクロスニコル配置の斜め視野からの崩れを Stokes／Poincar\'e 表現で捉え，光学補償フィルムで補償する $\sim$
+}
 
-\paragraph{オフアクシス暗状態漏れの本質（クロスニコルの幾何学的崩れ）}
-IPS の暗状態は，正面（$\theta=0$）では入射偏光板（POL）と出射偏光板（Analyzer）がクロスニコル（互いに $90^\circ$）となるように設定し，
-POL 透過後の線偏光が Analyzer により完全に吸収されることで実現される．
+\subsubsection{斜め視野における暗状態漏れの本質（クロスニコルの幾何学的崩れ）}
+IPS の暗状態は，正面（$\theta=0$）では入射偏光板（Polarizer）と出射偏光板（Analyzer）がクロスニコル（互いに $90^\circ$）となるように設定し，
+入射偏光板透過後の光の直線偏光が Analyzer により完全に吸収されることで実現される．
 しかし斜め入射では，光線ベクトル $\hat{\bm k}(\theta,\phi)$ に垂直な平面（横波面）上での
 「偏光板の有効光軸（透過軸／吸収軸）」が正面の設定から偏位し，
 クロス条件が見かけ上 $90^\circ$ から広がる（あるいは狭まる）．
-このとき，正面では一致していた「Analyzer の吸収軸」と「POL 透過後偏光状態」が一致しなくなり，
+このとき，正面では一致していた「Analyzer の吸収軸」と「Polarizer 透過後偏光状態」が一致しなくなり，
 暗状態漏れが生じる．とくに対角方向（$\phi\simeq 45^\circ$）で漏れが最大化されやすい．
 
-\paragraph{Stokes ベクトルと「直線偏光化＋方位合わせ」という設計目標}
-横波面上で直交基底 $(\bm u,\bm v)$ を定義し（本研究では \texttt{pol\_in} 基底），
+\subsubsection{Stokes ベクトルと「直線偏光化＋方位合わせ」という設計目標}
+横波面上で直交基底 $(\bm u,\bm v)$ を定義し，
 各層通過後の偏光状態を規格化 Stokes ベクトル
 $\bm s=(s_1,s_2,s_3)$（$|\bm s|=1$）で表す．
 $s_3$ は楕円偏光の楕円率（円偏光成分）を表し，$s_3\simeq 0$ は「ほぼ直線偏光（Poincar\'e 球の赤道）」を意味する．
@@ -31,52 +33,42 @@ $s_3$ は楕円偏光の楕円率（円偏光成分）を表し，$s_3\simeq 0$ 
 \item \textbf{直線偏光化：} $\;s_3(\theta,\phi)\to 0$（楕円率を消す）
 \item \textbf{方位合わせ：} $\;\Delta(\theta,\phi)\to 90^\circ$（出射偏光の方位を Analyzer の吸収方向へ整列）
 \end{enumerate}
-ここで重要なのは，\textbf{正面の CR$_{00}$ を落とさない}ことである．
+ここで重要なのは，正面の CR$_{00}$ を落とさないことである．
 すなわち，補償スタックは $\theta=0$ において POL--Analyzer のクロス条件を壊さず，
 同時に $\theta>0$ で生じる $\alpha(\theta,\phi)$ の偏位を「偏光状態の回転量」で打ち消すように働く必要がある．
 
-\paragraph{LC/A/C（吸収軸基準）の設計思想}
-本研究の LC/A/C は，暗状態の基準を「入射 POL の吸収軸」に取り，
+\subsubsection{LC/A/C（LC吸収軸基準）の設計思想}
+本研究の LC/A/C は，液晶LCの長軸方向を入射偏光板 POL の吸収軸にとり，
 \begin{equation}
   \mathrm{POL}\; /\; \mathrm{LC}\; /\; +\mathrm{A}\; /\; \pm \mathrm{C}\; /\; \mathrm{Analyzer}
 \end{equation}
-の順に配置する．ここで LC の光学軸は $\theta=0$ において入射 POL の吸収軸と一致させ，
+の順に配置する．ここで LC の光学軸は $\theta=0$ において入射偏光板 POL の吸収軸と一致させ，
 正面では偏光状態が Analyzer により消光される（CR$_{00}$ を保持）．
 斜め入射ではまず，LC により横波面内の偏光状態が回転・楕円化し，
 続く $+\mathrm{A}$ により「Analyzer の吸収軸に向かう」回転成分を付与する．
 最後の $\pm\mathrm{C}$ は，主として $s_3$ を抑えつつ（直線偏光化），
 $(s_1,s_2)$ の方位 $\psi$ を微調整する役割を担う．
-すなわち，\textbf{LC と A で方位を作り，C で赤道（$s_3\simeq 0$）へ押し戻しながら整列させる}という役割分担である．
+すなわち，LC と A で方位を作り，C で赤道（$s_3\simeq 0$）へ押し戻しながら整列させるという役割分担である．
 このとき $\phi\simeq 45^\circ$・所望の $\theta$ に対して $A$ の面内リタデーション（$R_\mathrm{o}$ スケール）と
 $C$ の面外リタデーション（$R_\mathrm{th}$ 符号付き）を最適化すると，
 「$\alpha(\theta,\phi)$ の偏位量」と「補償スタックによる $\psi(\theta,\phi)$ の回転量」が釣り合い，
 $\Delta\simeq 90^\circ$ かつ $s_3\simeq 0$ を同時に満たせる．
 
-\paragraph{C/A/LC（透過軸基準）の設計思想}
-透過軸基準では，LC の基準方位を正面で POL 透過軸側（吸収軸から $90^\circ$）へ取り直し，
+\subsubsection{C/A/LC（LC透過軸基準）の設計思想}
+透過軸基準では，LC の長軸方向を入射偏光板POL の透過軸（吸収軸から $90^\circ$）へとり，
 \begin{equation}
   \mathrm{POL}\; /\; \pm \mathrm{C}\; /\; +\mathrm{A}\; /\; \mathrm{LC}\; /\; \mathrm{Analyzer}
 \end{equation}
 のように順序を入れ替えた C/A/LC を考える．
 順序を入れ替えると，各素子が Poincar\'e 球上で与える「回転軸」と「回転順序」が変わるため，
 同じ $(R_\mathrm{o},R_\mathrm{th})$ でも最終的な $\bm s$ の到達点は異なる．
-しかし設計目標は共通であり，
+しかし，設計目標は共通であり，
 \begin{equation}
   s_3(\theta,\phi)\to 0,\qquad (\alpha-\psi)\bmod 180^\circ \to 90^\circ
 \end{equation}
 を満たすように，$+\mathrm{A}$ の $R_\mathrm{o}$ と $\pm\mathrm{C}$ の $R_\mathrm{th}$（符号を含む）を探索する．
 直観的には，先段の $\pm\mathrm{C}$ が楕円率成分（$s_3$）の生成／抑制に強く寄与し，
 その後段の $+\mathrm{A}$ と LC が方位 $\psi$ を Analyzer の吸収軸へ引き込む．
-したがって C/A/LC は「\textbf{先に楕円率を制御し，後段で方位を合わせ込む}」ルートとして理解でき，
+したがって C/A/LC は「先に楕円率を制御し，後段で方位を合わせ込む」ルートとして理解でき，
 LC/A/C とは異なる回転経路で同じ消光条件に到達し得る．
 
-\paragraph{数値最適化と Stokes トレースによる検証（設計思想の可視化）}
-上記の設計思想は，暗状態漏れ $T_\mathrm{leak}(\theta,\phi)$ を最小化（あるいは CR を最大化）する最適化により具体化できる．
-我々は目標角（例：$\theta=30^\circ,\phi=45^\circ$）で $A$ の $R_\mathrm{o}$ スケールと $C$ の $R_\mathrm{th}$ を走査し，
-最良解のスタックに対して各層通過後の $\bm s$ を逐次保存する（Stokes trace）ことで，
-(1) $s_3$ が小さく（ほぼ直線偏光），
-(2) 出射偏光の方位 $\psi$ がオフアクシス Analyzer 軸 $\alpha(\theta,\phi)$ と直交（$\Delta\simeq 90^\circ$）
-であることを直接確認した．
-すなわち，「斜め視でクロスニコルが $90^\circ$ から広がる」という幾何学的要因を，
-補償スタックが作る $\psi$ の回転で相殺しつつ，$s_3$ を抑えて直線偏光として Analyzer へ入射させることで，
-CR 視野角を拡大する――という設計思想を，Poincar\'e 球（あるいは $s_2$--$s_3$ 円）上の軌跡として記述できる．

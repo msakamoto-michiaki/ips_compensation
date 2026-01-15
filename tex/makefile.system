@@ -1,0 +1,28 @@
+SHELL := /bin/bash
+
+MAIN      ?= main.tex
+BUILD_DIR ?= build
+
+LATEXMK ?= latexmk
+LATEXMK_FLAGS ?= -lualatex -interaction=nonstopmode -halt-on-error -file-line-error
+
+JOB := $(basename $(notdir $(MAIN)))
+PDF := $(BUILD_DIR)/$(JOB).pdf
+FDB := $(BUILD_DIR)/$(JOB).fdb_latexmk
+LOG := $(BUILD_DIR)/$(JOB).log
+
+.PHONY: pdf clean
+
+$(BUILD_DIR):
+	mkdir -p "$(BUILD_DIR)"
+
+pdf: | $(BUILD_DIR)
+	@rm -f "$(FDB)" "$(LOG)"
+	@$(LATEXMK) $(LATEXMK_FLAGS) -outdir="$(BUILD_DIR)" "$(MAIN)"
+	@echo "OK: $(PDF)"
+
+clean:
+	@$(LATEXMK) -C -outdir="$(BUILD_DIR)" "$(MAIN)" >/dev/null 2>&1 || true
+	@rm -rf "$(BUILD_DIR)"
+	@echo "cleaned"
+

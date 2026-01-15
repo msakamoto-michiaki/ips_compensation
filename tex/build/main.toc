@@ -1,0 +1,55 @@
+\contentsline {section}{\numberline {1}IPSモードの光学補償最適化のための光学モデル}{3}{section.1}%
+\contentsline {subsection}{\numberline {1.1}光学モデルの概要}{3}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}座標系と角度}{3}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}グローバル座標系}{3}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}ローカル横波面と基底射影}{4}{subsubsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.3}偏光板モデル}{4}{subsection.1.3}%
+\contentsline {subsubsection}{\numberline {1.3.1}クロスニコル偏光板の off-axis 有効軸}{4}{subsubsection.1.3.1}%
+\contentsline {subsubsection}{\numberline {1.3.2}偏光板モデル}{5}{subsubsection.1.3.2}%
+\contentsline {subsubsection}{\numberline {1.3.3}偏光板のみの極限における整合性（Eq.~\eqref {eq:pol_only_leakage} の再現）}{6}{subsubsection.1.3.3}%
+\contentsline {subsection}{\numberline {1.4}補償板モデル（A-plate，C-plate）}{6}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}A-plateモデル（Eq.~(3a)）}{6}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}C-plateモデル（Eq.~(3b)）}{7}{subsubsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.5}有効 Jones 伝達行列とスタック伝搬アルゴリズム}{7}{subsection.1.5}%
+\contentsline {subsubsection}{\numberline {1.5.1}ローカル基底における retarder 演算子}{7}{subsubsection.1.5.1}%
+\contentsline {subsubsection}{\numberline {1.5.2}位相差 $\Gamma _n$ に基づく有効 Jones 伝達行列 $M_n$}{8}{subsubsection.1.5.2}%
+\contentsline {subsubsection}{\numberline {1.5.3}全体の漏れ振幅とコントラスト指標}{8}{subsubsection.1.5.3}%
+\contentsline {subsubsection}{\numberline {1.5.4}アルゴリズムまとめ}{8}{subsubsection.1.5.4}%
+\contentsline {subsection}{\numberline {1.6}Stokes 表現と Poincar\'e 球による解釈}{9}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}光学補償の設計思想：$\sim $ 偏光板のクロスニコル配置の斜め視野からの崩れを Stokes／Poincar\'e 表現で捉え，光学補償フィルムで補償する $\sim $ }{9}{subsection.1.7}%
+\contentsline {subsubsection}{\numberline {1.7.1}斜め視野における暗状態漏れの本質（クロスニコルの幾何学的崩れ）}{9}{subsubsection.1.7.1}%
+\contentsline {subsubsection}{\numberline {1.7.2}Stokes ベクトルと「直線偏光化＋方位合わせ」という設計目標}{9}{subsubsection.1.7.2}%
+\contentsline {subsubsection}{\numberline {1.7.3}LC/A/C（LC吸収軸基準）の設計思想}{10}{subsubsection.1.7.3}%
+\contentsline {subsubsection}{\numberline {1.7.4}C/A/LC（LC透過軸基準）の設計思想}{10}{subsubsection.1.7.4}%
+\contentsline {section}{\numberline {2}IPS光学補償フィルム構成の最適化}{11}{section.2}%
+\contentsline {subsection}{\numberline {2.1}計算条件（探索格子と評価量）}{11}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}入力}{12}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}構成}{12}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}膜厚}{12}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}相対角（光学軸方位）の定義}{12}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}基準配置}{12}{subsubsection.2.2.4}%
+\contentsline {subsubsection}{\numberline {2.2.5}光学軸の向き}{13}{subsubsection.2.2.5}%
+\contentsline {subsection}{\numberline {2.3}最適化手法及び結果}{14}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}最適化手法}{14}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}最適化結果}{15}{subsubsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.4}best条件と参照（Pol/LC/Analyzer）の ISO-CR 比較}{16}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Stokes解析による斜め視野における「クロスニコル条件の破綻」と補償の説明}{16}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}オフ軸でクロスニコル条件が崩れる理由}{17}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}A-plate + C-plate による補償の本質：出射偏光の回転}{17}{subsubsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.6}結論}{18}{subsection.2.6}%
+\contentsline {section}{\numberline {3}波長依存性評価}{18}{section.3}%
+\contentsline {subsection}{\numberline {3.1}評価条件}{18}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}結果}{18}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}RGBW毎の CR視野角分布（等高線ISO）}{20}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}実材料分散と分散補償スタックの必要性}{22}{subsection.3.4}%
+\contentsline {section}{\numberline {4}A-plate と Analyzer 連動貼りずれに対する IPS 光学補償の感度と方位非対称性評価}{22}{section.4}%
+\contentsline {subsection}{\numberline {4.1}要旨}{22}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}背景と目的}{22}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}評価条件と指標}{23}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}中心条件（best 近傍）}{23}{subsubsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.4}連動回転（A\_polout）}{23}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}方位非対称性指標}{23}{subsubsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.5}結果}{23}{subsection.4.5}%
+\contentsline {subsubsection}{\numberline {4.5.1}中心（$\Delta =0$）での ${\rm CR}$ と初期非対称}{23}{subsubsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.6}偏光板貼りずれ$\Delta \in [-3^\circ ,+3^\circ ]$ の場合の, ISO-CR 図と非対称指標}{24}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}結論}{24}{subsection.4.7}%
