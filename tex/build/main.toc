@@ -2,7 +2,7 @@
 \contentsline {subsection}{\numberline {1.1}光学モデルの概要}{4}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}座標系と角度}{4}{subsection.1.2}%
 \contentsline {subsubsection}{\numberline {1.2.1}グローバル座標系}{5}{subsubsection.1.2.1}%
-\contentsline {subsubsection}{\numberline {1.2.2}ローカル横波面と基底射影}{5}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.2}ローカル横波面と基底射影}{6}{subsubsection.1.2.2}%
 \contentsline {subsection}{\numberline {1.3}偏光板モデル}{6}{subsection.1.3}%
 \contentsline {subsubsection}{\numberline {1.3.1}クロスニコル偏光板の off-axis 有効軸}{6}{subsubsection.1.3.1}%
 \contentsline {subsubsection}{\numberline {1.3.2}偏光板モデル}{7}{subsubsection.1.3.2}%
@@ -12,10 +12,10 @@
 \contentsline {subsubsection}{\numberline {1.4.2}C-plateモデル（Eq.~(3b)）}{8}{subsubsection.1.4.2}%
 \contentsline {subsection}{\numberline {1.5}有効 Jones 伝達行列とスタック伝搬アルゴリズム}{9}{subsection.1.5}%
 \contentsline {subsubsection}{\numberline {1.5.1}ローカル基底における retarder 演算子}{9}{subsubsection.1.5.1}%
-\contentsline {subsubsection}{\numberline {1.5.2}位相差 $\Gamma _n$ に基づく有効 Jones 伝達行列 $M_n$}{9}{subsubsection.1.5.2}%
+\contentsline {subsubsection}{\numberline {1.5.2}位相差 $\Gamma _n$ に基づく有効 Jones 伝達行列 $M_n$}{10}{subsubsection.1.5.2}%
 \contentsline {subsubsection}{\numberline {1.5.3}全体の漏れ振幅とコントラスト指標}{10}{subsubsection.1.5.3}%
 \contentsline {subsubsection}{\numberline {1.5.4}アルゴリズムまとめ}{10}{subsubsection.1.5.4}%
-\contentsline {subsection}{\numberline {1.6}Stokes 表現と Poincar\'e 球による解釈}{10}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.6}Stokes 表現と Poincar\'e 球による解釈}{11}{subsection.1.6}%
 \contentsline {subsection}{\numberline {1.7}光学補償の設計思想：$\sim $ 偏光板のクロスニコル配置の斜め視野からの崩れを Stokes／Poincar\'e 表現で捉え，光学補償フィルムで補償する $\sim $ }{11}{subsection.1.7}%
 \contentsline {subsubsection}{\numberline {1.7.1}斜め視野における暗状態漏れの本質（クロスニコルの幾何学的崩れ）}{11}{subsubsection.1.7.1}%
 \contentsline {subsubsection}{\numberline {1.7.2}Stokes ベクトルと「直線偏光化＋方位合わせ」という設計目標}{11}{subsubsection.1.7.2}%

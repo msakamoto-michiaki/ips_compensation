@@ -20,8 +20,7 @@ FDB := $(BUILD_DIR)/$(JOB).fdb_latexmk
 LOG := $(BUILD_DIR)/$(JOB).log
 
 .PHONY: all pdf fonts fonts-harano fonts-noto clean distclean
-
-all: pdf
+all: clean pdf
 
 $(BUILD_DIR):
 	mkdir -p "$(BUILD_DIR)"
@@ -71,10 +70,14 @@ fonts-noto: | $(FONT_DIR)
 # ---- Build ----
 pdf: | $(BUILD_DIR)
 	@$(MAKE) fonts
-	@# latexmk が「前回の失敗」を覚えて止まるのを防ぐ
-	@rm -f "$(FDB)" "$(LOG)"
 	@$(LATEXMK) $(LATEXMK_FLAGS) -outdir="$(BUILD_DIR)" "$(MAIN)"
 	@echo "OK: $(PDF)"
+
+force: | $(BUILD_DIR)
+	@$(MAKE) fonts
+	@$(LATEXMK) -g $(LATEXMK_FLAGS) -outdir="$(BUILD_DIR)" "$(MAIN)"
+	@echo "OK: $(PDF) (forced)"
+
 
 clean:
 	@$(LATEXMK) -C -outdir="$(BUILD_DIR)" "$(MAIN)" >/dev/null 2>&1 || true
