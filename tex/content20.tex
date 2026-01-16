@@ -1,6 +1,8 @@
 \section{IPS光学補償フィルム構成の最適化}
 
-本節では，IPSパネルの光学補償フィルム構成POL/LC/A/C/ANAにおける
+本節では，
+図~\ref{fig:optical_stack2} に示すような 
+IPSパネルの光学補償フィルム構成　POL/LC/A/C/ANA 構成における，
 CR視野角の最適化について述べる．
 ここで，POLは入射側偏光板(偏光子,polarizer)，LCは液晶，AはA-plate, CはC-plate, ANAは出射側偏光板(検光子,analyzer)である．
 尚，LCの長軸とPOLの吸収軸を平行とするEモードで偏光板同士はクロスニコル条件である．
@@ -9,6 +11,13 @@ best条件を探索する．そして，best条件において($\theta$, $\phi$)
 さらに Stokes 解析の結果に基づき，偏光板の「オフ軸クロスニコルずれ」を補償する光学補償の設計思想の説明を行う．
 なお，構成はPOL/LC/A/C/ANAでEモード配置としたが，POL/C/A/LC/ANAでOモード配置（OモードはLCの長軸とPOLの透過軸を平行とする）, 
 POL/C/A/LC/A/C/ANAでEモード/Oモード配置の構成の場合も補償設計の思想は同様である．
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.92\linewidth]{optical_stack.png}
+\caption{光学補償に用いるスタック構成の例 Polarizer/LC/A/C/Analyzer．}
+\label{fig:optical_stack2}
+\end{figure}
 
 \subsection{計算条件（探索格子と評価量）}
 探索パラメータは A-plate の有効リターデーション（ReA）と C-plate の有効リターデーション（ReC）である．
@@ -103,12 +112,12 @@ $\mathrm{Re}_C$（nm）を最適化変数として走査し，式 \eqref{eq:d_fr
 なお $\mathrm{Re}_C$ の符号は，実装上は ``signed ReC'' として取り扱い，負の場合はTACなどのnegative C-plateを表す．
 
 
-\subsubsection{相対角（光学軸方位）の定義}
+\subsubsection{光学軸方位の定義}
 
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.92\linewidth]{azimuth.png}
-\caption{xxx}
+\caption{光学軸方位の定義．}
 \label{fig:azimuth}
 \end{figure}
 

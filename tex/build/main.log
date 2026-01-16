@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.12.28)  15 JAN 2026 14:34
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.12.28)  16 JAN 2026 13:36
  restricted system commands enabled.
  file:line:error style messages enabled.
 **main.tex
@@ -1495,7 +1495,11 @@ Package: lltjp-array 2024-07-21 Patch to array for LuaTeX-ja
 )
 Package translations Info: No language package found. I am going to use `englis
 h' as default language. on input line 72.
- (./build/main.aux)
+ (./build/main.aux
+
+LaTeX Warning: Label `eq:transversality' multiply defined.
+
+)
 \openout1 = main.aux
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 72.
@@ -1731,47 +1735,52 @@ LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/b/n' will be
 (Font)              scaled to size 7.08789pt on input line 2.
 LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/b/n' will be
 (Font)              scaled to size 5.0628pt on input line 2.
-)
+ [2])
 \tf@toc=\write5
 
 \openout5 = main.toc
- [2] (./content12.tex
+ [3] (./content12.tex
+<optical_stack.png, id=242, 595.899pt x 541.587pt>
+File: optical_stack.png Graphic file (type png)
+<use optical_stack.png>
+Package luatex.def Info: optical_stack.png  used on input line 25.
+(luatex.def)             Requested size: 455.47083pt x 413.96562pt.
 LaTeX Font Info:    Font shape `JT3/NotoSansCJKJP(1)/m/n' will be
-(Font)              scaled to size 12.15074pt on input line 17.
+(Font)              scaled to size 12.15074pt on input line 31.
 LaTeX Font Info:    Font shape `JY3/NotoSansCJKJP(1)/m/n' will be
-(Font)              scaled to size 12.15074pt on input line 17.
+(Font)              scaled to size 12.15074pt on input line 31.
 LaTeX Font Info:    Font shape `JT3/NotoSansCJKJP(1)/b/n' will be
-(Font)              scaled to size 12.15074pt on input line 17.
+(Font)              scaled to size 12.15074pt on input line 31.
 LaTeX Font Info:    Font shape `JY3/NotoSansCJKJP(1)/b/n' will be
-(Font)              scaled to size 12.15074pt on input line 17.
+(Font)              scaled to size 12.15074pt on input line 31.
 LaTeX Font Info:    Font shape `JT3/NotoSansCJKJP(1)/b/n' will be
-(Font)              scaled to size 10.12561pt on input line 37.
+(Font)              scaled to size 10.12561pt on input line 51.
 LaTeX Font Info:    Font shape `JY3/NotoSansCJKJP(1)/b/n' will be
-(Font)              scaled to size 10.12561pt on input line 37.
- [3]
+(Font)              scaled to size 10.12561pt on input line 51.
+ [4] [5<./optical_stack.png>]
 
 LaTeX Font Warning: Font shape `TU/NotoSerifCJKJP(0)/m/it' undefined
-(Font)              using `TU/NotoSerifCJKJP(0)/m/n' instead on input line 71.
+(Font)              using `TU/NotoSerifCJKJP(0)/m/n' instead on input line 85.
 
 LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
-(Font)              No change on input line 71.
-[4]
-<eq2_crop.png, id=192, 1455.4375pt x 572.1375pt>
+(Font)              No change on input line 85.
+<eq2_crop.png, id=264, 1455.4375pt x 572.1375pt>
 File: eq2_crop.png Graphic file (type png)
 <use eq2_crop.png>
-Package luatex.def Info: eq2_crop.png  used on input line 119.
+Package luatex.def Info: eq2_crop.png  used on input line 133.
 (luatex.def)             Requested size: 455.47083pt x 179.0457pt.
+[6]
 LaTeX Font Info:    Font shape `JT3/NotoSerifCJKJP(1)/b/n' will be
-(Font)              scaled to size 10.12561pt on input line 129.
- [5<./eq2_crop.png>] [6]
-<eq3ab_crop.png, id=226, 1495.5875pt x 702.625pt>
+(Font)              scaled to size 10.12561pt on input line 143.
+ [7<./eq2_crop.png>]
+<eq3ab_crop.png, id=297, 1495.5875pt x 702.625pt>
 File: eq3ab_crop.png Graphic file (type png)
 <use eq3ab_crop.png>
-Package luatex.def Info: eq3ab_crop.png  used on input line 227.
+Package luatex.def Info: eq3ab_crop.png  used on input line 241.
 (luatex.def)             Requested size: 455.47083pt x 213.97331pt.
 LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
-(Font)              No change on input line 237.
- [7<./eq3ab_crop.png>] [8]) (./content13.tex
+(Font)              No change on input line 251.
+ [8] [9<./eq3ab_crop.png>] [10]) (./content13.tex
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 3.
@@ -1796,50 +1805,54 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 3.
 
-[9]) (./content20.tex [10]
+[11]) (./content20.tex [12]
+File: optical_stack.png Graphic file (type png)
+<use optical_stack.png>
+Package luatex.def Info: optical_stack.png  used on input line 17.
+(luatex.def)             Requested size: 455.47083pt x 413.96562pt.
+ [13]
 Class bxjsarticle Info: Old font command '\rm' is used!!
-(bxjsarticle)           The first occurrence is on input line 40.
+(bxjsarticle)           The first occurrence is on input line 49.
 LaTeX Font Info:    Font shape `JT3/NotoSerifCJKJP(1)/m/n' will be
-(Font)              scaled to size 7.08789pt on input line 40.
+(Font)              scaled to size 7.08789pt on input line 49.
 LaTeX Font Info:    Font shape `JT3/NotoSerifCJKJP(1)/m/n' will be
-(Font)              scaled to size 5.0628pt on input line 40.
- [11]
+(Font)              scaled to size 5.0628pt on input line 49.
+ [14]
 LaTeX Font Info:    Font shape `JT3/NotoSerifCJKJP(1)/m/n' will be
-(Font)              scaled to size 8.1005pt on input line 94.
+(Font)              scaled to size 8.1005pt on input line 103.
 LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/m/n' will be
-(Font)              scaled to size 8.1005pt on input line 94.
-LaTeX Font Info:    Calculating math sizes for size <8.76001> on input line 94.
-
+(Font)              scaled to size 8.1005pt on input line 103.
+LaTeX Font Info:    Calculating math sizes for size <8.76001> on input line 103
+.
 LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/m/n' will be
-(Font)              scaled to size 5.6703pt on input line 94.
+(Font)              scaled to size 5.6703pt on input line 103.
 LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/m/n' will be
-(Font)              scaled to size 4.05025pt on input line 94.
+(Font)              scaled to size 4.05025pt on input line 103.
 LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/b/n' will be
-(Font)              scaled to size 8.1005pt on input line 94.
+(Font)              scaled to size 8.1005pt on input line 103.
 LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/b/n' will be
-(Font)              scaled to size 5.6703pt on input line 94.
+(Font)              scaled to size 5.6703pt on input line 103.
 LaTeX Font Info:    Font shape `JY3/NotoSerifCJKJP(1)/b/n' will be
-(Font)              scaled to size 4.05025pt on input line 94.
+(Font)              scaled to size 4.05025pt on input line 103.
 LaTeX Font Info:    Font shape `JT3/NotoSerifCJKJP(1)/m/n' will be
-(Font)              scaled to size 5.6703pt on input line 94.
-<azimuth.png, id=297, 609.039pt x 464.061pt>
+(Font)              scaled to size 5.6703pt on input line 103.
+<azimuth.png, id=387, 609.039pt x 464.061pt>
 File: azimuth.png Graphic file (type png)
 <use azimuth.png>
-Package luatex.def Info: azimuth.png  used on input line 110.
+Package luatex.def Info: azimuth.png  used on input line 119.
 (luatex.def)             Requested size: 455.47083pt x 347.04648pt.
- [12]
 LaTeX Font Info:    Font shape `TU/NotoSansMono(0)/m/n' will be
-(Font)              scaled to size 10.50055pt on input line 140.
- [13<./azimuth.png>] [14]
-<ReA_ReC_map_LC_AC_abs.png, id=332, 493.24275pt x 295.94565pt>
+(Font)              scaled to size 10.50055pt on input line 149.
+ [15] [16<./azimuth.png>]
+<ReA_ReC_map_LC_AC_abs.png, id=413, 493.24275pt x 295.94565pt>
 File: ReA_ReC_map_LC_AC_abs.png Graphic file (type png)
 <use ReA_ReC_map_LC_AC_abs.png>
-Package luatex.def Info: ReA_ReC_map_LC_AC_abs.png  used on input line 218.
+Package luatex.def Info: ReA_ReC_map_LC_AC_abs.png  used on input line 227.
 (luatex.def)             Requested size: 455.47083pt x 273.29385pt.
 
-Overfull \hbox (5.78427pt too wide) in paragraph at lines 225--231
+Overfull \hbox (5.78427pt too wide) in paragraph at lines 234--240
 []|\JY3/NotoSerifCJKJP(1)/m/n/10.95001 図 []\TU/NotoSerifCJKJP(0)/m/it/10.9500
-1 󴧹[] |\JY3/NotoSerifCJKJP(1)/m/n/10.95001 は \TU/NotoSerifCJKJP(0)/m/it/10
+1 󴧻[] |\JY3/NotoSerifCJKJP(1)/m/n/10.95001 は \TU/NotoSerifCJKJP(0)/m/it/10
 .95001 ReA--ReC |\JY3/NotoSerifCJKJP(1)/m/n/10.95001 ２ |次 |元 |マ |ッ |
 プ |を |示 |し []  |各 |格 |子 |点 $\OT1/cmr/m/n/10.95001 ([]\OML/cmm/m
 /it/10.95001 ; []\OT1/cmr/m/n/10.95001 )$ |\JY3/NotoSerifCJKJP(1)/m/n/10.95001 
@@ -1848,47 +1861,48 @@ Overfull \hbox (5.78427pt too wide) in paragraph at lines 225--231
 .95001 ; []\OT1/cmr/m/n/10.95001 45[])$
  []
 
-[15<./ReA_ReC_map_LC_AC_abs.png>]
-<iso_LC_only_abs.png, id=343, 448.074pt x 448.074pt>
+[17] [18<./ReA_ReC_map_LC_AC_abs.png>]
+<iso_LC_only_abs.png, id=433, 448.074pt x 448.074pt>
 File: iso_LC_only_abs.png Graphic file (type png)
 <use iso_LC_only_abs.png>
-Package luatex.def Info: iso_LC_only_abs.png  used on input line 314.
+Package luatex.def Info: iso_LC_only_abs.png  used on input line 323.
 (luatex.def)             Requested size: 237.6353pt x 237.63533pt.
-<iso_LC_AC_abs_best.png, id=344, 448.074pt x 448.074pt>
+<iso_LC_AC_abs_best.png, id=434, 448.074pt x 448.074pt>
 File: iso_LC_AC_abs_best.png Graphic file (type png)
 <use iso_LC_AC_abs_best.png>
-Package luatex.def Info: iso_LC_AC_abs_best.png  used on input line 321.
+Package luatex.def Info: iso_LC_AC_abs_best.png  used on input line 330.
 (luatex.def)             Requested size: 237.6353pt x 237.63533pt.
- [16] [17<./iso_LC_only_abs.png><./iso_LC_AC_abs_best.png>]) (./content22.tex
-<plot_lambda_vs_CR00_and_CRavg4_mono.png, id=365, 413.02306pt x 263.0628pt>
+ [19<./iso_LC_only_abs.png><./iso_LC_AC_abs_best.png>]) (./content22.tex [20]
+<plot_lambda_vs_CR00_and_CRavg4_mono.png, id=457, 413.02306pt x 263.0628pt>
 File: plot_lambda_vs_CR00_and_CRavg4_mono.png Graphic file (type png)
 <use plot_lambda_vs_CR00_and_CRavg4_mono.png>
 Package luatex.def Info: plot_lambda_vs_CR00_and_CRavg4_mono.png  used on input
  line 69.
 (luatex.def)             Requested size: 420.81929pt x 268.03952pt.
- [18] [19<./plot_lambda_vs_CR00_and_CRavg4_mono.png>]
-<iso_B_mono_450nm.png, id=387, 448.074pt x 448.074pt>
+ [21]
+<iso_B_mono_450nm.png, id=471, 448.074pt x 448.074pt>
 File: iso_B_mono_450nm.png Graphic file (type png)
 <use iso_B_mono_450nm.png>
 Package luatex.def Info: iso_B_mono_450nm.png  used on input line 117.
 (luatex.def)             Requested size: 237.6353pt x 237.63533pt.
-<iso_G_mono_546nm.png, id=388, 448.074pt x 448.074pt>
+<iso_G_mono_546nm.png, id=472, 448.074pt x 448.074pt>
 File: iso_G_mono_546nm.png Graphic file (type png)
 <use iso_G_mono_546nm.png>
 Package luatex.def Info: iso_G_mono_546nm.png  used on input line 124.
 (luatex.def)             Requested size: 237.6353pt x 237.63533pt.
-<iso_R_mono_610nm.png, id=389, 448.074pt x 448.074pt>
+<iso_R_mono_610nm.png, id=473, 448.074pt x 448.074pt>
 File: iso_R_mono_610nm.png Graphic file (type png)
 <use iso_R_mono_610nm.png>
 Package luatex.def Info: iso_R_mono_610nm.png  used on input line 131.
 (luatex.def)             Requested size: 237.6353pt x 237.63533pt.
-<iso_W.png, id=390, 448.074pt x 448.074pt>
+<iso_W.png, id=474, 448.074pt x 448.074pt>
 File: iso_W.png Graphic file (type png)
 <use iso_W.png>
 Package luatex.def Info: iso_W.png  used on input line 137.
 (luatex.def)             Requested size: 237.6353pt x 237.63533pt.
- [20] [21<./iso_B_mono_450nm.png><./iso_G_mono_546nm.png><./iso_R_mono_610nm.png
-><./iso_W.png>]) (./content21.tex [22]
+ [22<./plot_lambda_vs_CR00_and_CRavg4_mono.png>] [23<./iso_B_mono_450nm.png><./i
+so_G_mono_546nm.png><./iso_R_mono_610nm.png><./iso_W.png>]) (./content21.tex [2
+4]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 98.
@@ -1921,18 +1935,18 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 98.
 
-[23]
-<iso_A_polout_+0.00deg.png, id=425, 448.074pt x 448.074pt>
+[25]
+<iso_A_polout_+0.00deg.png, id=508, 448.074pt x 448.074pt>
 File: iso_A_polout_+0.00deg.png Graphic file (type png)
 <use iso_A_polout_+0.00deg.png>
 Package luatex.def Info: iso_A_polout_+0.00deg.png  used on input line 159.
 (luatex.def)             Requested size: 158.42857pt x 158.42812pt.
-<iso_A_polout_+3.00deg.png, id=426, 448.074pt x 448.074pt>
+<iso_A_polout_+3.00deg.png, id=509, 448.074pt x 448.074pt>
 File: iso_A_polout_+3.00deg.png Graphic file (type png)
 <use iso_A_polout_+3.00deg.png>
 Package luatex.def Info: iso_A_polout_+3.00deg.png  used on input line 166.
 (luatex.def)             Requested size: 158.42857pt x 158.42812pt.
-<iso_A_polout_-3.00deg.png, id=427, 448.074pt x 448.074pt>
+<iso_A_polout_-3.00deg.png, id=510, 448.074pt x 448.074pt>
 File: iso_A_polout_-3.00deg.png Graphic file (type png)
 <use iso_A_polout_-3.00deg.png>
 Package luatex.def Info: iso_A_polout_-3.00deg.png  used on input line 173.
@@ -1940,11 +1954,70 @@ Package luatex.def Info: iso_A_polout_-3.00deg.png  used on input line 173.
 ) (./biblio.tex
 LaTeX Font Info:    Kanji font shape `JY3/NotoSerifCJKJP(1)/m/it' undefined
 (Font)              No change on input line 9.
- [24]
+ [26]
 LaTeX Font Info:    Kanji font shape `JY3/NotoSerifCJKJP(1)/m/it' undefined
 (Font)              No change on input line 14.
-) [25<./iso_A_polout_+0.00deg.png><./iso_A_polout_+3.00deg.png><./iso_A_polout_-
-3.00deg.png>]
+) [27<./iso_A_polout_+0.00deg.png><./iso_A_polout_+3.00deg.png><./iso_A_polout_-
+3.00deg.png>] (./content30.tex
+LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
+(Font)              No change on input line 42.
+ [28]
+<appendix_1.png, id=544, 835.704pt x 542.025pt>
+File: appendix_1.png Graphic file (type png)
+<use appendix_1.png>
+Package luatex.def Info: appendix_1.png  used on input line 85.
+(luatex.def)             Requested size: 455.47083pt x 295.41017pt.
+LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
+(Font)              No change on input line 101.
+ [29<./appendix_1.png>] [30]
+LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
+(Font)              No change on input line 244.
+ [31]
+LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
+(Font)              No change on input line 325.
+<appendix_2.png, id=581, 738.03pt x 547.719pt>
+File: appendix_2.png Graphic file (type png)
+<use appendix_2.png>
+Package luatex.def Info: appendix_2.png  used on input line 336.
+(luatex.def)             Requested size: 455.47083pt x 338.02777pt.
+ [32] [33<./appendix_2.png>]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\hbox' on input line 450.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\mathsurround' on input line 450.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\z@' on input line 450.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\unskip' on input line 450.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@@italiccorr' on input line 450.
+
+[34]) (./content31.tex
+LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
+(Font)              No change on input line 35.
+ [35]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 72.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `subscript' on input line 72.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 72.
+
+[36] [37]) [38]
 
 Class bxjsarticle Warning: Some old font commands were used in text:
 (bxjsarticle)                \rm
@@ -1962,21 +2035,24 @@ L3 programming layer <2025-12-24>
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 93DCE38E8C3CFCA084EFBBAF74BDEBF1;5001.
+(rerunfilecheck)             Checksum: A1E671C39EBE222A00CB7D7351752B54;7454.
 )
 
 Here is how much of LuaTeX's memory you used:
- 24561 strings out of 476081
+ 24792 strings out of 476081
  244632,953878 words of node,token memory allocated
- 3654 words of node memory still in use:
-   11 hlist, 2 vlist, 5 rule, 4 glue, 4 kern, 1 glyph, 1358 attribute, 64 glue_s
-pec, 135 attribute_list, 1 write, 14 user_defined, 1 pdf_action nodes
-   avail lists: 1:16,2:62120,3:462,4:454,5:421,6:85,7:7185,8:76,9:2642,10:46,11:
-84
- 46350 multiletter control sequences out of 65536+600000
+ 6630 words of node memory still in use:
+   11 hlist, 2 vlist, 5 rule, 4 glue, 4 kern, 1 glyph, 2722 attribute, 64 glue_s
+pec, 259 attribute_list, 1 write, 14 user_defined, 1 pdf_action nodes
+   avail lists: 1:18,2:58577,3:474,4:533,5:377,6:103,7:7188,8:76,9:2673,10:46,11
+:84
+ 46464 multiletter control sequences out of 65536+600000
  228 fonts using 967747791 bytes
- 109i,12n,119p,2060b,1076s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 109i,13n,119p,2060b,1076s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/fonts/truetype/noto/NotoSansMono-Regular.ttf></usr/share/fonts/opent
 ype/noto/NotoSerifCJK-Bold.ttc></usr/share/fonts/opentype/noto/NotoSerifCJK-Bold
 .ttc></usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc></usr/share/fonts/o
@@ -1994,20 +2070,21 @@ b></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><
 r/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr
 /local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
 cal/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local
-/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/tex
-live/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive
-/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/202
-4/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2024/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2024/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2024/texmf-dist/fonts
-/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (25 pages, 5354497 bytes).
+/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/tex
+live/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive
+/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/202
+4/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2024/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2024/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2024/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2024/texmf-dist/fonts/typ
+e1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (38 pages, 16743310 bytes).
 
-PDF statistics: 554 PDF objects out of 1000 (max. 8388607)
- 459 compressed objects within 5 object streams
- 143 named destinations out of 1000 (max. 131072)
- 225 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 784 PDF objects out of 1000 (max. 8388607)
+ 667 compressed objects within 7 object streams
+ 242 named destinations out of 1000 (max. 131072)
+ 329 words of extra memory for PDF output out of 10000 (max. 100000000)
 

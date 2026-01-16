@@ -1,0 +1,221 @@
+\section{斜入射における偏光伝搬の取り扱い}
+\label{app:oblique_main_method}
+
+本付録では，視線方向が法線から傾いた斜入射（oblique incidence）における偏光伝搬を，
+本文で用いた光の進行方向に垂直な「横波面（transverse plane）平面上の2成分Jones作用を3次元空間へ埋め込む」枠組みとして整理する．
+この定式化は，層を理想リターダ（位相差素子）として扱いながら，
+斜入射で本質となる横波条件と基底の幾何学を明示的に取り込むことを目的とする．
+最後に，界面のFresnel効果を明示的に含む拡張Jones（Extended Jones）法との相違点をまとめる．
+
+\subsection{幾何学的準備：横波条件と横波面射影}
+\label{app:geom_transverse}
+
+単色平面波の伝搬方向を単位ベクトル $\hat{\mathbf{k}}=\hat{\mathbf{k}}(\theta,\phi)$ とする．
+電場 $\mathbf{E}$ は横波条件
+\begin{equation}
+\mathbf{E}\cdot\hat{\mathbf{k}}=0
+\label{eq:app_transversality}
+\end{equation}
+を満たし，したがって $\mathbf{E}$ は $\hat{\mathbf{k}}$ に直交する2次元部分空間
+\begin{equation}
+\mathcal{T}(\hat{\mathbf{k}})=\{\mathbf{v}\in\mathbb{R}^3\mid \mathbf{v}\cdot\hat{\mathbf{k}}=0\}
+\end{equation}
+（横波面）に属する．任意の3次元ベクトルを横波面へ射影する直交射影行列を
+\begin{equation}
+P_\perp(\hat{\mathbf{k}})=I_3-\hat{\mathbf{k}}\hat{\mathbf{k}}^{\mathsf T}
+\label{eq:app_Pperp}
+\end{equation}
+と定義する．数値計算では層を跨ぐ演算により縦成分（$\parallel \hat{\mathbf{k}}$）が微小に混入することがあるため，
+必要に応じて $P_\perp$ を適用して横波条件\eqref{eq:app_transversality}を保つ．
+
+\subsection{偏光板の扱い}
+\label{app:polarizer_state}
+
+本手法では，入射偏光板および出射偏光板 (Analyzer)を明示的なJones行列 $P$ として挿入せず，
+各視線方向 $\hat{\mathbf{k}}$ に対する偏光板の\emph{有効透過偏光状態}ベクトルを導入して扱う．
+
+偏光板の吸収軸（あるいは偏光板の姿勢を規定する参照軸）を3次元ベクトル $\mathbf{c}$ で与えるとき，
+視線方向 $\hat{\mathbf{k}}$ に対して横波条件を満たす偏光板の（off-axis）有効透過軸ベクトルを
+\begin{equation}
+\mathbf{o}(\hat{\mathbf{k}},\mathbf{c})
+=
+\frac{\hat{\mathbf{k}}\times \mathbf{c}}{\|\hat{\mathbf{k}}\times \mathbf{c}\|}
+\label{eq:app_o_def}
+\end{equation}
+により定義する（$\hat{\mathbf{k}}\times\mathbf{c}\neq \mathbf{0}$ を仮定）．
+この $\mathbf{o}(\hat{\mathbf{k}},\mathbf{c})$ は単位ベクトルであり，$\mathbf{o}\cdot\hat{\mathbf{k}}=0$ を満たすため，
+横波面内の1次元透過モード（=透過状態）を与える．
+
+入射側偏光板の有効透過状態を $\mathbf{o}_1=\mathbf{o}(\hat{\mathbf{k}},\mathbf{c}_1)$，
+解析器（analyzer）の有効透過状態を $\mathbf{o}_2=\mathbf{o}(\hat{\mathbf{k}},\mathbf{c}_2)$ とすると，
+入射電場は偏光板通過後の状態として
+\begin{equation}
+\mathbf{E}_{\mathrm{in}} = E_0\,\mathbf{o}_1
+\label{eq:app_Ein}
+\end{equation}
+と与えることができる．出射側では解析器の透過状態への射影により透過振幅を定義し，
+\begin{equation}
+a=\mathbf{o}_2^{\mathsf T}\mathbf{E}_{\mathrm{out}},\qquad
+I\propto |a|^2
+\label{eq:app_analyzer_projection}
+\end{equation}
+として透過強度を評価する．
+
+なお，理想偏光板を3次元射影作用行列（正入射近傍では横波面上の $2\times2$ Jones行列に対応する表現）で表すなら
+\begin{equation}
+P^{(3D)}(\hat{\mathbf{k}})=\mathbf{o}(\hat{\mathbf{k}},\mathbf{c})\,\mathbf{o}(\hat{\mathbf{k}},\mathbf{c})^{\mathsf T}
+\end{equation}
+であり，上記の取り扱いはこれと等価である．ただし本手法では，
+入射側偏光板の作用を入射偏光状態\eqref{eq:app_Ein}に吸収し，
+出射側は射影\eqref{eq:app_analyzer_projection}で透過成分を直接読み出す点に特徴がある．
+
+\subsection{層の記述：横波面基底と埋め込み行列 $U_n$}
+\label{app:Un_def}
+
+層 $n$ を3次元の光学軸（単位ベクトル）$\mathbf{a}_n$ と位相差（retardation）$\Gamma_n$ で記述する．
+与えられた視線方向 $\hat{\mathbf{k}}$ に対し，光学軸の横波面への射影
+\begin{equation}
+\mathbf{a}_{n,\perp}=P_\perp(\hat{\mathbf{k}})\mathbf{a}_n
+=\mathbf{a}_n-(\mathbf{a}_n\cdot\hat{\mathbf{k}})\hat{\mathbf{k}}
+\label{eq:app_axis_projection}
+\end{equation}
+を計算し，$\|\mathbf{a}_{n,\perp}\|\neq 0$ のとき横波面正規直交基底を
+\begin{equation}
+\mathbf{u}_n=\frac{\mathbf{a}_{n,\perp}}{\|\mathbf{a}_{n,\perp}\|},
+\qquad
+\mathbf{v}_n=\hat{\mathbf{k}}\times\mathbf{u}_n
+\label{eq:app_uv_def}
+\end{equation}
+により定める（$\mathbf{a}_n\parallel\hat{\mathbf{k}}$ の特異点では任意の横波面基底を選べばよい）．
+このとき埋め込み行列
+\begin{equation}
+U_n=\begin{pmatrix}\mathbf{u}_n & \mathbf{v}_n\end{pmatrix}\in\mathbb{R}^{3\times 2}
+\label{eq:app_Un}
+\end{equation}
+は
+\begin{equation}
+U_n^{\mathsf T}U_n=I_2,\qquad
+U_nU_n^{\mathsf T}=P_\perp(\hat{\mathbf{k}})
+\label{eq:app_U_properties}
+\end{equation}
+を満たし，横波面の2成分表現と偏光の3次元空間上の電場を厳密に接続する．
+
+\subsection{層作用素：2次元Jones作用の3次元への埋め込み}
+\label{app:Mn_def}
+
+横波面基底 $(\mathbf{u}_n,\mathbf{v}_n)$ 上で，層 $n$ を位相差 $\Gamma_n$ の理想リターダとして扱うと，
+2次元Jones行列は
+\begin{equation}
+J_n(\Gamma_n)=
+\begin{pmatrix}
+e^{+i\Gamma_n/2} & 0\\
+0 & e^{-i\Gamma_n/2}
+\end{pmatrix}
+\label{eq:app_Jn}
+\end{equation}
+で与えられる．これを3次元空間内に埋め込む操作が
+\begin{equation}
+M_n(\hat{\mathbf{k}};\mathbf{a}_n,\Gamma_n)=U_n\,J_n(\Gamma_n)\,U_n^{\mathsf T}
+\label{eq:app_Mn}
+\end{equation}
+である．
+
+\subsection{多層スタックと透過強度}
+\label{app:stack_intensity}
+
+層が $n=1,\dots,N$ の順に直列に並ぶとき，全体作用素を
+\begin{equation}
+M_{\mathrm{stack}}(\hat{\mathbf{k}})
+=
+\prod_{n=1}^{N} M_n(\hat{\mathbf{k}};\mathbf{a}_n,\Gamma_n)
+\label{eq:app_stack}
+\end{equation}
+（右端が入射側，左端が出射側：順序は本文の定義に従う）として，
+\begin{equation}
+\mathbf{E}_{\mathrm{out}} = M_{\mathrm{stack}}(\hat{\mathbf{k}})\,\mathbf{E}_{\mathrm{in}}
+= E_0\,M_{\mathrm{stack}}(\hat{\mathbf{k}})\,\mathbf{o}_1
+\label{eq:app_Eout}
+\end{equation}
+を得る．解析器透過振幅と強度は
+\begin{equation}
+a(\hat{\mathbf{k}})=\mathbf{o}_2^{\mathsf T} \mathbf{E}_{\mathrm{out}}
+=E_0\,\mathbf{o}_2^{\mathsf T} M_{\mathrm{stack}}(\hat{\mathbf{k}})\mathbf{o}_1,
+\qquad
+I(\hat{\mathbf{k}})\propto |a(\hat{\mathbf{k}})|^2
+\label{eq:app_I}
+\end{equation}
+で与えられる．暗状態漏れや視野角特性は $I(\theta,\phi)$ を走査して評価する．
+
+以上のように，本手法は，斜入射問題における本質的困難の一つである「横波面の回転」と「基底の選び方」を
+$U_n$ と $\mathbf{o}(\hat{\mathbf{k}},\mathbf{c})$ により幾何学的に明示した上で，
+層を位相差 $\Gamma_n$ の理想リターダとして表現する枠組みである．
+従って，層内部の吸収や散乱，および界面でのFresnel係数の偏光依存（$t_s\neq t_p$）や
+異方性界面に起因する偏光混合は，基本形では陽に含まれない．
+
+\subsection{拡張Jones（Extended Jones）法との相違点}
+\label{app:diff_extended_jones}
+
+\subsubsection{Extended Jones 法の要点（概念）}
+\label{app:extj_summary}
+
+Extended Jones 法（Gu--Yeh 型）は，斜入射で通常Jonesが破綻する主因である界面効果を
+2成分表現の中に取り込むことを目的とする．外部媒質で定義した $s/p$ 成分振幅
+$(A_s,A_p)^{\mathsf T}$ を状態変数とし，単一一軸板の透過を典型的に
+\begin{equation}
+\begin{pmatrix}A_s'\\A_p'\end{pmatrix}
+=
+D_o\,P\,D_i
+\begin{pmatrix}A_s\\A_p\end{pmatrix}
+\label{eq:app_extj_form}
+\end{equation}
+と表す．ここで $P$ は板内部固有モード（$o/e$）の伝搬位相（対角行列），
+$D_i, D_o$ は入射・出射界面でのモード分解・再合成とFresnel透過係数を含む「dynamical matrix」であり，
+一般に回転行列ではない（振幅差 $t_s\neq t_p$ や結合を含み得る）．
+多重反射を無視する近似を置くことが多い一方，単回の界面条件は陽に保持される．
+
+\subsubsection{相違点の整理}
+\label{app:diff_points}
+
+本手法（main.pdf）と Extended Jones 法の差異は，主に「界面をどこまでモデルに含めるか」に集約される．
+以下に要点をまとめる．
+
+\begin{enumerate}
+\item \textbf{状態変数（2成分）の定義} \\
+本手法は3次元電場 $\mathbf{E}$ を基本変数とし，横波面基底を介して2成分Jones作用を埋め込む．
+偏光板も $\mathbf{o}(\hat{\mathbf{k}},\mathbf{c})$ により有効透過偏光状態として与える．
+一方 Extended Jones は外部媒質で定義される $s/p$ 成分 $(A_s,A_p)$ を基本変数とし，
+界面条件によりそれらが混合し得ることを前提に2$\times$2を構成する．
+
+\item \textbf{界面（Fresnel）効果の扱い} \\
+本手法の基本形では，層は理想リターダ（位相差のみ）として表され，
+界面での偏光依存透過（$t_s\neq t_p$）や偏光混合を陽には含めない．
+Extended Jones は $D_i,D_o$ により界面のFresnel係数とモード結合を明示的に含むため，
+高NAや屈折率ミスマッチが大きい場合に精度向上が期待できる．
+
+\item \textbf{幾何学（横波面回転）の取り込み方} \\
+本手法は $\hat{\mathbf{k}}$ に依存する横波面を $U_n$ と $P_\perp$ により明示し，
+「横波条件を保ったまま層の位相差作用を積で追跡する」ことに重点を置く．
+Extended Jones では横波面の幾何は主として $s/p$ 定義（入射面）に埋め込まれ，
+界面行列 $D$ の中に幾何と境界条件が統合される．
+
+\item \textbf{計算量と設計最適化への適性} \\
+本手法は $M_n=U_n J_n U_n^{\mathsf T}$ の積として実装でき，幾何学的で見通しが良く高速であるため，
+補償板パラメータ（$\Gamma_n$，軸方位）の最適化に適する．
+Extended Jones は界面ごとに dynamical matrix を構築するため bookkeeping が増えるが，
+界面支配的な漏れや視野角劣化をより忠実に扱える．
+
+\item \textbf{適用領域の指針} \\
+本手法は「漏れの主因が横波面幾何と位相差の組合せ」で説明できる領域で有効である．
+一方，界面の偏光依存透過・結合が支配的となる条件（高視野角，屈折率差が大きい，多界面）では，
+Extended Jones の導入が有利となる．
+\end{enumerate}
+
+\subsubsection{まとめ}
+\label{app:conclusion}
+
+本手法は，斜入射における横波面の幾何学を明示した上で，
+層を位相差 $\Gamma_n$ の理想リターダとして扱う「横波面埋め込み型」定式化である．
+これにより，通常Jonesの簡潔さ（行列積）を保ちながら，
+斜入射で無視できない基底の回転と偏光板の有効透過状態を自然に取り込むことができる．
+一方，界面のFresnel効果や偏光混合を陽に含む必要がある場合には，
+Extended Jones（dynamical matrix）型の枠組みが有効である．

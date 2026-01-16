@@ -3,15 +3,29 @@
 
 本節では，IPS（in-plane switching）モード液晶表示の暗状態において，斜入射観察で顕在化する視野角漏れ
 （off-axis light leakage）を抑制するための光学補償スタック（A-plate，C-plate，TAC 等）と液晶層を含む数値モデルを記述する．
-具体的には，スタック構成（層の順序）および各層の設計パラメータ（膜厚／リタデーション，光学軸方位，必要に応じて波長依存）
-を与え，視野角 $(\theta,\phi)$ で指定される各視線方向に対して，(i) 斜入射における偏光板の有効透過軸回転，
-(ii) 一軸板（LC を含む）の斜入射有効遅相を取り込んだ Jones 伝搬を行い，スタック通過後の偏光状態から
-暗状態漏れ透過率 $T_{\mathrm{leak}}(\theta,\phi)$，およびこれに基づくコントラスト比 $\mathrm{CR}(\theta,\phi)$ を直接評価する．
-得られた $\mathrm{CR}$ 分布は等コントラスト線（isocontrast contour）として可視化でき，正面 $\mathrm{CR}_{00}$ や
-視野角領域での$\mathrm{CR}(\theta=30^\circ,\phi=45^\circ)$指標などと併せて，補償スタック構成の比較や設計パラメータ探索・最適化の進捗を定量的に追跡できる．
-先行研究では，とくに対角方向（$\phi=45^\circ$）で最大化されやすい暗状態漏れを Poincar\'e 球上の幾何学として整理し，
+想定する光学スタック構成は，例えば図~\ref{fig:optical_stack} に示すような Polarizer/LC/A/C/Analyzer 構成である．
+各層の設計パラメータ（膜厚またはリタデーション，光学軸方位，必要に応じて波長依存性）を与え，
+視野角 $(\theta,\phi)$ で指定される各視線方向に対して，
+(i) 斜入射における偏光板の有効透過軸（透過状態）の回転，
+(ii) 一軸板（LC を含む）の斜入射における有効遅相（位相差）を取り込んだ偏光伝搬
+を一貫したJones計算として実行する．
+得られたスタック通過後の偏光状態から暗状態漏れ透過率 $T_{\mathrm{leak}}(\theta,\phi)$ を直接評価し，
+さらにこれに基づくコントラスト比 $\mathrm{CR}(\theta,\phi)$ を算出する．
+$\mathrm{CR}$ 分布は等コントラスト線（isocontrast contour）として可視化でき，
+正面コントラスト $\mathrm{CR}_{00}$ や視野角代表点（例：$\theta=30^\circ,\phi=45^\circ$）における
+$\mathrm{CR}(\theta,\phi)$ 指標と併せて，補償スタック構成の比較，ならびに設計パラメータ探索・最適化の進捗を
+定量的に追跡できる．
+先行研究では，とくに対角方向（$\phi=45^\circ$）で顕著となる暗状態漏れを Poincar\'e 球上の幾何学として整理し，
 A-plate／C-plate による補償条件（分散整合を含む）を設計する枠組みが提示されている~\cite{lee2006, oh2015}．
-本節の定式化はこれらに基づき，後段で扱う補償条件の系統導出と最適化に必要な記号・計算法・出力指標を一貫した形で与える．
+本節の定式化はこれらに基づき，後段で扱う補償条件の系統導出と最適化に必要な記号・計算法・出力指標を
+一貫した形で与える．
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=0.92\linewidth]{optical_stack.png}
+\caption{光学補償に用いるスタック構成の例 Polarizer/LC/A/C/Analyzer．}
+\label{fig:optical_stack}
+\end{figure}
 
 
 \subsection{光学モデルの概要}
@@ -222,7 +236,7 @@ n_o
 符号は実装上 $n_e-n_o$ の符号（すなわち $\Delta n$ の符号）として取り込むことで，
 Poincar\'e 球上の回転向きを反転させる自由度として扱う．
 
-\begin{figure}[t]
+\begin{figure}[htb]
 \centering
 \includegraphics[width=0.92\linewidth]{eq3ab_crop.png}
 \caption{引用論文に示された Eq.~(3a), (3b) 参照画像（クロップ）．}
