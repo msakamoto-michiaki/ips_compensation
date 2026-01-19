@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.12.28)  16 JAN 2026 14:43
+This is LuaHBTeX, Version 1.22.0 (TeX Live 2025)  (format=lualatex 2025.12.28)  19 JAN 2026 14:52
  restricted system commands enabled.
  file:line:error style messages enabled.
 **main.tex
@@ -1904,7 +1904,7 @@ Package luatex.def Info: iso_W.png  used on input line 140.
 (luatex.def)             Requested size: 237.6353pt x 237.63533pt.
  [22<./plot_lambda_vs_CR00_and_CRavg4_mono.png>] [23<./iso_B_mono_450nm.png><./i
 so_G_mono_546nm.png><./iso_R_mono_610nm.png><./iso_W.png>]) (./content21.tex [2
-4] [25]
+4]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 98.
@@ -1937,30 +1937,31 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 98.
 
-<iso_A_polout_+0.00deg.png, id=510, 448.074pt x 448.074pt>
+[25]
+<iso_A_polout_+0.00deg.png, id=514, 448.074pt x 448.074pt>
 File: iso_A_polout_+0.00deg.png Graphic file (type png)
 <use iso_A_polout_+0.00deg.png>
 Package luatex.def Info: iso_A_polout_+0.00deg.png  used on input line 159.
 (luatex.def)             Requested size: 158.42857pt x 158.42812pt.
-<iso_A_polout_+3.00deg.png, id=511, 448.074pt x 448.074pt>
+<iso_A_polout_+3.00deg.png, id=515, 448.074pt x 448.074pt>
 File: iso_A_polout_+3.00deg.png Graphic file (type png)
 <use iso_A_polout_+3.00deg.png>
 Package luatex.def Info: iso_A_polout_+3.00deg.png  used on input line 166.
 (luatex.def)             Requested size: 158.42857pt x 158.42812pt.
-<iso_A_polout_-3.00deg.png, id=512, 448.074pt x 448.074pt>
+<iso_A_polout_-3.00deg.png, id=516, 448.074pt x 448.074pt>
 File: iso_A_polout_-3.00deg.png Graphic file (type png)
 <use iso_A_polout_-3.00deg.png>
 Package luatex.def Info: iso_A_polout_-3.00deg.png  used on input line 173.
 (luatex.def)             Requested size: 158.42857pt x 158.42812pt.
-[26]) (./biblio.tex
+ [26<./iso_A_polout_+0.00deg.png><./iso_A_polout_+3.00deg.png><./iso_A_polout_-3
+.00deg.png>]) (./biblio.tex
 LaTeX Font Info:    Kanji font shape `JY3/NotoSerifCJKJP(1)/m/it' undefined
 (Font)              No change on input line 10.
 LaTeX Font Info:    Kanji font shape `JY3/NotoSerifCJKJP(1)/m/it' undefined
 (Font)              No change on input line 15.
 LaTeX Font Info:    Kanji font shape `JY3/NotoSerifCJKJP(1)/m/it' undefined
 (Font)              No change on input line 20.
-) [27<./iso_A_polout_+0.00deg.png><./iso_A_polout_+3.00deg.png><./iso_A_polout_-
-3.00deg.png>] (./content30.tex
+) [27] (./content30.tex
 LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
 (Font)              No change on input line 42.
  [28]
@@ -1971,8 +1972,7 @@ Package luatex.def Info: appendix_1.png  used on input line 85.
 (luatex.def)             Requested size: 455.47083pt x 295.41017pt.
 LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
 (Font)              No change on input line 101.
- [29<./appendix_1.png>]
-[30]
+ [29<./appendix_1.png>] [30]
 LaTeX Font Info:    Kanji font shape `JY3/NotoSansCJKJP(1)/m/it' undefined
 (Font)              No change on input line 244.
  [31]
@@ -2046,16 +2046,16 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 )
 
 Here is how much of LuaTeX's memory you used:
- 24797 strings out of 476081
+ 24796 strings out of 476081
  244635,953878 words of node,token memory allocated
- 6654 words of node memory still in use:
-   11 hlist, 2 vlist, 5 rule, 4 glue, 4 kern, 1 glyph, 2733 attribute, 64 glue_s
-pec, 260 attribute_list, 1 write, 14 user_defined, 1 pdf_action nodes
-   avail lists: 1:18,2:66890,3:474,4:533,5:402,6:103,7:7384,8:76,9:3066,10:46,11
+ 6558 words of node memory still in use:
+   11 hlist, 2 vlist, 5 rule, 4 glue, 4 kern, 1 glyph, 2689 attribute, 64 glue_s
+pec, 256 attribute_list, 1 write, 14 user_defined, 1 pdf_action nodes
+   avail lists: 1:18,2:66938,3:474,4:533,5:398,6:103,7:7384,8:76,9:3066,10:46,11
 :122
  46468 multiletter control sequences out of 65536+600000
  231 fonts using 999516615 bytes
- 109i,13n,119p,2060b,1083s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 109i,13n,119p,2060b,1057s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/fonts/truetype/noto/NotoSansMono-Regular.ttf></usr/share/fonts/opent
 ype/noto/NotoSerifCJK-Bold.ttc></usr/share/fonts/opentype/noto/NotoSerifCJK-Bold
 .ttc></usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc></usr/share/fonts/o
@@ -2084,10 +2084,10 @@ fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2024/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2024/texmf-dist/fonts/typ
 e1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (38 pages, 16744572 bytes).
+Output written on main.pdf (38 pages, 16742750 bytes).
 
 PDF statistics: 786 PDF objects out of 1000 (max. 8388607)
  669 compressed objects within 7 object streams
- 243 named destinations out of 1000 (max. 131072)
+ 242 named destinations out of 1000 (max. 131072)
  329 words of extra memory for PDF output out of 10000 (max. 100000000)
 

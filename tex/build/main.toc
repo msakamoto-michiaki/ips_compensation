@@ -50,9 +50,8 @@
 \contentsline {subsection}{\numberline {4.4}連動回転（A\_polout）}{25}{subsection.4.4}%
 \contentsline {subsubsection}{\numberline {4.4.1}方位非対称性指標}{25}{subsubsection.4.4.1}%
 \contentsline {subsection}{\numberline {4.5}結果}{25}{subsection.4.5}%
-\contentsline {subsubsection}{\numberline {4.5.1}中心（$\Delta =0$）での ${\rm CR}$ と初期非対称}{25}{subsubsection.4.5.1}%
-\contentsline {subsection}{\numberline {4.6}偏光板貼りずれ$\Delta \in [-3^\circ ,+3^\circ ]$ の場合の, ISO-CR 図と非対称指標}{26}{subsection.4.6}%
-\contentsline {subsection}{\numberline {4.7}結論}{26}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.6}偏光板貼りずれ$\Delta \in [-3^\circ ,+3^\circ ]$ の場合の, ISO-CR 図と非対称指標}{25}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}結論}{27}{subsection.4.7}%
 \contentsline {section}{\numberline {付録A}媒質に垂直入射した光の伝搬に関する偏光計算}{28}{appendix.A}%
 \contentsline {subsection}{\numberline {A.1}Jones行列の導入}{28}{subsection.A.1}%
 \contentsline {subsection}{\numberline {A.2}Jones行列の一般論}{31}{subsection.A.2}%
